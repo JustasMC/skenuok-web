@@ -81,7 +81,14 @@ const ctaPrimary =
 const ctaSecondary =
   "inline-flex w-full min-h-11 items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-center text-sm font-semibold text-white motion-safe:transition-colors motion-safe:duration-200 hover:border-[var(--color-lime)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50";
 
+function hasConfiguredPrice5(): boolean {
+  const id = process.env.STRIPE_PRICE_ID_5_EUR?.trim() ?? "";
+  return id.startsWith("price_");
+}
+
 export default function PricingPage() {
+  const showPack5 = hasConfiguredPrice5();
+
   return (
     <>
       <SiteHeader />
@@ -118,7 +125,20 @@ export default function PricingPage() {
                 </ul>
                 {p.slug === "pro" ? (
                   <div className="space-y-3">
-                    <StripeCheckoutButton className={ctaPrimary}>Pirkti kreditų paketą (Stripe)</StripeCheckoutButton>
+                    {showPack5 ? (
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <StripeCheckoutButton priceKey="5" className={ctaPrimary}>
+                          Užsisakyti — 5 €
+                        </StripeCheckoutButton>
+                        <StripeCheckoutButton priceKey="20" className={ctaPrimary}>
+                          Užsisakyti — 20 €
+                        </StripeCheckoutButton>
+                      </div>
+                    ) : (
+                      <StripeCheckoutButton priceKey="20" className={ctaPrimary}>
+                        Užsisakyti — 20 € (Stripe)
+                      </StripeCheckoutButton>
+                    )}
                     <Link href={p.cta.href} className={ctaSecondary}>
                       {p.cta.label}
                     </Link>
@@ -142,9 +162,13 @@ export default function PricingPage() {
         </div>
 
         <p className="mt-12 max-w-3xl text-pretty text-center text-xs leading-relaxed text-zinc-600 sm:mx-auto">
-          Mokėjimai vyksta per Stripe Checkout; kreditai pridedami po sėkmingo apmokėjimo (webhook į{" "}
-          <code className="rounded bg-zinc-900/80 px-1 py-0.5 font-mono text-zinc-500">/api/webhooks/stripe</code>).
-          Reikia <code className="rounded bg-zinc-900/80 px-1 py-0.5 font-mono text-zinc-500">STRIPE_SECRET_KEY</code> ir{" "}
+          Mokėjimai per Stripe Checkout naudoja katalogo <strong className="font-medium text-zinc-500">Price ID</strong>{" "}
+          (<code className="rounded bg-zinc-900/80 px-1 py-0.5 font-mono text-zinc-500">price_…</code>). Po apmokėjimo —{" "}
+          <Link href="/success" className="text-[var(--color-electric)] hover:underline">
+            /success
+          </Link>
+          , tada generatorius. Kreditus priskiria webhook{" "}
+          <code className="rounded bg-zinc-900/80 px-1 py-0.5 font-mono text-zinc-500">/api/webhooks/stripe</code> ir{" "}
           <code className="rounded bg-zinc-900/80 px-1 py-0.5 font-mono text-zinc-500">STRIPE_WEBHOOK_SECRET</code>.
         </p>
       </main>

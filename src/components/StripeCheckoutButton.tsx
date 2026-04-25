@@ -3,19 +3,27 @@
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
+export type StripePackKey = "5" | "20";
+
 type Props = {
   className?: string;
   children: ReactNode;
   disabled?: boolean;
+  /** Kuris Stripe Price ID naudojamas serveryje (žr. STRIPE_PRICE_ID_5_EUR / _20_EUR). */
+  priceKey?: StripePackKey;
 };
 
-export function StripeCheckoutButton({ className, children, disabled }: Props) {
+export function StripeCheckoutButton({ className, children, disabled, priceKey = "20" }: Props) {
   const [loading, setLoading] = useState(false);
 
   async function onClick() {
     setLoading(true);
     try {
-      const res = await fetch("/api/checkout", { method: "POST" });
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceKey }),
+      });
       const data = (await res.json()) as { url?: string; error?: string };
       if (data.url) {
         window.location.href = data.url;

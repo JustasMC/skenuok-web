@@ -7,19 +7,66 @@ import { getSiteBaseUrl, getStripe } from "@/lib/stripe-server";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
+type Pack = "5" | "20";
+
+function parsePack(body: unknown): Pack {
+  if (!body || typeof body !== "object") return "20";
+  const key = (body as { priceKey?: unknown }).priceKey;
+  if (key === "5" || key === 5) return "5";
+  return "20";
+}
+
 /**
- * Sukuria Stripe Checkout sesiją kreditų paketui.
- * POST be body — prisijungus: kreditai į User; kitaip: gen_session slapukas.
+ * Stripe Checkout: line_items turi naudoti katalogo Price ID (price_...), ne prod_.
+ * POST JSON: { "priceKey": "5" | "20" } — atitinka 5 € ir 20 € planus (žr. .env.example).
  */
-export async function POST() {
+export async function POST(req: Request) {
   try {
     const stripe = getStripe();
-    const base = getSiteBaseUrl();
+    const base = getSiteBaseUrl().replace(/\/+$/, "");
 
-    const credits = Math.max(1, Number.parseInt(process.env.STRIPE_CREDITS_PER_PURCHASE ?? "20", 10));
-    const amountCents = Math.max(50, Number.parseInt(process.env.STRIPE_PACK_AMOUNT_CENTS ?? "1000", 10));
-    /** Stripe kataloge sukurtas produkto ID (pradeda nuo prod_) — sieti Checkout su jūsų kataloge sukurtu prekės įrašu. */
-    const catalogProductId = process.env.STRIPE_CREDIT_PRODUCT_ID?.trim() || null;
+    let body: unknown = {};
+    const ct = req.headers.get("content-type") ?? "";
+    if (ct.includes("application/json")) {
+      try {
+        body = await req.json();
+      } catch {
+        return NextResponse.json({ error: "Neteisingas JSON kūnas" }, { status: 400 });
+      }
+    }
+
+    const pack = parsePack(body);
+
+    const priceId5 = process.env.STRIPE_PRICE_ID_5_EUR?.trim() ?? "";
+    const priceId20 =
+      process.env.STRIPE_PRICE_ID_20_EUR?.trim() ||
+      process.env.STRIPE_PRICE_ID?.trim() ||
+      "";
+
+    const stripePriceId = pack === "5" ? priceId5 : priceId20;
+
+    if (!stripePriceId.startsWith("price_")) {
+      return NextResponse.json(
+        {
+          error:
+            pack === "5"
+              ? "Stripe: nenustatytas STRIPE_PRICE_ID_5_EUR (turi prasidėti price_). Railway Variables."
+              : "Stripe: nenustatytas STRIPE_PRICE_ID_20_EUR arba STRIPE_PRICE_ID (turi prasidėti price_). Railway Variables.",
+        },
+        { status: 501 },
+      );
+    }
+
+    const credits =
+      pack === "5"
+        ? Math.max(1, Number.parseInt(process.env.STRIPE_CREDITS_5_EUR ?? process.env.STRIPE_CREDITS_PER_PURCHASE ?? "10", 10))
+        : Math.max(
+            1,
+            Number.parseInt(
+              process.env.STRIPE_CREDITS_20_EUR ?? process.env.STRIPE_CREDITS_PER_PURCHASE ?? "50",
+              10,
+            ),
+          );
 
     const authSession = await auth();
 
@@ -33,6 +80,7 @@ export async function POST() {
         userId: authSession.user.id,
         credits: String(credits),
         kind: "user_credits",
+        pack,
       };
       clientReferenceId = authSession.user.id;
     } else {
@@ -43,39 +91,25 @@ export async function POST() {
         generatorSessionId: resolved.sessionId,
         credits: String(credits),
         kind: "session_credits",
+        pack,
       };
       clientReferenceId = resolved.sessionId;
     }
 
-    const productDescription = authSession?.user?.id
-      ? "Kreditai SEO turinio generatoriui (paskyra)"
-      : "Kreditai SEO turinio generatoriui (anoniminė sesija)";
-
-    const successUrl = authSession?.user?.id
-      ? `${base}/irankiai/seo-generatorius?checkout=success&session_id={CHECKOUT_SESSION_ID}`
-      : `${base}/irankiai/seo-generatorius?checkout=success&session_id={CHECKOUT_SESSION_ID}${
-          anonSessionId ? `&gen_session_hint=${encodeURIComponent(anonSessionId)}` : ""
-        }`;
+    const explicitSuccess = process.env.STRIPE_CHECKOUT_SUCCESS_URL?.trim();
+    const successPath = (process.env.STRIPE_CHECKOUT_SUCCESS_PATH?.trim() || "/success").replace(/\/+$/, "") || "/success";
+    const successBase = explicitSuccess
+      ? explicitSuccess.replace(/\/+$/, "")
+      : `${base}${successPath.startsWith("/") ? successPath : `/${successPath}`}`;
+    const successUrl = `${successBase}?session_id={CHECKOUT_SESSION_ID}${
+      !authSession?.user?.id && anonSessionId
+        ? `&gen_session_hint=${encodeURIComponent(anonSessionId)}`
+        : ""
+    }`;
 
     const checkout = await stripe.checkout.sessions.create({
       mode: "payment",
-      line_items: [
-        {
-          price_data: {
-            currency: "eur",
-            unit_amount: amountCents,
-            ...(catalogProductId
-              ? { product: catalogProductId }
-              : {
-                  product_data: {
-                    name: `SEO straipsnių kreditai (${credits} vnt.)`,
-                    description: productDescription,
-                  },
-                }),
-          },
-          quantity: 1,
-        },
-      ],
+      line_items: [{ price: stripePriceId, quantity: 1 }],
       success_url: successUrl,
       cancel_url: `${base}/pricing?checkout=cancel`,
       metadata,
