@@ -48,10 +48,11 @@ export async function POST(req: Request) {
     if (!stripePriceId.startsWith("price_")) {
       return NextResponse.json(
         {
-          error:
+          error: "Missing Price ID",
+          detail:
             pack === "5"
-              ? "Stripe: nenustatytas STRIPE_PRICE_ID_5_EUR (turi prasidėti price_). Railway Variables."
-              : "Stripe: nenustatytas STRIPE_PRICE_ID_20_EUR arba STRIPE_PRICE_ID (turi prasidėti price_). Railway Variables.",
+              ? "Trūksta STRIPE_PRICE_ID_5_EUR (turi prasidėti price_)."
+              : "Trūksta STRIPE_PRICE_ID_20_EUR arba STRIPE_PRICE_ID (turi prasidėti price_).",
         },
         { status: 501 },
       );
@@ -107,6 +108,14 @@ export async function POST(req: Request) {
         : ""
     }`;
 
+    console.log("[stripe checkout] creating session", {
+      pack,
+      stripePriceId,
+      successUrl,
+      cancelUrl: `${base}/pricing?checkout=cancel`,
+      hasUser: Boolean(authSession?.user?.id),
+    });
+
     const checkout = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: [{ price: stripePriceId, quantity: 1 }],
@@ -125,14 +134,18 @@ export async function POST(req: Request) {
       applyGenSessionCookie(res, anonSessionId);
     }
     return res;
-  } catch (e) {
-    const raw = e instanceof Error ? e.message : "";
+  } catch (error) {
+    console.error("[stripe checkout] failed", error);
+    const raw = error instanceof Error ? error.message : "";
     if (raw.includes("STRIPE_SECRET_KEY")) {
       return NextResponse.json(
         { error: "Stripe raktas nesukonfigūruotas. Pridėkite STRIPE_SECRET_KEY į .env." },
         { status: 501 },
       );
     }
-    return NextResponse.json({ error: publicApiErrorMessage(e) }, { status: 502 });
+    return NextResponse.json(
+      { error: "Serverio klaida", detail: publicApiErrorMessage(error) },
+      { status: 502 },
+    );
   }
 }

@@ -4,9 +4,12 @@ import { getSiteOrigin } from "@/lib/site-url";
 let stripeSingleton: Stripe | null = null;
 
 export function getStripe(): Stripe {
-  const key = process.env.STRIPE_SECRET_KEY;
+  const key = process.env.STRIPE_SECRET_KEY?.trim();
   if (!key) {
     throw new Error("STRIPE_SECRET_KEY is not set");
+  }
+  if (!key.startsWith("sk_")) {
+    throw new Error("STRIPE_SECRET_KEY format is invalid");
   }
   if (!stripeSingleton) {
     stripeSingleton = new Stripe(key, { typescript: true });
