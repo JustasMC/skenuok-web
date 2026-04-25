@@ -21,6 +21,10 @@ const geistMono = Geist_Mono({
 });
 
 const siteUrl = getSiteOrigin();
+const ogTitle = "Skenuok.com | Pilna AI & SEO Ekosistema";
+const ogDescription =
+  "Nuo interaktyvios sąsajos iki AI agentų ir duomenų analizės. Profesionalus įrankis kursų skenavimui, konkurentų žvalgybai ir automatinėms SEO strategijoms.";
+const ogKeywords = ["AI SEO", "Python automation", "React UI", "Kursų analizė", "Market intelligence"];
 
 export const viewport: Viewport = {
   themeColor: "#050508",
@@ -31,11 +35,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: getMetadataBaseUrl(),
   title: {
-    default: siteConfig.defaultTitle,
+    default: ogTitle,
     template: siteConfig.titleTemplate,
   },
-  description: siteConfig.defaultDescription,
-  keywords: siteConfig.keywords,
+  description: ogDescription,
+  keywords: ogKeywords,
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   openGraph: {
@@ -43,23 +47,23 @@ export const metadata: Metadata = {
     locale: siteConfig.locale,
     url: siteUrl,
     siteName: siteConfig.name,
-    title: siteConfig.defaultTitle,
-    description: siteConfig.defaultDescription,
+    title: ogTitle,
+    description: ogDescription,
     images: [
       {
-        url: "/opengraph-image",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: siteConfig.defaultTitle,
+        alt: ogTitle,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.defaultTitle,
-    description: siteConfig.defaultDescription,
+    title: ogTitle,
+    description: ogDescription,
     ...(siteConfig.twitterCreator ? { creator: siteConfig.twitterCreator } : {}),
-    images: ["/opengraph-image"],
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
