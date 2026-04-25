@@ -31,6 +31,8 @@ const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) =>
   ),
 });
 
+const ogImageUrl = "https://skenuok.com/og-image.png";
+
 export async function generateMetadata(): Promise<Metadata> {
   const siteUrl = getSiteOrigin();
   const base = getMetadataBaseUrl();
@@ -53,7 +55,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: homePageDescription,
       images: [
         {
-          url: "/opengraph-image",
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: homePageTitle,
@@ -65,7 +67,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: homePageTitle,
       description: homePageDescription,
       ...(siteConfig.twitterCreator ? { creator: siteConfig.twitterCreator } : {}),
-      images: ["/opengraph-image"],
+      images: [ogImageUrl],
     },
     category: "technology",
   };
