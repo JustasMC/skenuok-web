@@ -132,8 +132,8 @@ export function UrlScanner() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={onSubmit} className="flex flex-col gap-4 sm:flex-row sm:items-end">
-            <div className="min-w-0 flex-1 space-y-2">
+          <form onSubmit={onSubmit} className="grid gap-4 lg:grid-cols-12 lg:items-end">
+            <div className="min-w-0 space-y-2 lg:col-span-7">
               <label htmlFor="scan-url" className="text-sm font-medium text-zinc-300">
                 URL
               </label>
@@ -150,7 +150,7 @@ export function UrlScanner() {
                 autoComplete="url"
               />
             </div>
-            <div className="w-full space-y-2 sm:w-44 sm:shrink-0">
+            <div className="w-full space-y-2 lg:col-span-2">
               <label htmlFor="scan-strategy" className="text-sm font-medium text-zinc-300">
                 Strategija
               </label>
@@ -165,13 +165,15 @@ export function UrlScanner() {
                 <option value="desktop">Desktop</option>
               </select>
             </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="site-btn-primary w-full min-h-12 min-w-0 sm:min-h-11 sm:min-w-[9.5rem] sm:shrink-0"
-            >
-              {loading ? "Skenuojama…" : "Paleisti skaną"}
-            </button>
+            <div className="lg:col-span-3">
+              <button
+                type="submit"
+                disabled={loading}
+                className="site-btn-primary w-full min-h-12 min-w-0 sm:min-h-11"
+              >
+                {loading ? "Skenuojama…" : "Paleisti skaną"}
+              </button>
+            </div>
           </form>
           {error ? (
             <p className="mt-4 rounded-lg border border-rose-500/30 bg-rose-500/5 px-3 py-2 text-sm text-rose-300" role="alert">

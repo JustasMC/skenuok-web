@@ -56,13 +56,23 @@ const plans = [
     highlight: false,
   },
   {
+    slug: "starter" as const,
+    name: "Pradedantysis",
+    price: "5 € / mėn.",
+    blurb: "Pradinis planas smulkiam SEO turinio tempui.",
+    features: ["10 kreditų per mėnesį", "SEO HTML turinys pagal raktinį žodį", "Istorija ir eksportas", "El. pašto pagalba"],
+    cta: { href: "/irankiai/seo-generatorius", label: "Atidaryti generatorių" },
+    highlight: false,
+  },
+  {
     slug: "pro" as const,
     name: "Profesionalus",
     price: "20 € / mėn.",
     blurb: "Turinio generatorius su kreditais — mažoms komandoms.",
-    features: ["10 kreditų / mėn.", "SEO HTML turinys pagal raktinį žodį", "Istorija ir eksportas", "Prioritetinis el. paštas"],
+    features: ["50 kreditų per mėnesį", "SEO HTML turinys pagal raktinį žodį", "Istorija ir eksportas", "Prioritetinis el. paštas"],
     cta: { href: "/irankiai/seo-generatorius", label: "Atidaryti generatorių" },
     highlight: true,
+    badge: "Populiariausias",
   },
   {
     slug: "business" as const,
@@ -101,7 +111,7 @@ export default function PricingPage() {
           </p>
         </PageIntro>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-4">
           {plans.map((p) => (
             <Card
               key={p.slug}
@@ -110,6 +120,11 @@ export default function PricingPage() {
               )}
             >
               <CardHeader>
+                {"badge" in p ? (
+                  <span className="mb-2 inline-flex w-fit rounded-full border border-[var(--color-electric)]/45 bg-[color-mix(in_oklab,var(--color-electric)_12%,var(--color-surface))] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--color-electric)]">
+                    {p.badge}
+                  </span>
+                ) : null}
                 <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-electric)]">{p.name}</p>
                 <CardTitle className="text-2xl">{p.price}</CardTitle>
                 <CardDescription>{p.blurb}</CardDescription>
@@ -123,22 +138,20 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                {p.slug === "pro" ? (
+                {p.slug === "starter" ? (
                   <div className="space-y-3">
-                    {showPack5 ? (
-                      <div className="grid gap-2 sm:grid-cols-2">
-                        <StripeCheckoutButton priceKey="5" className={ctaPrimary}>
-                          Užsisakyti — 5 €
-                        </StripeCheckoutButton>
-                        <StripeCheckoutButton priceKey="20" className={ctaPrimary}>
-                          Užsisakyti — 20 €
-                        </StripeCheckoutButton>
-                      </div>
-                    ) : (
-                      <StripeCheckoutButton priceKey="20" className={ctaPrimary}>
-                        Užsisakyti — 20 € (Stripe)
-                      </StripeCheckoutButton>
-                    )}
+                    <StripeCheckoutButton priceKey="5" className={ctaPrimary} disabled={!showPack5}>
+                      {showPack5 ? "Užsisakyti — 5 €" : "5 € planas neaktyvus"}
+                    </StripeCheckoutButton>
+                    <Link href={p.cta.href} className={ctaSecondary}>
+                      {p.cta.label}
+                    </Link>
+                  </div>
+                ) : p.slug === "pro" ? (
+                  <div className="space-y-3">
+                    <StripeCheckoutButton priceKey="20" className={ctaPrimary}>
+                      Užsisakyti — 20 €
+                    </StripeCheckoutButton>
                     <Link href={p.cta.href} className={ctaSecondary}>
                       {p.cta.label}
                     </Link>
