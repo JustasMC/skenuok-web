@@ -25,6 +25,7 @@ const ogTitle = "Skenuok.com | Pilna AI & SEO Ekosistema";
 const ogDescription =
   "Nuo interaktyvios sąsajos iki AI agentų ir duomenų analizės. Profesionalus įrankis kursų skenavimui, konkurentų žvalgybai ir automatinėms SEO strategijoms.";
 const ogKeywords = ["AI SEO", "Python automation", "React UI", "Kursų analizė", "Market intelligence"];
+const ogImageUrl = "https://skenuok.com/og-image.png";
 
 export const viewport: Viewport = {
   themeColor: "#050508",
@@ -51,7 +52,7 @@ export const metadata: Metadata = {
     description: ogDescription,
     images: [
       {
-        url: "/og-image.png",
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: ogTitle,
@@ -63,7 +64,7 @@ export const metadata: Metadata = {
     title: ogTitle,
     description: ogDescription,
     ...(siteConfig.twitterCreator ? { creator: siteConfig.twitterCreator } : {}),
-    images: ["/og-image.png"],
+    images: [ogImageUrl],
   },
   robots: {
     index: true,
