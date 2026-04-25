@@ -137,7 +137,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("[stripe checkout] failed", error);
     const raw = error instanceof Error ? error.message : "";
-    if (raw.includes("STRIPE_SECRET_KEY")) {
+    if (raw.includes("STRIPE_SECRET_KEY is not set")) {
       return NextResponse.json(
         { error: "Stripe raktas nesukonfigūruotas. Pridėkite STRIPE_SECRET_KEY į .env." },
         { status: 501 },

@@ -8,9 +8,6 @@ export function getStripe(): Stripe {
   if (!key) {
     throw new Error("STRIPE_SECRET_KEY is not set");
   }
-  if (!key.startsWith("sk_")) {
-    throw new Error("STRIPE_SECRET_KEY format is invalid");
-  }
   if (!stripeSingleton) {
     stripeSingleton = new Stripe(key, { typescript: true });
   }
