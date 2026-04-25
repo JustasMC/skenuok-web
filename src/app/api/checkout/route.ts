@@ -117,7 +117,7 @@ export async function POST(req: Request) {
     });
 
     const checkout = await stripe.checkout.sessions.create({
-      mode: "payment",
+      mode: "subscription",
       line_items: [{ price: stripePriceId, quantity: 1 }],
       success_url: successUrl,
       cancel_url: `${base}/pricing?checkout=cancel`,
