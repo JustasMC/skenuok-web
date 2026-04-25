@@ -9,9 +9,6 @@ export const runtime = "nodejs";
  */
 export async function GET(req: Request) {
   const headers = Object.fromEntries(req.headers.entries());
-  const userAgent = req.headers.get("user-agent") ?? "(none)";
-
-  console.log("[api:debug-fb]", JSON.stringify({ userAgent, headers }, null, 2));
-
-  return NextResponse.json({ message: "As matau tave!", headers }, { status: 200 });
+  console.log("FB DEBUG:", headers);
+  return NextResponse.json({ labas: "as tave matau", headers }, { status: 200 });
 }
