@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { FreeAlternativesBundle } from "@/lib/verify-free-alternatives";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import { TrustSummaryStrip } from "@/components/tools/TrustSummaryStrip";
 import { ScoreRing } from "@/components/tools/ScoreRing";
 import type { SkepticVerdict } from "@/lib/course-skeptic-types";
 import type { InstructorPresence } from "@/lib/course-quality-scan";
+import { buildGeneratorUrl } from "@/lib/generator-deeplink";
 
 type ScanScores = {
   performance: number | null;
@@ -43,6 +44,28 @@ function verdictLabel(r: VerdictRec): string {
     default:
       return r;
   }
+}
+
+function estimateModuleCount(text: string): number {
+  const m = text.match(/\d+/g);
+  if (!m) return 0;
+  return m.map((n) => Number.parseInt(n, 10)).filter(Number.isFinite).reduce((a, b) => a + b, 0);
+}
+
+function getPriceAiInsight(input: {
+  priceText: string | null;
+  priceQuality: number | null;
+  syllabusSummary: string;
+}): string {
+  const p = input.priceQuality;
+  const modules = estimateModuleCount(input.syllabusSummary);
+  if (!input.priceText) return "Kaina tekste neidentifikuota — rekomenduojama aiškiai pateikti kainodarą ir pasiūlos lygį.";
+  if (modules >= 12 && (p == null || p < 70)) {
+    return "Rekomenduojama kelti kainą dėl didelio modulių skaičiaus, jei aiškiai parodyta praktinė vertė ir rezultatai.";
+  }
+  if (p != null && p >= 75) return "Atitinka rinkos vidurkį pagal pateiktą turinį ir vertės signalus.";
+  if (p != null && p < 45) return "Kaina gali būti aukšta pagal dabartinį turinio aiškumą — verta stiprinti pažadų konkretumą.";
+  return "Kaina atrodo pagrįsta, bet galutiniam sprendimui svarbu palyginti su 2–3 alternatyvomis.";
 }
 
 export function CourseQualityScanner() {
@@ -96,6 +119,15 @@ export function CourseQualityScanner() {
   const [creditsLeft, setCreditsLeft] = useState<number | null>(null);
   const [creditsCharged, setCreditsCharged] = useState<number | null>(null);
   const [authGate, setAuthGate] = useState<"none" | "login" | "credits">("none");
+
+  const generatorHref = useMemo(() => {
+    if (!extractedOffer) return null;
+    const topicBase = page?.title?.trim() || "Kursų pasiūla";
+    const topic = `${topicBase}: SEO straipsnis pagal kursų turinį ir kainą`;
+    const context = extractedOffer.syllabusSummary || extractedOffer.outcomesSummary || scannedUrl || null;
+    const tone = extractedOffer.outcomesSummary || page?.description || null;
+    return buildGeneratorUrl(topic, context, tone);
+  }, [extractedOffer, page?.title, page?.description, scannedUrl]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -576,21 +608,53 @@ export function CourseQualityScanner() {
                 {extractedOffer ? (
                   <div className="rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-4 text-sm">
                     <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Ištraukta iš puslapio (AI)</p>
-                    {extractedOffer.priceText ? (
-                      <p className="mt-2 text-white">
-                        Kaina: <span className="text-[var(--color-lime)]">{extractedOffer.priceText}</span>
+                    <div className="mt-3 overflow-hidden rounded-lg border border-[var(--color-border)]/80">
+                      <table className="w-full text-left text-sm">
+                        <tbody>
+                          <tr className="border-b border-[var(--color-border)]/70">
+                            <th className="w-44 bg-[var(--color-surface)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                              Kaina
+                            </th>
+                            <td className="px-3 py-2 text-white">
+                              {extractedOffer.priceText ? (
+                                <span className="text-[var(--color-lime)]">{extractedOffer.priceText}</span>
+                              ) : (
+                                <span className="text-zinc-500">Nerasta aiškios kainos</span>
+                              )}
+                            </td>
+                          </tr>
+                          <tr className="border-b border-[var(--color-border)]/70">
+                            <th className="w-44 bg-[var(--color-surface)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                              Programa
+                            </th>
+                            <td className="px-3 py-2 text-zinc-300">{extractedOffer.syllabusSummary}</td>
+                          </tr>
+                          <tr>
+                            <th className="w-44 bg-[var(--color-surface)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                              Pažadai / rezultatai
+                            </th>
+                            <td className="px-3 py-2 text-zinc-300">{extractedOffer.outcomesSummary}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="mt-3 rounded-md border border-[color-mix(in_oklab,var(--color-electric)_35%,var(--color-border))] bg-[color-mix(in_oklab,var(--color-electric)_9%,var(--color-surface))] px-3 py-2.5">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-electric)]">AI įžvalga apie kainą</p>
+                      <p className="mt-1.5 text-sm leading-relaxed text-zinc-200">
+                        {getPriceAiInsight({
+                          priceText: extractedOffer.priceText,
+                          priceQuality: valueMetrics?.priceQuality ?? null,
+                          syllabusSummary: extractedOffer.syllabusSummary,
+                        })}
                       </p>
-                    ) : (
-                      <p className="mt-2 text-zinc-500">Kaina tekste neidentifikuota aiškiai.</p>
-                    )}
-                    <p className="mt-3 text-zinc-400">
-                      <span className="font-medium text-zinc-300">Programa: </span>
-                      {extractedOffer.syllabusSummary}
-                    </p>
-                    <p className="mt-2 text-zinc-400">
-                      <span className="font-medium text-zinc-300">Pažadai / rezultatai: </span>
-                      {extractedOffer.outcomesSummary}
-                    </p>
+                    </div>
+                    {generatorHref ? (
+                      <div className="mt-4">
+                        <Link href={generatorHref} className="site-btn-primary w-full sm:w-auto">
+                          Generuoti SEO tekstą pagal šį turinį
+                        </Link>
+                      </div>
+                    ) : null}
                   </div>
                 ) : null}
 

@@ -188,4 +188,24 @@ main {
     @apply fixed right-4 z-[60] flex max-h-[min(560px,calc(100dvh-7rem))] w-[min(100vw-1.5rem,380px)] flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] sm:right-5;
     @apply bg-[color-mix(in_oklab,#050508_94%,#0c1822)] shadow-[0_0_48px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md;
   }
+
+  @keyframes credit-zero-ring {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+    50% {
+      box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-electric) 32%, transparent);
+    }
+  }
+
+  .credit-zero-pulse {
+    animation: credit-zero-ring 2.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .credit-zero-pulse {
+      animation: none;
+    }
+  }
 }

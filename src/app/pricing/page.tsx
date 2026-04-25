@@ -111,7 +111,7 @@ export default function PricingPage() {
           </p>
         </PageIntro>
 
-        <div className="grid gap-6 lg:grid-cols-4">
+        <div id="prenumerata" className="grid scroll-mt-24 gap-6 lg:grid-cols-4">
           {plans.map((p) => (
             <Card
               key={p.slug}

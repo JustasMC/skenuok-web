@@ -39,6 +39,7 @@ function SuccessSync() {
         q.set("checkout", "success");
         q.set("session_id", sid);
         if (genHint) q.set("gen_session_hint", genHint);
+        router.refresh();
         router.replace(`/irankiai/seo-generatorius?${q.toString()}`);
       } catch {
         if (!cancelled) setMessage("Nepavyko susisiekti su serveriu. Bandykite atidaryti generatorių rankiniu būdu.");
