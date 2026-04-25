@@ -47,7 +47,8 @@ export function AuthHeaderActions() {
   const [creditsReady, setCreditsReady] = useState(false);
   const userKeyRef = useRef<string>("");
   const pollRef = useRef<number | null>(null);
-  const focusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** Browser timer id; avoid `ReturnType<typeof setTimeout>` (conflicts with NodeJS.Timeout under @types/node). */
+  const focusTimerRef = useRef<number | null>(null);
 
   const loadCredits = useCallback(async (signal?: AbortSignal) => {
     try {
