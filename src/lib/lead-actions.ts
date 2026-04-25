@@ -1,4 +1,5 @@
 import type { ContactPayload } from "@/lib/contact-schema";
+import { sendLeadSummaryToPagalba } from "@/lib/email-resend";
 import { prisma } from "@/lib/prisma";
 
 async function notifyDiscord(content: string) {
@@ -72,6 +73,7 @@ export async function createLeadAndNotify(data: ContactPayload, source: "contact
   void Promise.allSettled([
     notifyDiscord(plain),
     notifyTelegram(summary),
+    sendLeadSummaryToPagalba(plain),
     notifyGenericWebhook({
       type: "lead",
       source,
