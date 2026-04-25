@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-bg: #050508;
+  --color-surface: #0c0e14;
+  --color-surface-2: #12151f;
+  --color-border: #1e2433;
+
+  --color-electric: #00d4ff;
+  --color-electric-dim: #0098b8;
+  --color-lime: #c8ff00;
+  --color-lime-dim: #9fcc00;
+
+  --shadow-glow: 0 0 40px color-mix(in oklab, var(--color-electric) 35%, transparent);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  @apply bg-[var(--color-bg)] text-zinc-100 antialiased;
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -30%, color-mix(in oklab, var(--color-electric) 18%, transparent), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, color-mix(in oklab, var(--color-lime) 8%, transparent), transparent);
+}
+
+/* Pagrindinio puslapio skaitomumas: švelnesnė tekstų skalė */
+main {
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-electric) 40%, transparent);
+  color: #fff;
+}
+
+@keyframes site-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-enter {
+    animation: site-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .site-enter-delay {
+    animation: site-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.1s;
+  }
+}
+
+@layer components {
+  .site-shell {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .site-shell-wide {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .site-section {
+    @apply scroll-mt-20 border-b border-[var(--color-border)]/90 py-16 sm:scroll-mt-24 sm:py-20 md:py-24 lg:py-28;
+  }
+
+  .site-card {
+    @apply rounded-2xl border border-[var(--color-border)]/90 bg-[var(--color-surface)] shadow-sm shadow-black/10;
+  }
+
+  .site-card-interactive {
+    @apply rounded-2xl border border-[var(--color-border)]/90 bg-[var(--color-surface)] shadow-sm shadow-black/10;
+    @apply motion-safe:transition-[border-color,box-shadow,transform] motion-safe:duration-300 motion-safe:ease-out;
+  }
+
+  .site-card-interactive:hover {
+    @apply border-[color-mix(in_oklab,var(--color-electric)_38%,var(--color-border))] shadow-md shadow-black/20;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .site-card-interactive:hover {
+      @apply -translate-y-0.5;
+    }
+  }
+
+  .site-nav-link {
+    @apply rounded-md px-1.5 py-1 text-zinc-400 motion-safe:transition-colors motion-safe:duration-200;
+    @apply hover:text-[var(--color-lime)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/60;
+  }
+
+  .site-input {
+    @apply mt-1 w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-sm text-white placeholder:text-zinc-600;
+    @apply motion-safe:transition-[border-color,box-shadow] motion-safe:duration-200;
+    @apply focus:border-[var(--color-electric)] focus:outline-none focus:ring-2 focus:ring-[color-mix(in_oklab,var(--color-electric)_35%,transparent)];
+  }
+
+  .site-btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-[var(--color-electric)] px-6 py-3 text-sm font-semibold text-[#041014] shadow-[var(--shadow-glow)];
+    @apply motion-safe:transition-[background-color,transform,box-shadow] motion-safe:duration-200 motion-safe:ease-out;
+    @apply hover:bg-[var(--color-electric-dim)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)];
+    @apply active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60;
+  }
+
+  .site-btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-3 text-sm font-semibold text-zinc-100;
+    @apply motion-safe:transition-[border-color,color,transform] motion-safe:duration-200 motion-safe:ease-out;
+    @apply hover:border-[color-mix(in_oklab,var(--color-lime)_55%,var(--color-border))] hover:text-[var(--color-lime)];
+    @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-500;
+    @apply active:scale-[0.98];
+  }
+
+  .site-btn-lime {
+    @apply w-full rounded-xl bg-[var(--color-lime)] py-3 text-sm font-semibold text-[#101300];
+    @apply motion-safe:transition-[background-color,transform] motion-safe:duration-200;
+    @apply hover:bg-[var(--color-lime-dim)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-lime)];
+    @apply active:scale-[0.99] disabled:pointer-events-none disabled:opacity-60;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 1rem;
+    width: 1rem;
+    border-radius: 9999px;
+    background: var(--color-lime);
+    cursor: pointer;
+    box-shadow: 0 2px 10px color-mix(in oklab, black 40%, transparent);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    height: 1rem;
+    width: 1rem;
+    border: 0;
+    border-radius: 9999px;
+    background: var(--color-lime);
+    cursor: pointer;
+    box-shadow: 0 2px 10px color-mix(in oklab, black 40%, transparent);
+  }
+
+  .site-page-main {
+    @apply mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8;
+  }
+
+  .site-link-inline {
+    @apply font-medium text-[var(--color-electric)] underline-offset-4 motion-safe:transition-colors motion-safe:duration-200;
+    @apply hover:text-[var(--color-lime)] hover:underline focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/55;
+  }
+
+  .site-skeleton {
+    @apply min-h-[200px] rounded-2xl border border-[var(--color-border)]/70 bg-[color-mix(in_oklab,var(--color-surface)_80%,transparent)] p-8 text-sm text-zinc-500 motion-safe:animate-pulse;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-skeleton {
+      @apply animate-none;
+    }
+  }
+
+  .site-input-chat {
+    @apply min-w-0 flex-1 rounded-lg border border-[var(--color-border)] bg-[color-mix(in_oklab,black_40%,transparent)] px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600;
+    @apply motion-safe:transition-[border-color,box-shadow] motion-safe:duration-200;
+    @apply focus:border-[var(--color-electric)] focus:outline-none focus:ring-2 focus:ring-[color-mix(in_oklab,var(--color-electric)_35%,transparent)];
+  }
+
+  .site-chat-fab {
+    @apply fixed right-4 z-[60] flex h-14 w-14 items-center justify-center rounded-2xl sm:right-5;
+    @apply border border-[color-mix(in_oklab,var(--color-electric)_50%,transparent)] bg-[color-mix(in_oklab,black_55%,#0a1620)] text-[var(--color-electric)];
+    @apply shadow-[0_0_32px_-6px_rgba(34,211,238,0.45)] motion-safe:transition-[border-color,box-shadow,transform] motion-safe:duration-200;
+    @apply hover:border-[var(--color-electric)] hover:shadow-[0_0_40px_-4px_rgba(34,211,238,0.55)] active:scale-95;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-electric)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)];
+  }
+
+  .site-chat-panel {
+    @apply fixed right-4 z-[60] flex max-h-[min(560px,calc(100dvh-7rem))] w-[min(100vw-1.5rem,380px)] flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] sm:right-5;
+    @apply bg-[color-mix(in_oklab,#050508_94%,#0c1822)] shadow-[0_0_48px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md;
+  }
+}
