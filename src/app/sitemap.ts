@@ -1,19 +1,32 @@
 import type { MetadataRoute } from "next";
-import { getSiteOrigin } from "@/lib/site-url";
+import { getCanonicalPath, getSiteOrigin } from "@/lib/site-url";
 
-const siteUrl = getSiteOrigin();
+/**
+ * Dinaminis žemėlapis — Next.js automatiškai patiekia kaip `/sitemap.xml`.
+ * URL absoliutūs (pagal NEXT_PUBLIC_SITE_URL / RAILWAY_PUBLIC_DOMAIN build metu).
+ */
+const entries: Array<{
+  path: string;
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
+  priority: number;
+}> = [
+  { path: "/", changeFrequency: "weekly", priority: 1 },
+  { path: "/tools/scanner", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/tools/course-scanner", changeFrequency: "weekly", priority: 0.85 },
+  { path: "/irankiai/seo-generatorius", changeFrequency: "weekly", priority: 0.85 },
+  { path: "/pricing", changeFrequency: "monthly", priority: 0.75 },
+  { path: "/terms", changeFrequency: "yearly", priority: 0.35 },
+  { path: "/privacy", changeFrequency: "yearly", priority: 0.35 },
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = siteUrl.replace(/\/$/, "");
   const lastModified = new Date();
+  const origin = getSiteOrigin().replace(/\/+$/, "");
 
-  return [
-    { url: base, lastModified, changeFrequency: "weekly", priority: 1 },
-    { url: `${base}/tools/scanner`, lastModified, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${base}/tools/course-scanner`, lastModified, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${base}/irankiai/seo-generatorius`, lastModified, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${base}/pricing`, lastModified, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${base}/terms`, lastModified, changeFrequency: "yearly", priority: 0.35 },
-    { url: `${base}/privacy`, lastModified, changeFrequency: "yearly", priority: 0.35 },
-  ];
+  return entries.map((e) => ({
+    url: e.path === "/" ? origin : getCanonicalPath(e.path),
+    lastModified,
+    changeFrequency: e.changeFrequency,
+    priority: e.priority,
+  }));
 }
