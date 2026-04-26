@@ -27,7 +27,7 @@ export function HomeTestimonials() {
       <div className="site-shell">
         <SectionHeader
           eyebrow="Atsiliepimai"
-          title="Ką sako pirmi bandymai (iliustrativūs pavyzdžiai)"
+          title="Ką sako pirmi bandymai (iliustratyvūs pavyzdžiai)"
           description="Žemiau — pavyzdiniai citatų laukai; publikuodami realius vardus, sutarsime dėl leidimų. Strategija, aiški eiga ir matau pokytį, ne tik ataskaita."
         />
         <ul
