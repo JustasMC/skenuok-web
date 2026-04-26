@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { siteConfig } from "@/lib/site-config";
 import { getSoftwareServiceJsonLd } from "@/lib/jsonld";
 import { getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
@@ -102,6 +103,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <Providers>{children}</Providers>
+        <GoogleAnalytics gaId="G-J29QGBZ1MT" />
       </body>
     </html>
   );
