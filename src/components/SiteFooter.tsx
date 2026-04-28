@@ -48,12 +48,12 @@ export function SiteFooter() {
             </Link>
           </nav>
         </div>
-        <div className="flex flex-col gap-3 border-t border-[var(--color-border)]/80 pt-6 text-xs text-zinc-600 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="flex flex-col gap-3 border-t border-[var(--color-border)]/80 pt-6 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <p>
             © {new Date().getFullYear()} {siteConfig.name}
           </p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:justify-end">
-            <p className="font-mono text-[11px] text-zinc-600">FS·AI</p>
+            <p className="font-mono text-[11px] text-zinc-500">FS·AI</p>
             <nav className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px]" aria-label="Teisinės nuorodos">
               <Link href="/terms" className="text-zinc-500 hover:text-[var(--color-electric)]">
                 Terms

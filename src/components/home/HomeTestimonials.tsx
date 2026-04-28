@@ -31,7 +31,7 @@ export function HomeTestimonials() {
           description="Žemiau — pavyzdiniai citatų laukai; publikuodami realius vardus, sutarsime dėl leidimų. Strategija, aiški eiga ir matau pokytį, ne tik ataskaita."
         />
         <ul
-          className="mt-10 grid list-none gap-5 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-10 grid list-none gap-5 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3 min-h-[24rem]"
           role="list"
         >
           {items.map((t) => (

@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 const siteUrl = getSiteOrigin();
 const ogTitle = "Skenuok.com | Pilna AI & SEO Ekosistema";
 const ogDescription =
-  "Svetainių kūrimas, SEO auditas ir Next.js sprendimai: greitos AI svetainės su techniškai tvarkingu kodu, skirtos matomumui ir konversijoms.";
+  "Svetainių kūrimas ir SEO auditas su Next.js: greitos AI svetainės su techniškai tvarkingu kodu, skirtos matomumui bei konversijoms Lietuvoje.";
 const ogKeywords = ["AI SEO", "Python automation", "React UI", "Kursų analizė", "Market intelligence"];
 const ogImageUrl = "https://skenuok.com/og-image.png";
 
