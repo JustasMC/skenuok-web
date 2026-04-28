@@ -14,6 +14,15 @@ const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) =>
   ),
 });
 
+const WebPriceCalculator = dynamic(
+  () => import("@/components/tools/WebPriceCalculator").then((m) => m.WebPriceCalculator),
+  {
+    loading: () => (
+      <div className="min-h-[28rem] animate-pulse rounded-2xl border border-[var(--color-border)]/50 bg-[var(--color-surface)]/30" />
+    ),
+  },
+);
+
 const WebBuildPricingCalculator = dynamic(
   () => import("@/components/WebBuildPricingCalculator").then((m) => m.WebBuildPricingCalculator),
   {
@@ -160,7 +169,13 @@ export default function SvetainiuKurimasPage() {
             </ol>
           </section>
 
-          <WebBuildPricingCalculator />
+          <div className="space-y-8">
+            <WebPriceCalculator />
+            <div>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-300">Supaprastinta versija</p>
+              <WebBuildPricingCalculator />
+            </div>
+          </div>
         </div>
 
         <ContactForm />
