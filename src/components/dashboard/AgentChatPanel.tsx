@@ -433,6 +433,7 @@ export function AgentChatPanel() {
         </div>
         <div className="flex flex-wrap gap-2">
           <select
+            aria-label="Pasirinkti pokalbį"
             className="max-w-[220px] rounded-lg border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-surface)_50%,black)] px-3 py-2 text-sm text-zinc-200"
             value={conversationId ?? ""}
             disabled={loadingList}
@@ -452,6 +453,7 @@ export function AgentChatPanel() {
           <button
             type="button"
             onClick={() => void newConversation()}
+            aria-label="Pradėti naują pokalbį"
             className="rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm text-zinc-200 transition hover:border-[var(--color-electric)] hover:text-white"
           >
             Naujas pokalbis
@@ -459,7 +461,8 @@ export function AgentChatPanel() {
           <button
             type="button"
             onClick={() => void deleteConversation()}
-            className="rounded-lg border border-zinc-700 px-3 py-2 text-sm text-zinc-500 transition hover:border-red-900 hover:text-red-300"
+            aria-label="Ištrinti pokalbį"
+            className="rounded-lg border border-zinc-700 px-3 py-2 text-sm text-zinc-300 transition hover:border-red-900 hover:text-red-300"
           >
             Ištrinti
           </button>

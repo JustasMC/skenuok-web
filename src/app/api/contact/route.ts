@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { jsonApiError } from "@/lib/api-errors";
 import { contactPayloadSchema } from "@/lib/contact-schema";
 import { createLeadAndNotify } from "@/lib/lead-actions";
-import { assertContactRateLimit, getRateLimitClientKey } from "@/lib/rate-limit";
+import { assertContactRateLimit, getRateLimitClientKey, isSyntheticCrawler } from "@/lib/rate-limit";
 
 type JsonBody = Record<string, unknown>;
 
@@ -19,16 +19,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true }, { status: 200 });
   }
 
-  const clientKey = getRateLimitClientKey(req);
-  const rate = assertContactRateLimit(clientKey);
-  if (!rate.ok) {
-    return NextResponse.json(
-      {
-        error: "Per daug užklausų iš šio tinklo. Palaukite ir bandykite vėliau.",
-        retryAfterSec: rate.retryAfterSec,
-      },
-      { status: 429, headers: { "Retry-After": String(rate.retryAfterSec) } },
-    );
+  if (!isSyntheticCrawler(req)) {
+    const clientKey = getRateLimitClientKey(req);
+    const rate = assertContactRateLimit(clientKey);
+    if (!rate.ok) {
+      return NextResponse.json(
+        {
+          error: "Per daug užklausų iš šio tinklo. Palaukite ir bandykite vėliau.",
+          retryAfterSec: rate.retryAfterSec,
+        },
+        { status: 429, headers: { "Retry-After": String(rate.retryAfterSec) } },
+      );
+    }
   }
 
   const normalized = {

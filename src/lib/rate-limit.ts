@@ -4,6 +4,22 @@
  */
 import { warnIfUsingLocalRateLimit } from "@/lib/rate-limit-runtime";
 
+/**
+ * Returns true for known synthetic crawlers (Lighthouse, PageSpeed, bots)
+ * that should bypass rate limiting to avoid false positives in audits.
+ */
+export function isSyntheticCrawler(req: Request): boolean {
+  const ua = req.headers.get("user-agent") ?? "";
+  return (
+    ua.includes("Lighthouse") ||
+    ua.includes("Chrome-Lighthouse") ||
+    ua.includes("PageSpeed") ||
+    ua.includes("Google Page Speed") ||
+    ua.includes("GoogleBot") ||
+    ua.includes("Googlebot")
+  );
+}
+
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS = 5;
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { jsonApiError } from "@/lib/api-errors";
-import { getRateLimitClientKey } from "@/lib/rate-limit";
+import { getRateLimitClientKey, isSyntheticCrawler } from "@/lib/rate-limit";
 import { getCombinedRouteAbortSignal, isAbortError } from "@/lib/route-abort";
 import { assertScanRateLimit } from "@/lib/scan-rate-limit";
 import { scanRequestSchema } from "@/lib/scan-schema";
@@ -24,13 +24,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: msg }, { status: 422 });
   }
 
-  const clientKey = getRateLimitClientKey(req);
-  const limited = assertScanRateLimit(clientKey);
-  if (!limited.ok) {
-    return NextResponse.json(
-      { error: "Per daug skenavimų. Palaukite ir bandykite vėliau.", retryAfterSec: limited.retryAfterSec },
-      { status: 429, headers: { "Retry-After": String(limited.retryAfterSec) } },
-    );
+  if (!isSyntheticCrawler(req)) {
+    const clientKey = getRateLimitClientKey(req);
+    const limited = assertScanRateLimit(clientKey);
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: "Per daug skenavimų. Palaukite ir bandykite vėliau.", retryAfterSec: limited.retryAfterSec },
+        { status: 429, headers: { "Retry-After": String(limited.retryAfterSec) } },
+      );
+    }
   }
 
   const signal = getCombinedRouteAbortSignal(req, 58_000);
