@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { homePageH1 } from "@/lib/home-seo";
 
 const stats = [
@@ -75,7 +76,20 @@ export function Hero() {
           </div>
         </div>
 
-        <dl className="site-enter-delay grid w-full shrink-0 grid-cols-2 gap-2.5 sm:max-w-md sm:gap-3 lg:max-w-sm lg:self-center">
+        <div className="site-enter-delay w-full shrink-0 sm:max-w-md lg:max-w-sm lg:self-center">
+          <div className="mb-3 overflow-hidden rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface)]/60 sm:mb-4">
+            <Image
+              src="/og-image.png"
+              alt="Svetainių kūrimas ir SEO auditas su Next.js"
+              width={1200}
+              height={630}
+              priority={true}
+              fetchPriority="high"
+              sizes="(min-width: 1024px) 22rem, (min-width: 640px) 24rem, 100vw"
+              className="h-auto w-full"
+            />
+          </div>
+        <dl className="grid grid-cols-2 gap-2.5 sm:gap-3">
           {stats.map((item) => (
             <div
               key={item.k}
@@ -86,6 +100,7 @@ export function Hero() {
             </div>
           ))}
         </dl>
+        </div>
       </div>
     </section>
   );

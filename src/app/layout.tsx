@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { GoogleAnalytics } from '@next/third-parties/google';
+import Script from "next/script";
 import { siteConfig } from "@/lib/site-config";
 import { getSoftwareServiceJsonLd } from "@/lib/jsonld";
 import { getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 const siteUrl = getSiteOrigin();
 const ogTitle = "Skenuok.com | Pilna AI & SEO Ekosistema";
 const ogDescription =
-  "Nuo interaktyvios sąsajos iki AI agentų ir duomenų analizės. Profesionalus įrankis kursų skenavimui, konkurentų žvalgybai ir automatinėms SEO strategijoms.";
+  "Svetainių kūrimas, SEO auditas ir Next.js sprendimai: greitos, techniškai tikslios svetainės su AI analitika, kurios didina matomumą ir konversijas.";
 const ogKeywords = ["AI SEO", "Python automation", "React UI", "Kursų analizė", "Market intelligence"];
 const ogImageUrl = "https://skenuok.com/og-image.png";
 
@@ -88,6 +88,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const jsonLd = getSoftwareServiceJsonLd();
+  const gaId = process.env.NEXT_PUBLIC_GA_ID?.trim() || "G-J29QGBZ1MT";
 
   return (
     <html lang="lt" className={`${geistSans.variable} ${geistMono.variable}`}>
@@ -103,7 +104,21 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <Providers>{children}</Providers>
-        <GoogleAnalytics gaId="G-J29QGBZ1MT" />
+        {gaId ? (
+          <>
+            <Script
+              id="ga-script"
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-inline" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaId}');`}
+            </Script>
+          </>
+        ) : null}
       </body>
     </html>
   );
