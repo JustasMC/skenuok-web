@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ContactForm } from "@/components/ContactForm";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { WebBuildPricingCalculator } from "@/components/WebBuildPricingCalculator";
 import { getCanonicalPath } from "@/lib/site-url";
 import { siteConfig } from "@/lib/site-config";
 
@@ -46,51 +48,106 @@ export default function SvetainiuKurimasPage() {
   return (
     <>
       <SiteHeader />
-      <main id="main-content" className="site-shell py-14 sm:py-16">
-        <section className="site-card p-6 sm:p-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">Paslauga</p>
-          <h1 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            Svetainių kūrimas: nuo idėjos iki greito, SEO paruošto produkto
-          </h1>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-300">
-            Kuriu modernias svetaines su Next.js taip, kad jos ne tik atrodytų tvarkingai, bet ir konvertuotų: greitas
-            užkrovimas, aiški informacijos architektūra, tvarkingas SEO ir paruoštos integracijos augimui.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/#kontaktai" className="site-btn-primary">
-              Aptarti projektą
-            </Link>
-            <Link href="/tools/scanner" className="site-btn-secondary">
-              Išbandyti URL auditą
-            </Link>
-          </div>
-        </section>
-
-        <section className="mt-8 grid gap-5 sm:mt-10 md:grid-cols-3">
-          <article className="site-card-interactive p-6">
-            <h2 className="text-xl font-semibold text-white">Kodėl Next.js</h2>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-              Next.js leidžia turėti serverinį renderinimą, gerą indeksaciją ir aiškią komponentinę architektūrą.
-              Rezultatas: greitas pirmas įkėlimas ir paprastesnė ilgalaikė priežiūra.
+      <main id="main-content" className="site-section">
+        <div className="site-shell space-y-8 sm:space-y-10">
+          <section className="site-card p-6 sm:p-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">Svetainių kūrimas</p>
+            <h1 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              Next.js svetainės su AI Orchestration: greitesnės, pigesnės ir techniškai stipresnės
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-300">
+              Kuriame svetaines ne „rankinio darbo fabriko“ principu, o su AI Orchestration procesu: nuo struktūros,
+              turinio ir SEO iki diegimo. Tai leidžia trumpinti terminus, mažinti kainą ir užtikrinti aukštą techninį
+              lygį nuo pirmos dienos.
             </p>
-          </article>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="#kontaktai" className="site-btn-primary">
+                Gauti pasiūlymą
+              </Link>
+              <Link href="/tools/scanner" className="site-btn-secondary">
+                Pirmiau įvertinti esamą svetainę
+              </Link>
+            </div>
+          </section>
 
-          <article className="site-card-interactive p-6">
-            <h2 className="text-xl font-semibold text-white">Greitis ir patikimumas</h2>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-              Diegimas ant Railway, mokėjimai per Stripe ir modernus TypeScript stack leidžia turėti stabilų pagrindą
-              tiek MVP, tiek augančiam verslui be techninės skolos kaupimo.
-            </p>
-          </article>
+          <section className="grid gap-5 md:grid-cols-2">
+            <article className="site-card-interactive p-6 sm:p-8">
+              <h2 className="text-2xl font-semibold tracking-tight text-white">Kodėl Next.js?</h2>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+                Next.js suteikia serverinį renderinimą, tvirtą SEO pagrindą ir aukštą našumą. Rezultatas: greitesnis
+                pirmas užkrovimas, geresnė indeksacija ir ilgaamžė architektūra, kurią paprasta plėsti augant verslui.
+              </p>
+              <ul className="mt-5 space-y-2 text-sm text-zinc-400">
+                <li>• Stabilus techninis pagrindas konversijai ir reklamos srautui.</li>
+                <li>• Tvarkinga komponentinė architektūra be perteklinio chaoso.</li>
+                <li>• Geresni Core Web Vitals rezultatai realiame naudojime.</li>
+              </ul>
+            </article>
 
-          <article className="site-card-interactive p-6">
-            <h2 className="text-xl font-semibold text-white">AI auditai UX gerinimui</h2>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-              AI + Lighthouse auditai padeda pamatyti, kur prarandate konversiją: lėti puslapiai, neaiškus turinys ar
-              silpni veiksmo kvietimai. Tai paverčiama prioritetiniu darbų planu.
+            <article className="site-card-interactive p-6 sm:p-8">
+              <h2 className="text-2xl font-semibold tracking-tight text-white">AI integracijos nauda</h2>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+                AI Orchestration pagreitina kūrimą ir sumažina kaštus: dalis pasikartojančių užduočių automatizuojama,
+                o komanda koncentruojasi į vertę kuriančius sprendimus. Gaunate greitesnį paleidimą ir geresnę kokybę.
+              </p>
+              <ul className="mt-5 space-y-2 text-sm text-zinc-400">
+                <li>• Spartesnės iteracijos ir trumpesnis time-to-market.</li>
+                <li>• Automatinis turinio/SEO paruošimas prieš publikavimą.</li>
+                <li>• Mažesnis rankinio darbo kiekis ir mažiau žmogiškų klaidų.</li>
+              </ul>
+            </article>
+          </section>
+
+          <section className="site-card-interactive p-6 sm:p-8">
+            <h2 className="text-2xl font-semibold tracking-tight text-white">SEO garantija: procesas, kuris veikia</h2>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+              SEO srityje negarantuojame „magiško mygtuko“, bet garantuojame disciplinuotą procesą: techninis auditas,
+              struktūros optimizacija, turinio semantika ir nuolatinis matavimas. Būtent šis metodas padėjo
+              <strong className="font-medium text-zinc-200"> skenuok.com </strong>
+              iškelti į aukštas Google pozicijas pagal tikslines užklausas.
             </p>
-          </article>
-        </section>
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
+              <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">01</p>
+                <p className="mt-2 text-sm text-zinc-300">Techninis SEO bazės sutvarkymas prieš paleidimą.</p>
+              </div>
+              <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">02</p>
+                <p className="mt-2 text-sm text-zinc-300">AI + analitika pagrįsti turinio ir UX patobulinimai.</p>
+              </div>
+              <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">03</p>
+                <p className="mt-2 text-sm text-zinc-300">Metrikų stebėsena ir nuolatinis rezultatų gerinimas.</p>
+              </div>
+            </div>
+          </section>
+
+          <section className="site-card-interactive p-6 sm:p-8">
+            <h2 className="text-2xl font-semibold tracking-tight text-white">Darbo eiga</h2>
+            <ol className="mt-5 grid gap-4 md:grid-cols-2">
+              <li className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/45 p-4 text-sm text-zinc-300">
+                <strong className="block text-white">1. Discovery</strong>
+                Tikslų, auditorijos ir verslo KPI išgryninimas.
+              </li>
+              <li className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/45 p-4 text-sm text-zinc-300">
+                <strong className="block text-white">2. AI Orchestration planas</strong>
+                Architektūra, turinio schema, integracijos ir automatikos.
+              </li>
+              <li className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/45 p-4 text-sm text-zinc-300">
+                <strong className="block text-white">3. Kūrimas ir testavimas</strong>
+                Next.js įgyvendinimas, našumo testai, SEO validacija.
+              </li>
+              <li className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/45 p-4 text-sm text-zinc-300">
+                <strong className="block text-white">4. Paleidimas ir augimas</strong>
+                Diegimas, analitika, iteracijos pagal realius duomenis.
+              </li>
+            </ol>
+          </section>
+
+          <WebBuildPricingCalculator />
+        </div>
+
+        <ContactForm />
       </main>
       <SiteFooter />
     </>
