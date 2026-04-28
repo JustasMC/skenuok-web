@@ -20,9 +20,9 @@ const cards = [
     minHeight: "min-h-[16rem] md:min-h-[18rem] lg:min-h-[19rem]",
   },
   {
-    title: "AI Orchestracija",
-    stack: "Cursor Pro modeliai, Autonominiai agentai, API integracijos",
-    value: "Verslo procesų automatizavimas naujos kartos dirbtiniu intelektu: mažiau rankinių veiksmų, daugiau greičio ir kontrolės.",
+    title: "AI Orchestration & Next-Gen Development",
+    stack: "Pažangiausios AI ekosistemos, Agentinė automatika, LLM integracijos",
+    value: "Kuriu pasitelkdamas pažangiausias AI ekosistemas, kurios leidžia pasiekti dešimteriopai didesnį efektyvumą. Užuot gaišęs laiką ties standartiniu kodo rašymu, aš architektūruoju ir diriguoju sudėtingiems AI agentams. Tai užtikrina ne tik žaibišką projekto įgyvendinimą, bet ir klaidų prevenciją, kurios nepastebėtų žmogaus akis.",
     icon: BrainCircuit,
     glow: "group-hover:shadow-[0_0_40px_-14px_rgba(163,230,53,0.45)]",
     accent: "from-lime-400/20 to-transparent",
