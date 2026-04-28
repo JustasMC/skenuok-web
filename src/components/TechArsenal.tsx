@@ -17,7 +17,7 @@ const cards = [
     glow: "group-hover:shadow-[0_0_40px_-14px_rgba(34,211,238,0.55)]",
     accent: "from-cyan-400/20 to-transparent",
     size: "md:col-span-2 lg:col-span-2",
-    minHeight: "min-h-[16rem] md:min-h-[17rem]",
+    minHeight: "min-h-[16rem] md:min-h-[18rem] lg:min-h-[19rem]",
   },
   {
     title: "AI Orchestracija",
@@ -27,7 +27,7 @@ const cards = [
     glow: "group-hover:shadow-[0_0_40px_-14px_rgba(163,230,53,0.45)]",
     accent: "from-lime-400/20 to-transparent",
     size: "md:row-span-2 lg:col-span-1 lg:row-span-2",
-    minHeight: "min-h-[16rem] md:min-h-[22rem]",
+    minHeight: "min-h-[16rem] md:min-h-[24rem] lg:min-h-[26rem]",
   },
   {
     title: "Duomenų Intelligence",
@@ -37,7 +37,7 @@ const cards = [
     glow: "group-hover:shadow-[0_0_38px_-14px_rgba(56,189,248,0.5)]",
     accent: "from-sky-400/18 to-transparent",
     size: "md:col-span-1 lg:col-span-1",
-    minHeight: "min-h-[16rem] md:min-h-[17rem]",
+    minHeight: "min-h-[16rem] md:min-h-[18rem] lg:min-h-[19rem]",
   },
   {
     title: "Botai & Web-Automations",
@@ -47,7 +47,7 @@ const cards = [
     glow: "group-hover:shadow-[0_0_42px_-16px_rgba(45,212,191,0.48)]",
     accent: "from-teal-400/20 to-transparent",
     size: "md:col-span-1 lg:col-span-1",
-    minHeight: "min-h-[16rem] md:min-h-[17rem]",
+    minHeight: "min-h-[16rem] md:min-h-[18rem] lg:min-h-[19rem]",
   },
   {
     title: "Fullstack & UX",
@@ -57,7 +57,7 @@ const cards = [
     glow: "group-hover:shadow-[0_0_44px_-16px_rgba(34,211,238,0.55)]",
     accent: "from-cyan-300/20 to-transparent",
     size: "md:col-span-2 lg:col-span-2",
-    minHeight: "min-h-[16rem] md:min-h-[17rem]",
+    minHeight: "min-h-[16rem] md:min-h-[18rem] lg:min-h-[19rem]",
   },
 ] as const;
 
@@ -71,7 +71,7 @@ export function TechArsenal() {
           description="Bento stiliaus kompetencijų žemėlapis: nuo branduolinio našumo ir agentinės automatizacijos iki SEO/UX rezultatų, kurie tiesiogiai veikia verslo augimą."
         />
 
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-12 md:grid-cols-3 md:auto-rows-[minmax(210px,1fr)]">
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-12 md:grid-cols-3 md:auto-rows-[minmax(18rem,1fr)] lg:auto-rows-[minmax(19rem,1fr)]">
           {cards.map((card) => {
             const Icon = card.icon;
             return (
@@ -87,8 +87,8 @@ export function TechArsenal() {
                     <Icon className="h-5 w-5" aria-hidden />
                   </div>
                   <h3 className="mt-4 text-xl font-semibold tracking-tight text-white">{card.title}</h3>
-                  <p className="mt-2 text-xs font-semibold uppercase tracking-[0.13em] text-zinc-500">{card.stack}</p>
-                  <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">{card.value}</p>
+                  <p className="mt-2 text-xs font-semibold uppercase tracking-[0.13em] text-zinc-400">{card.stack}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">{card.value}</p>
                 </div>
               </article>
             );

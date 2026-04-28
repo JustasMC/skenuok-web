@@ -43,13 +43,19 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteUrl = getSiteOrigin();
   const base = getMetadataBaseUrl();
 
+  const title = homePageTitle;
+  const description = homePageDescription;
+  const keywords = Array.from(new Set([...siteConfig.keywords, ...homePageKeywords])).filter(Boolean);
+
   return {
     metadataBase: base,
-    title: { absolute: homePageTitle },
-    description: homePageDescription,
-    keywords: Array.from(new Set([...siteConfig.keywords, ...homePageKeywords])),
+    title: { absolute: title },
+    description,
+    keywords,
+    applicationName: siteConfig.name,
     authors: [{ name: siteConfig.name, url: siteUrl }],
     creator: siteConfig.name,
+    publisher: siteConfig.name,
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     alternates: { canonical: siteUrl },
     openGraph: {
@@ -57,23 +63,27 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: siteConfig.locale,
       url: siteUrl,
       siteName: siteConfig.name,
-      title: homePageTitle,
-      description: homePageDescription,
+      title,
+      description,
       images: [
         {
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: homePageTitle,
+          alt: title,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: homePageTitle,
-      description: homePageDescription,
+      title,
+      description,
       ...(siteConfig.twitterCreator ? { creator: siteConfig.twitterCreator } : {}),
       images: [ogImageUrl],
+    },
+    other: {
+      "og:description": description,
+      description,
     },
     category: "technology",
   };

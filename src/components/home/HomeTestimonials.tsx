@@ -40,8 +40,8 @@ export function HomeTestimonials() {
                 <blockquote className="text-sm leading-relaxed text-zinc-300 sm:text-base">
                   <p className="text-pretty italic">„{t.quote}“</p>
                 </blockquote>
-                <figcaption className="mt-5 text-xs text-zinc-500">
-                  <span className="font-medium text-zinc-400">{t.name}</span>
+                <figcaption className="mt-5 text-xs text-zinc-400">
+                  <span className="font-medium text-zinc-300">{t.name}</span>
                   <br />
                   <span>{t.role}</span>
                 </figcaption>
@@ -49,8 +49,8 @@ export function HomeTestimonials() {
             </li>
           ))}
         </ul>
-        <p className="mt-8 text-xs leading-relaxed text-zinc-600 sm:mt-10 sm:text-sm">
-          <strong className="font-medium text-zinc-500">Skaidrumas:</strong> šios citatos yra placeholderiai demonstracijai. Norėdami matyti tikras rekomendacijas,
+        <p className="mt-8 text-xs leading-relaxed text-zinc-400 sm:mt-10 sm:text-sm">
+          <strong className="font-medium text-zinc-300">Skaidrumas:</strong> šios citatos yra placeholderiai demonstracijai. Norėdami matyti tikras rekomendacijas,
           pirmiausia paleiskite{" "}
           <a className="site-link-inline" href="#paslaugos">
             AI SEO auditą ar kursų skenavimą
