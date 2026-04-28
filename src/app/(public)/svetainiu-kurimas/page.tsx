@@ -57,9 +57,9 @@ export default function SvetainiuKurimasPage() {
             užkrovimas, aiški informacijos architektūra, tvarkingas SEO ir paruoštos integracijos augimui.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href="/#kontaktai" className="site-btn-primary">
+            <Link href="/#kontaktai" className="site-btn-primary">
               Aptarti projektą
-            </a>
+            </Link>
             <Link href="/tools/scanner" className="site-btn-secondary">
               Išbandyti URL auditą
             </Link>
