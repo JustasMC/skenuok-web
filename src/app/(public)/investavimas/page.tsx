@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { CashSecuredPutCalculator } from "@/components/CashSecuredPutCalculator";
-import { ContactForm } from "@/components/ContactForm";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
@@ -9,6 +8,25 @@ import { getCanonicalPath } from "@/lib/site-url";
 
 const ibkrReferralUrl =
   process.env.NEXT_PUBLIC_IBKR_REFERRAL_URL?.trim() || "https://www.interactivebrokers.com/";
+
+const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) => m.ContactForm), {
+  ssr: false,
+  loading: () => (
+    <div className="site-shell">
+      <div className="min-h-[min(380px,45vh)] animate-pulse rounded-2xl border border-[var(--color-border)]/50 bg-[var(--color-surface)]/30" />
+    </div>
+  ),
+});
+
+const CashSecuredPutCalculator = dynamic(
+  () => import("@/components/CashSecuredPutCalculator").then((m) => m.CashSecuredPutCalculator),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="min-h-[22rem] animate-pulse rounded-2xl border border-[var(--color-border)]/50 bg-[var(--color-surface)]/30" />
+    ),
+  },
+);
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/investavimas");
