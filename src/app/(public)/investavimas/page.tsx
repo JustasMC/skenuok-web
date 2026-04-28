@@ -10,7 +10,6 @@ const ibkrReferralUrl =
   process.env.NEXT_PUBLIC_IBKR_REFERRAL_URL?.trim() || "https://www.interactivebrokers.com/";
 
 const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) => m.ContactForm), {
-  ssr: false,
   loading: () => (
     <div className="site-shell">
       <div className="min-h-[min(380px,45vh)] animate-pulse rounded-2xl border border-[var(--color-border)]/50 bg-[var(--color-surface)]/30" />
@@ -21,7 +20,6 @@ const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) =>
 const CashSecuredPutCalculator = dynamic(
   () => import("@/components/CashSecuredPutCalculator").then((m) => m.CashSecuredPutCalculator),
   {
-    ssr: false,
     loading: () => (
       <div className="min-h-[22rem] animate-pulse rounded-2xl border border-[var(--color-border)]/50 bg-[var(--color-surface)]/30" />
     ),

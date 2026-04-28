@@ -16,7 +16,6 @@ import { siteConfig } from "@/lib/site-config";
 import { getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
 
 const ROICalculator = dynamic(() => import("@/components/ROICalculator").then((m) => m.ROICalculator), {
-  ssr: false,
   loading: () => (
     <div
       className="min-h-[min(420px,50vh)] animate-pulse rounded-2xl border border-[var(--color-border)]/50 bg-[var(--color-surface)]/30"
@@ -26,7 +25,6 @@ const ROICalculator = dynamic(() => import("@/components/ROICalculator").then((m
 });
 
 const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) => m.ContactForm), {
-  ssr: false,
   loading: () => (
     <div
       className="min-h-[min(380px,45vh)] animate-pulse rounded-2xl border border-[var(--color-border)]/50 bg-[var(--color-surface)]/30"
