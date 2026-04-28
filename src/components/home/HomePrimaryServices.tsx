@@ -45,7 +45,7 @@ export function HomePrimaryServices() {
                   {c.kicker}
                 </span>
                 <h3 className="mt-4 text-xl font-semibold leading-snug tracking-tight text-white sm:text-2xl">{c.title}</h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-400 sm:text-base">{c.body}</p>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-300 sm:text-base">{c.body}</p>
                 <Link
                   href={c.href}
                   className="site-link-inline mt-6 inline-flex w-fit font-medium text-[var(--color-electric)] underline-offset-4"

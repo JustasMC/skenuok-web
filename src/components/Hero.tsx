@@ -34,7 +34,7 @@ export function Hero() {
               Google Lighthouse, kur silpsta Core Web Vitals, ir ką pirmiausia daryti, kad{" "}
               <strong className="font-medium text-zinc-100">SEO strategija</strong> turėtų tvirtą techninę bazę.
             </p>
-            <p className="text-zinc-400">
+            <p className="text-zinc-300">
               Jei parduodate mokymus, <strong className="font-medium text-zinc-200">Kursų kokybės skenavimas</strong> papildo
               klasikinę Svetainių analizę turinio ir pasiūlos prasme. Tada galite tęsti su generatoriumi, planais ar
               individualiu fullstack / AI projektu — <Link href="#moduliai" className="font-medium text-[var(--color-electric)] underline-offset-2 hover:underline">žr. modulius toliau</Link>.
