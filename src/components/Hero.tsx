@@ -23,7 +23,7 @@ export function Hero() {
             <h1 className="text-balance text-[1.65rem] font-semibold leading-[1.12] tracking-tight text-white min-[400px]:text-4xl sm:text-5xl sm:leading-[1.08] lg:text-[3.25rem] lg:leading-[1.06]">
               {homePageH1}
             </h1>
-            <p className="text-pretty pt-1 text-sm font-medium text-zinc-400 sm:text-base">
+            <p className="text-pretty pt-1 text-sm font-medium text-zinc-300 sm:text-base">
               Kuriame žaibiškas Next.js svetaines ir skenuojame esamas, kad pasiektumėte Google viršūnę.
             </p>
           </div>
@@ -50,29 +50,29 @@ export function Hero() {
             </Link>
           </div>
 
-          <div className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_88%,transparent)] px-4 py-3.5 text-sm leading-relaxed text-zinc-300 backdrop-blur-sm sm:px-5">
-            <span className="text-zinc-400">Išbandykite:</span>{" "}
+          <div className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_88%,transparent)] px-4 py-3.5 text-sm leading-relaxed text-zinc-200 backdrop-blur-sm sm:px-5">
+            <span className="text-zinc-300">Išbandykite:</span>{" "}
             <Link
               href="/tools/scanner"
               className="font-medium text-[var(--color-electric)] underline-offset-4 motion-safe:transition-colors motion-safe:duration-200 hover:text-[var(--color-lime)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/70"
             >
               URL skaneris (Svetainių analizė)
             </Link>
-            <span className="text-zinc-400"> arba </span>
+            <span className="text-zinc-300"> arba </span>
             <Link
               href="/tools/course-scanner"
               className="font-medium text-[var(--color-electric)] underline-offset-4 motion-safe:transition-colors motion-safe:duration-200 hover:text-[var(--color-lime)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/70"
             >
               kursų skenavimą
             </Link>
-            <span className="text-zinc-400"> — tada peržiūrėkite </span>
+            <span className="text-zinc-300"> — tada peržiūrėkite </span>
             <a
               href="#duk"
               className="font-medium text-[var(--color-electric)] underline-offset-4 motion-safe:transition-colors motion-safe:duration-200 hover:underline"
             >
               DUK
             </a>
-            <span className="text-zinc-400">.</span>
+            <span className="text-zinc-300">.</span>
           </div>
         </div>
 
@@ -85,6 +85,7 @@ export function Hero() {
               height={630}
               priority={true}
               fetchPriority="high"
+              loading="eager"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 22rem"
               className="h-auto w-full"
             />
@@ -95,7 +96,7 @@ export function Hero() {
               key={item.k}
               className="site-card-interactive flex flex-col justify-between rounded-xl p-3.5 backdrop-blur-sm sm:p-4"
             >
-              <dt className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">{item.k}</dt>
+              <dt className="text-[10px] font-semibold uppercase tracking-wide text-zinc-300">{item.k}</dt>
               <dd className="mt-2 text-xs font-medium leading-snug text-[var(--color-lime)] sm:text-sm">{item.v}</dd>
             </div>
           ))}

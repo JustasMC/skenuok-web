@@ -57,7 +57,7 @@ export function HomePrimaryServices() {
           ))}
         </ul>
 
-        <p className="mt-10 text-center text-sm text-zinc-400 sm:mt-12">
+        <p className="mt-10 text-center text-sm text-zinc-300 sm:mt-12">
           Priedas verslui: lietuviškas{" "}
           <Link className="site-link-inline font-medium" href="/irankiai/seo-generatorius">
             SEO turinio generatorius

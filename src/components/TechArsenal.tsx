@@ -77,7 +77,7 @@ export function TechArsenal() {
             return (
               <article
                 key={card.title}
-                className={`site-card-interactive group relative overflow-hidden p-6 ${card.glow} ${card.size} ${card.minHeight}`}
+                className={`site-card-interactive group relative overflow-hidden p-6 aspect-[4/3] ${card.glow} ${card.size} ${card.minHeight}`}
               >
                 <div
                   className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${card.accent} opacity-0 motion-safe:transition-opacity motion-safe:duration-300 group-hover:opacity-100`}
@@ -87,8 +87,8 @@ export function TechArsenal() {
                     <Icon className="h-5 w-5" aria-hidden />
                   </div>
                   <h3 className="mt-4 text-xl font-semibold tracking-tight text-white">{card.title}</h3>
-                  <p className="mt-2 text-xs font-semibold uppercase tracking-[0.13em] text-zinc-400">{card.stack}</p>
-                  <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">{card.value}</p>
+                  <p className="mt-2 text-xs font-semibold uppercase tracking-[0.13em] text-zinc-300">{card.stack}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-zinc-200 sm:text-base">{card.value}</p>
                 </div>
               </article>
             );

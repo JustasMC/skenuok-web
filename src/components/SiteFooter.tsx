@@ -2,7 +2,7 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 
 const footerLinkClass =
-  "rounded-md px-1 py-0.5 text-sm text-zinc-400 motion-safe:transition-colors motion-safe:duration-200 hover:text-[var(--color-electric)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50";
+  "rounded-md px-1 py-0.5 text-sm text-zinc-300 motion-safe:transition-colors motion-safe:duration-200 hover:text-[var(--color-electric)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50";
 
 export function SiteFooter() {
   return (
@@ -11,7 +11,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
           <div className="max-w-md">
             <p className="font-semibold tracking-tight text-zinc-200">{siteConfig.name}</p>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+            <p className="mt-2 text-sm leading-relaxed text-zinc-300">
               Next.js · serveriniai komponentai · SEO pirmiausia
             </p>
           </div>
@@ -48,17 +48,17 @@ export function SiteFooter() {
             </Link>
           </nav>
         </div>
-        <div className="flex flex-col gap-3 border-t border-[var(--color-border)]/80 pt-6 text-xs text-zinc-400 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="flex flex-col gap-3 border-t border-[var(--color-border)]/80 pt-6 text-xs text-zinc-300 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <p>
             © {new Date().getFullYear()} {siteConfig.name}
           </p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:justify-end">
-            <p className="font-mono text-[11px] text-zinc-400">FS·AI</p>
+            <p className="font-mono text-[11px] text-zinc-300">FS·AI</p>
             <nav className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px]" aria-label="Teisinės nuorodos">
-              <Link href="/terms" className="text-zinc-400 hover:text-[var(--color-electric)]">
+              <Link href="/terms" className="text-zinc-300 hover:text-[var(--color-electric)]">
                 Terms
               </Link>
-              <Link href="/privacy" className="text-zinc-400 hover:text-[var(--color-electric)]">
+              <Link href="/privacy" className="text-zinc-300 hover:text-[var(--color-electric)]">
                 Privacy
               </Link>
             </nav>

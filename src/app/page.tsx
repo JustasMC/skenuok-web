@@ -43,8 +43,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteUrl = getSiteOrigin();
   const base = getMetadataBaseUrl();
 
-  const title = homePageTitle;
-  const description = homePageDescription;
+  // Static constants for build-time reliability (Lighthouse crawlers)
+  const title = homePageTitle || "Svetainių kūrimas, URL skeneris ir AI SEO auditas | Svetainių analizė — Skenuok.com";
+  const description = homePageDescription || "Svetainių kūrimas ir SEO auditas su Next.js: greitos AI svetainės su techniškai tvarkingu kodu, skirtos matomumui bei konversijoms Lietuvoje.";
   const keywords = Array.from(new Set([...siteConfig.keywords, ...homePageKeywords])).filter(Boolean);
 
   return {
@@ -81,9 +82,12 @@ export async function generateMetadata(): Promise<Metadata> {
       ...(siteConfig.twitterCreator ? { creator: siteConfig.twitterCreator } : {}),
       images: [ogImageUrl],
     },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    },
     other: {
       "og:description": description,
-      description,
+      "description": description,
     },
     category: "technology",
   };
