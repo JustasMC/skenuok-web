@@ -24,6 +24,7 @@ export async function runPageSpeedInsights(params: {
   signal?: AbortSignal;
 }): Promise<ParsedPsiResult> {
   const { url, strategy, apiKey, signal } = params;
+  console.log("[pagespeed] request", { url, strategy, hasApiKey: Boolean(apiKey) });
   const u = new URL("https://www.googleapis.com/pagespeedonline/v5/runPagespeed");
   u.searchParams.set("url", url);
   u.searchParams.set("key", apiKey);

@@ -8,7 +8,7 @@ const contentSecurityPolicy = [
   "frame-ancestors 'none'",
   "form-action 'self'",
   "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
-  "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com",
+  "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://www.googleapis.com",
   "img-src 'self' data: https:",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
