@@ -1,12 +1,22 @@
-refactor: atnaujintas AI kortelės tekstas į aukštesnio lygio kompetenciją
+feat: Case Studies accessibility ir mobiliojo UX patobulinimai
 
-- Pakeista antraštė į "AI Orchestration & Next-Gen Development"
-- Stack aprašymas pakeistas į bendresnį (be konkrečių įrankių pavadinimų)
-- Fokusas pakeistas į rezultatus ir aukštesnio lygio kompetenciją
-- Ištrinti per aiškūs įrankių pavadinimai ("Cursor Pro")
-- Akcentuojamas "dirigavimo" ir architektūros aspektas
-- Pabrėžiamas dešimteropis efektyvumas ir klaidų prevencija
+Accessibility Improvements (WCAG AAA):
+- Pridėti prasmingūs aria-label kiekvienam Lighthouse badge'ui
+- Badge'ai dabar aprašomi ekrano skaitytuvams ("Performance balas: 98 iš 100 - Puikus rezultatas")
+- role="region" Lighthouse badge grupei su aprašymu "prieš/po optimizavimo"
+- aria-label rodyklei "pagerinta į" tarp badge'ų
+- aria-expanded state "Read more" toggle'ui
 
-Strateginis pagrindimas: Klientas moka ne už konkrečius įrankius,
-o už tai, kad mes mokame juos panaudoti maksimaliai efektyviai.
-Konkurentai lieka nežinioje apie konkrečias technologijas.
+Mobile UX Optimizavimas:
+- "Skaityti daugiau / Rodyti mažiau" toggle ilgiems tekstams (Problem/Solution)
+- Tekstas sutrumpinamas iki 128px aukščio mobiliajame (sm breakpoint)
+- ChevronDown ikona su rotate animacija
+- Desktop'e tekstas visada rodomas pilnai (nėra toggle)
+
+Refactoring:
+- Išskirtas CaseStudyCard komponentas su useState valdymu
+- Geresnis komponentų struktūrinis organizavimas
+- Importuota ChevronDown ikona iš lucide-react
+
+Techninis pagrindimas: Screen reader support yra kritinis Accessibility 100/100 balui.
+Mobile "Read more" funkcionalumas sumažina "makarono" efektą mažuose ekranuose.
