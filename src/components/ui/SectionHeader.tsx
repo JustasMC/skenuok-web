@@ -28,7 +28,7 @@ export function SectionHeader({ eyebrow, title, description, className = "", wid
       >
         {title}
       </h2>
-      <p className="text-pretty text-base leading-relaxed text-zinc-400 sm:text-lg sm:leading-relaxed">{description}</p>
+      <p className="text-pretty text-base leading-relaxed text-zinc-300 sm:text-lg sm:leading-relaxed">{description}</p>
     </div>
   );
 }

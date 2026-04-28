@@ -89,11 +89,11 @@ export default function SvetainiuKurimasPage() {
           <section className="grid gap-5 md:grid-cols-2">
             <article className="site-card-interactive p-6 sm:p-8">
               <h2 className="text-2xl font-semibold tracking-tight text-white">Kodėl Next.js?</h2>
-              <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+              <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
                 Next.js suteikia serverinį renderinimą, tvirtą SEO pagrindą ir aukštą našumą. Rezultatas: greitesnis
                 pirmas užkrovimas, geresnė indeksacija ir ilgaamžė architektūra, kurią paprasta plėsti augant verslui.
               </p>
-              <ul className="mt-5 space-y-2 text-sm text-zinc-400">
+              <ul className="mt-5 space-y-2 text-sm text-zinc-300">
                 <li>• Stabilus techninis pagrindas konversijai ir reklamos srautui.</li>
                 <li>• Tvarkinga komponentinė architektūra be perteklinio chaoso.</li>
                 <li>• Geresni Core Web Vitals rezultatai realiame naudojime.</li>
@@ -102,11 +102,11 @@ export default function SvetainiuKurimasPage() {
 
             <article className="site-card-interactive p-6 sm:p-8">
               <h2 className="text-2xl font-semibold tracking-tight text-white">AI integracijos nauda</h2>
-              <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+              <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
                 AI Orchestration pagreitina kūrimą ir sumažina kaštus: dalis pasikartojančių užduočių automatizuojama,
                 o komanda koncentruojasi į vertę kuriančius sprendimus. Gaunate greitesnį paleidimą ir geresnę kokybę.
               </p>
-              <ul className="mt-5 space-y-2 text-sm text-zinc-400">
+              <ul className="mt-5 space-y-2 text-sm text-zinc-300">
                 <li>• Spartesnės iteracijos ir trumpesnis time-to-market.</li>
                 <li>• Automatinis turinio/SEO paruošimas prieš publikavimą.</li>
                 <li>• Mažesnis rankinio darbo kiekis ir mažiau žmogiškų klaidų.</li>
@@ -116,7 +116,7 @@ export default function SvetainiuKurimasPage() {
 
           <section className="site-card-interactive p-6 sm:p-8">
             <h2 className="text-2xl font-semibold tracking-tight text-white">SEO garantija: procesas, kuris veikia</h2>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+            <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
               SEO srityje negarantuojame „magiško mygtuko“, bet garantuojame disciplinuotą procesą: techninis auditas,
               struktūros optimizacija, turinio semantika ir nuolatinis matavimas. Būtent šis metodas padėjo
               <strong className="font-medium text-zinc-200"> skenuok.com </strong>
@@ -124,15 +124,15 @@ export default function SvetainiuKurimasPage() {
             </p>
             <div className="mt-5 grid gap-4 md:grid-cols-3">
               <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
-                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">01</p>
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-300">01</p>
                 <p className="mt-2 text-sm text-zinc-300">Techninis SEO bazės sutvarkymas prieš paleidimą.</p>
               </div>
               <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
-                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">02</p>
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-300">02</p>
                 <p className="mt-2 text-sm text-zinc-300">AI + analitika pagrįsti turinio ir UX patobulinimai.</p>
               </div>
               <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
-                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">03</p>
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-300">03</p>
                 <p className="mt-2 text-sm text-zinc-300">Metrikų stebėsena ir nuolatinis rezultatų gerinimas.</p>
               </div>
             </div>

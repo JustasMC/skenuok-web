@@ -47,7 +47,7 @@ export function TechStack() {
                 />
                 <div className="relative flex flex-1 flex-col">
                   <h3 className="text-lg font-semibold tracking-tight text-white">{item.name}</h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-400">{item.role}</p>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-300">{item.role}</p>
                   <span className="mt-6 inline-flex text-[11px] font-semibold uppercase tracking-wider text-[var(--color-lime)]">
                     Pipeline dalis
                   </span>

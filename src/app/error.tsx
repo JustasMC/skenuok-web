@@ -22,7 +22,7 @@ export default function ErrorPage({
           <h1 className="text-balance text-2xl font-semibold tracking-tight text-white sm:text-3xl">
             Kažkas nepavyko
           </h1>
-          <p className="text-pretty text-sm leading-relaxed text-zinc-400">
+          <p className="text-pretty text-sm leading-relaxed text-zinc-300">
             Puslapio negalėjome parodyti iki galo. Tai dažniausiai laikina — galite bandyti dar kartą arba grįžti į pradžią.
           </p>
         </div>

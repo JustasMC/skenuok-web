@@ -52,7 +52,7 @@ export default function BlogPostPage() {
           <header className="mb-10 max-w-3xl space-y-4 sm:mb-12">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--color-electric)]">Blogas · 2026</p>
             <h1 className="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">{title}</h1>
-            <p className="text-base leading-relaxed text-zinc-400 sm:text-lg">{description}</p>
+            <p className="text-base leading-relaxed text-zinc-300 sm:text-lg">{description}</p>
           </header>
 
           <div className="grid gap-8 lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-12">
@@ -61,7 +61,7 @@ export default function BlogPostPage() {
                 aria-label="Straipsnio turinys"
                 className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_78%,transparent)] p-4"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Turinys</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-300">Turinys</p>
                 <ul className="mt-3 space-y-1.5">
                   {toc.map((item) => (
                     <li key={item.id}>

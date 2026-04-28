@@ -56,7 +56,7 @@ export default function BlogPage() {
               <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
                 Svetainių kūrimas ir SEO auditas: planas 2026-iesiems
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+              <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
                 Nuo techninės bazės iki turinio ir analitikos: ką daryti pirmiausia, kad svetainė pradėtų rinkti
                 kokybišką organinį srautą ir konversijas.
               </p>

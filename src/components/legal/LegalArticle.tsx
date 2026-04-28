@@ -7,7 +7,7 @@ type Props = {
 /** Shared readable column for Terms / Privacy (RSC). */
 export function LegalArticle({ children }: Props) {
   return (
-    <div className="mx-auto max-w-3xl space-y-8 text-sm leading-relaxed text-zinc-400 sm:text-[0.9375rem] sm:leading-relaxed">
+    <div className="mx-auto max-w-3xl space-y-8 text-sm leading-relaxed text-zinc-300 sm:text-[0.9375rem] sm:leading-relaxed">
       {children}
     </div>
   );

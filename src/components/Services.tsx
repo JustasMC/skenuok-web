@@ -49,7 +49,7 @@ export function Services() {
                 {m.tag}
               </span>
               <h3 className="relative mt-5 text-xl font-semibold leading-snug tracking-tight text-white sm:text-2xl">{m.title}</h3>
-              <p className="relative mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base sm:leading-relaxed">{m.body}</p>
+              <p className="relative mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base sm:leading-relaxed">{m.body}</p>
               {m.tag === "Našumas" ? (
                 <ul className="relative mt-5 flex flex-wrap gap-2" aria-label="Technologijos">
                   {(["Rust", "C++", "gRPC", "Real-time"] as const).map((b) => (
