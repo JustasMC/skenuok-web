@@ -17,6 +17,12 @@ const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) =>
   ),
 });
 
+const RoiCalculator = dynamic(() => import("@/components/tools/RoiCalculator").then((m) => m.RoiCalculator), {
+  loading: () => (
+    <div className="min-h-[28rem] animate-pulse rounded-2xl border border-[var(--color-border)]/50 bg-[var(--color-surface)]/30" />
+  ),
+});
+
 const CashSecuredPutCalculator = dynamic(
   () => import("@/components/CashSecuredPutCalculator").then((m) => m.CashSecuredPutCalculator),
   {
@@ -92,7 +98,7 @@ export default function InvestavimasPage() {
           <section className="grid gap-5 md:grid-cols-2">
             <article className="site-card-interactive p-6 sm:p-8">
               <h2 className="text-2xl font-semibold tracking-tight text-white">Praktinis workflow</h2>
-              <ol className="mt-4 space-y-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+              <ol className="mt-4 space-y-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
                 <li>
                   <strong className="text-zinc-200">1.</strong> AI filtras surenka akcijas pagal likvidumą, implied volatility
                   ir kainos zoną.
@@ -113,18 +119,22 @@ export default function InvestavimasPage() {
 
             <article className="site-card-interactive p-6 sm:p-8">
               <h2 className="text-2xl font-semibold tracking-tight text-white">Kodėl AI šiame procese</h2>
-              <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+              <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
                 AI leidžia greičiau atrinkti kandidatus, aptikti pasikartojančius rizikos modelius ir standartizuoti
                 pasiruošimą sandoriui. Rezultatas: mažiau rankinio triukšmo, daugiau nuoseklaus sprendimų priėmimo.
               </p>
-              <p className="mt-4 text-sm leading-relaxed text-zinc-400 sm:text-base">
+              <p className="mt-4 text-sm leading-relaxed text-zinc-300 sm:text-base">
                 Svarbu: tai nėra „automatinio pelno mygtukas“ — AI yra pagalbinis sluoksnis disciplinuotai sistemai.
               </p>
             </article>
           </section>
 
-          <div id="roi-calculator">
-            <CashSecuredPutCalculator />
+          <div id="roi-calculator" className="space-y-8">
+            <RoiCalculator />
+            <div>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-300">Supaprastinta versija</p>
+              <CashSecuredPutCalculator />
+            </div>
           </div>
 
           <section className="site-card-interactive relative overflow-hidden p-6 sm:p-8">
@@ -144,7 +154,7 @@ export default function InvestavimasPage() {
               >
                 Atidaryti IBKR registraciją
               </a>
-              <p className="mt-4 text-xs leading-relaxed text-zinc-500">
+              <p className="mt-4 text-xs leading-relaxed text-zinc-300">
                 Pastaba: investavimas susijęs su rizika. Ši informacija yra edukacinė ir nėra individuali finansinė
                 rekomendacija.
               </p>
