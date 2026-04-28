@@ -1,4 +1,5 @@
 /** Rate limit for /api/scan (separate bucket from contact form). */
+import { warnIfUsingLocalRateLimit } from "@/lib/rate-limit-runtime";
 
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS = 12;
@@ -13,6 +14,7 @@ function prune(key: string, now: number): number[] {
 }
 
 export function assertScanRateLimit(clientKey: string): { ok: true } | { ok: false; retryAfterSec: number } {
+  warnIfUsingLocalRateLimit();
   const now = Date.now();
   const recent = prune(clientKey, now);
   if (recent.length >= MAX_REQUESTS) {

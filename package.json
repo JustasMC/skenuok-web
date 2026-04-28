@@ -10,6 +10,9 @@
     "start:prod": "node ./node_modules/prisma/build/index.js migrate deploy && node ./node_modules/next/dist/bin/next start",
     "db:migrate:deploy": "node ./node_modules/prisma/build/index.js migrate deploy",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test:smoke": "tsx --test tests/smoke/**/*.test.ts",
+    "test": "npm run test:smoke",
     "db:generate": "prisma generate",
     "db:generate:unlock": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/db-generate-unlock.ps1",
     "postinstall": "node scripts/postinstall-prisma.cjs"
@@ -42,6 +45,7 @@
     "eslint-config-next": "^15.3.0",
     "prisma": "^6.6.0",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

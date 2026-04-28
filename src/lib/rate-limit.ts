@@ -2,6 +2,7 @@
  * Simple in-memory rate limiter for a single Node instance.
  * On serverless with many instances each has its own map — use Redis/Upstash for strict global limits.
  */
+import { warnIfUsingLocalRateLimit } from "@/lib/rate-limit-runtime";
 
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS = 5;
@@ -16,6 +17,7 @@ function prune(key: string, now: number): number[] {
 }
 
 export function assertContactRateLimit(clientKey: string): { ok: true } | { ok: false; retryAfterSec: number } {
+  warnIfUsingLocalRateLimit();
   const now = Date.now();
   const recent = prune(clientKey, now);
   if (recent.length >= MAX_REQUESTS) {
@@ -52,6 +54,7 @@ function pruneChat(key: string, now: number): number[] {
 }
 
 export function assertChatRateLimit(clientKey: string): { ok: true } | { ok: false; retryAfterSec: number } {
+  warnIfUsingLocalRateLimit();
   const now = Date.now();
   const recent = pruneChat(clientKey, now);
   if (recent.length >= CHAT_MAX_REQUESTS) {

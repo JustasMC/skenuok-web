@@ -1,10 +1,11 @@
 import Stripe from "stripe";
+import { env } from "@/lib/env";
 import { getSiteOrigin } from "@/lib/site-url";
 
 let stripeSingleton: Stripe | null = null;
 
 export function getStripe(): Stripe {
-  const key = process.env.STRIPE_SECRET_KEY?.trim();
+  const key = env.STRIPE_SECRET_KEY;
   if (!key) {
     throw new Error("STRIPE_SECRET_KEY is not set");
   }

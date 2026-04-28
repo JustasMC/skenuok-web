@@ -1,4 +1,5 @@
 import { extractPageMeta } from "@/lib/lighthouse-meta";
+import { getPageSpeedApiKey } from "@/lib/env";
 import { fetchPageHtmlSignals } from "@/lib/page-html-signals";
 import {
   buildAiScanAnalysis,
@@ -44,8 +45,7 @@ export async function runSeoScan(
   validated: ScanRequest,
   opts?: { signal?: AbortSignal },
 ): Promise<SeoScanApiPayload | SeoScanFailure> {
-  const apiKey =
-    process.env.PSI_API_KEY ?? process.env.PAGESPEED_API_KEY ?? process.env.GOOGLE_PAGESPEED_API_KEY;
+  const apiKey = getPageSpeedApiKey();
   if (!apiKey) {
     return {
       ok: false,

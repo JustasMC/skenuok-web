@@ -4,6 +4,7 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import Nodemailer from "next-auth/providers/nodemailer";
 import { cookies } from "next/headers";
+import { env } from "@/lib/env";
 import { mergeGeneratorSessionIntoUser } from "@/lib/auth-merge";
 import { prisma } from "@/lib/prisma";
 
@@ -26,8 +27,8 @@ const devLoginAllowed =
  */
 const useDatabaseSession = googleConfigured || emailConfigured;
 
-const authSecret = process.env.AUTH_SECRET?.trim();
-if (process.env.NODE_ENV === "production" && !authSecret) {
+const authSecret = env.AUTH_SECRET;
+if (env.NODE_ENV === "production" && !authSecret) {
   console.error(
     "[auth] Production: nustatykite AUTH_SECRET (ilgas atsitiktinis stringas). Kitu atveju sesijos nėra saugios.",
   );
