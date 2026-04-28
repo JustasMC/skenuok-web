@@ -10,7 +10,7 @@ const pillars = [
   },
   {
     title: "AI Orchestration & Automation",
-    body: "Nerašau kodo rankomis \u2014 aš jam diriguoju. Naudodamas Cursor Pro++ ir pažangiausius AI agentus, integruoju LLM modelius bei automatizuoju verslo procesus (nuo YouTube turinio iki MEV botų architektūros).",
+    body: "Nerašau kodo rankomis \u2014 aš jam diriguoju. Naudodamas pažangiausius AI agentus, integruoju LLM modelius bei automatizuoju verslo procesus (nuo YouTube turinio iki MEV botų architektūros).",
     accent: "border-[var(--color-lime)]/40",
     glow: "group-hover:shadow-[0_0_36px_-12px_rgba(200,255,0,0.3)]",
     tag: "AI",
