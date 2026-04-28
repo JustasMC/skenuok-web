@@ -1,22 +1,18 @@
-feat: Case Studies accessibility ir mobiliojo UX patobulinimai
+feat: kainų komunikacijos ir value proposition patobulinimai
 
-Accessibility Improvements (WCAG AAA):
-- Pridėti prasmingūs aria-label kiekvienam Lighthouse badge'ui
-- Badge'ai dabar aprašomi ekrano skaitytuvams ("Performance balas: 98 iš 100 - Puikus rezultatas")
-- role="region" Lighthouse badge grupei su aprašymu "prieš/po optimizavimo"
-- aria-label rodyklei "pagerinta į" tarp badge'ų
-- aria-expanded state "Read more" toggle'ui
+Skaičiuoklės Tooltip'ų Patobulinimai:
+- "Premium Hosting & Support" - pridėtas "(3 mėn.)" label ir "Vienkartinis mokėjimas" paaiškinimas
+- "SEO Pro paketas" - pridėtas "(100/100 garantija)" label ir konkretus LCP < 2.5s standartas
+- "AI funkcijos" - pridėtas "(custom integracijos)" label ir palyginimas su AI specialisto kaina (2000+ EUR/mėn)
+- Tooltip'uose pabrėžtas value vs konkurentų kainos (pvz. "Standartinės agentūros tokiai paslaugai ima 50-80 EUR/mėn.")
 
-Mobile UX Optimizavimas:
-- "Skaityti daugiau / Rodyti mažiau" toggle ilgiems tekstams (Problem/Solution)
-- Tekstas sutrumpinamas iki 128px aukščio mobiliajame (sm breakpoint)
-- ChevronDown ikona su rotate animacija
-- Desktop'e tekstas visada rodomas pilnai (nėra toggle)
+Rinkos Palyginimo Sekcija (Anchor Pricing):
+- Pridėta nauja sekcija po CTA su trimis kortelėmis: Studentas/Pradininkas (200-400 EUR), Standartinė agentūra (1200-2500 EUR), Mūsų (dynamic pricing)
+- Kiekviena kortelė rodo Lighthouse balus ir kokybės skirtumą
+- Studentas: 40-60 balų (lėtas WordPress)
+- Agentūra: 70-90 balų (geras dizainas, bet sunki svetainė)
+- Mes: 100/100/100 (žaibiškas greitis, modernus stackas)
+- Pridėtas techninis pranašumas: "AI-driven development workflow" paaiškina, kodėl kokybė aukšta, o kaina realistinė
 
-Refactoring:
-- Išskirtas CaseStudyCard komponentas su useState valdymu
-- Geresnis komponentų struktūrinis organizavimas
-- Importuota ChevronDown ikona iš lucide-react
-
-Techninis pagrindimas: Screen reader support yra kritinis Accessibility 100/100 balui.
-Mobile "Read more" funkcionalumas sumažina "makarono" efektą mažuose ekranuose.
+Psichologinis efektas: Anchor pricing (agentūros 1200-2500 EUR) daro mūsų 870 EUR labai patrauklią. 
+Skaidrumas: Klientas mato, už ką moka ir kodėl kaina yra tokia.

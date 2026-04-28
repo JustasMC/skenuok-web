@@ -22,24 +22,24 @@ const addons: ReadonlyArray<{
 }> = [
   {
     id: "seo-pro",
-    label: "SEO Pro paketas",
+    label: "SEO Pro paketas (100/100 garantija)",
     price: 390,
     tooltip:
-      "Užtikriname 100/100 Lighthouse balus: meta optimizavimas, schema markup, Core Web Vitals patikrinimas ir Search Console integracija.",
+      "Garantuojame 100/100 Lighthouse balus (Performance, SEO, Accessibility): meta optimizavimas, schema markup, Core Web Vitals < 2.5s LCP, Search Console integracija ir sitemap.xml setup. Tai ne 'bandymas', o inžinerinis standartas.",
   },
   {
     id: "ai-features",
-    label: "AI funkcijos",
+    label: "AI funkcijos (custom integracijos)",
     price: 650,
     tooltip:
-      "AI Chat botai, turinio generavimas, automatinis SEO auditas — pritaikyta jūsų verslo poreikiams, ne generic chatbot'as.",
+      "Ne generic chatbot'as: custom AI agentai jūsų verslo logikai (turinio generavimas, automatinis SEO auditas, klientų aptarnavimas, produktų rekomendacijos). Pilnai integruota su jūsų duomenų baze. Samdant AI specialistą kainuotų 2000+ EUR/mėn.",
   },
   {
     id: "premium-hosting",
-    label: "Premium Hosting & Support",
+    label: "Premium Hosting & Support (3 mėn.)",
     price: 180,
     tooltip:
-      "Railway deployment, CDN optimizavimas, automatiniai backup'ai ir 3 mėnesių techninė pagalba po paleidimo (atnaujinimai, bugfix'ai).",
+      "Vienkartinis mokėjimas: Railway deployment, CDN optimizavimas, automatiniai backup'ai ir 3 mėnesių techninė pagalba po paleidimo (atnaujinimai, bugfix'ai, našumo stebėsena). Standartinės agentūros tokiai paslaugai ima 50-80 EUR/mėn.",
     defaultChecked: true,
   },
 ];
@@ -261,6 +261,50 @@ export function WebPriceCalculator() {
         <p className="text-xs leading-relaxed text-zinc-300">
           <strong className="font-medium text-zinc-200">SEO efektas:</strong> Interaktyvūs įrankiai padidina puslapio
           engagement — Google tai mato kaip kokybės signalą ir geriau ranguoja svetainę.
+        </p>
+      </motion.div>
+
+      {/* Value Proposition: Why Our Pricing is Fair */}
+      <motion.div
+        layout
+        transition={spring}
+        className="mt-6 space-y-4 rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-5 sm:p-6"
+      >
+        <h3 className="text-base font-semibold text-zinc-100 sm:text-lg">
+          Kodėl mūsų kainos yra teisingos? (Rinkos palyginimas)
+        </h3>
+        <div className="grid gap-3 text-sm sm:grid-cols-3">
+          <div className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-4">
+            <p className="font-mono text-xs font-semibold uppercase tracking-wide text-rose-400">Studentas / Pradininkas</p>
+            <p className="mt-2 text-xl font-bold tabular-nums text-white">200-400 EUR</p>
+            <p className="mt-2 text-xs leading-relaxed text-zinc-300">
+              Lighthouse: <span className="font-semibold text-rose-400">40-60 balų</span>. Lėtas WordPress, prastas SEO, dažnai
+              lūžta.
+            </p>
+          </div>
+          <div className="rounded-lg border border-amber-400/30 bg-amber-400/5 p-4">
+            <p className="font-mono text-xs font-semibold uppercase tracking-wide text-amber-400">Standartinė agentūra</p>
+            <p className="mt-2 text-xl font-bold tabular-nums text-white">1200-2500 EUR</p>
+            <p className="mt-2 text-xs leading-relaxed text-zinc-300">
+              Lighthouse: <span className="font-semibold text-amber-400">70-90 balų</span>. Geras dizainas, bet techniškai sunki
+              svetainė.
+            </p>
+          </div>
+          <div className="rounded-lg border border-[var(--color-lime)]/40 bg-[var(--color-lime)]/10 p-4">
+            <p className="font-mono text-xs font-semibold uppercase tracking-wide text-[var(--color-lime)]">
+              Mūsų (AI Orchestrator)
+            </p>
+            <p className="mt-2 text-xl font-bold tabular-nums text-white">{pricing.total} EUR</p>
+            <p className="mt-2 text-xs leading-relaxed text-zinc-300">
+              Lighthouse: <span className="font-semibold text-[var(--color-lime)]">100/100/100</span>. Žaibiškas greitis,
+              modernus stackas, SEO paruoštas.
+            </p>
+          </div>
+        </div>
+        <p className="border-l-2 border-[var(--color-electric)]/60 pl-4 text-xs leading-relaxed text-zinc-300 sm:text-sm">
+          <strong className="font-medium text-zinc-200">Techninis pranašumas:</strong> Mes naudojame AI-driven development
+          workflow, kuris leidžia pasiekti agentūrų kokybę už realistišką kainą. Klientas moka ne už laiką, o už rezultatą —
+          100/100 Lighthouse balus, kurie garantuoja Google meilę.
         </p>
       </motion.div>
     </section>
