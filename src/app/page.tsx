@@ -8,6 +8,7 @@ import { HomeTestimonials } from "@/components/home/HomeTestimonials";
 import { Services } from "@/components/Services";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { TechArsenal } from "@/components/TechArsenal";
 import { TechStack } from "@/components/TechStack";
 import { homePageDescription, homePageKeywords, homePageTitle } from "@/lib/home-seo";
 import { siteConfig } from "@/lib/site-config";
@@ -83,6 +84,7 @@ export default function HomePage() {
         <HomeTestimonials />
         <CaseStudies />
         <Services />
+        <TechArsenal />
         <TechStack />
         <ROICalculator />
         <HomeFaq />

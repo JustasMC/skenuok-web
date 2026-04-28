@@ -6,6 +6,7 @@ const stats = [
   { k: "Svetainių analizė", v: "CWV, SEO, prieinamumas" },
   { k: "Kursų skenavimas", v: "Turinys, pažadai, metrikos" },
   { k: "SEO strategija", v: "Įrankis → tęsinys / projektas" },
+  { k: "Svetainių kūrimas", v: "Next.js + SEO + AI integracijos" },
 ] as const;
 
 export function Hero() {
@@ -22,7 +23,7 @@ export function Hero() {
               {homePageH1}
             </h1>
             <p className="text-pretty pt-1 text-sm font-medium text-zinc-500 sm:text-base">
-              Skenuok.com — Svetainių analizė, kursų skenavimas, AI rekomendacijos (Next.js / React, Metaduomenų API)
+              Kuriame žaibiškas Next.js svetaines ir skenuojame esamas, kad pasiektumėte Google viršūnę.
             </p>
           </div>
 

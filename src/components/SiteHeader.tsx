@@ -10,13 +10,17 @@ const links = [
   { href: "/#atsiliepimai", label: "Atsiliepimai" },
   { href: "/#atvejai", label: "Atvejai" },
   { href: "/#duk", label: "DUK" },
-  { href: "/tools/scanner", label: "URL skaneris" },
-  { href: "/tools/course-scanner", label: "Kursų skaneris" },
+  { href: "/svetainiu-kurimas", label: "Svetainių kūrimas" },
   { href: "/irankiai/seo-generatorius", label: "SEO generatorius" },
   { href: "/pricing", label: "Kainos" },
   { href: "/#stack", label: "Stack" },
   { href: "/#roi", label: "ROI" },
   { href: "/#kontaktai", label: "Kontaktai" },
+] as const;
+
+const scannerLinks = [
+  { href: "/tools/scanner", label: "URL skaneris" },
+  { href: "/tools/course-scanner", label: "Kursų skaneris" },
 ] as const;
 
 export function SiteHeader() {
@@ -59,6 +63,26 @@ export function SiteHeader() {
           className="hidden flex-wrap items-center gap-x-1 gap-y-1 text-sm md:flex lg:gap-x-0.5"
           aria-label="Pagrindinė navigacija"
         >
+          <div className="group relative">
+            <button
+              type="button"
+              className="site-nav-link inline-flex items-center gap-1"
+              aria-haspopup="true"
+              aria-label="Skeneriai meniu"
+            >
+              Skeneriai
+              <span aria-hidden className="text-[10px] text-zinc-500 group-hover:text-zinc-300">
+                ▾
+              </span>
+            </button>
+            <div className="pointer-events-none invisible absolute left-0 top-full z-50 mt-1 min-w-44 rounded-lg border border-[var(--color-border)]/80 bg-[var(--color-surface)] p-1 opacity-0 shadow-lg shadow-black/30 transition group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100">
+              {scannerLinks.map((l) => (
+                <Link key={l.href} href={l.href} className="block rounded-md px-2.5 py-2 text-sm text-zinc-200 hover:bg-white/5 hover:text-[var(--color-lime)]">
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
           {links.map((l) => (
             <Link key={l.href} href={l.href} className="site-nav-link">
               {l.label}
@@ -109,6 +133,17 @@ export function SiteHeader() {
           >
             <nav className="site-shell-wide flex flex-col gap-0.5 py-4" aria-label="Mobilioji navigacija">
               {links.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="rounded-lg px-3 py-3 text-sm text-zinc-200 motion-safe:transition-colors motion-safe:duration-200 hover:bg-white/5 hover:text-[var(--color-lime)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50 active:bg-white/10"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {l.label}
+                </Link>
+              ))}
+              <p className="mt-2 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">Skeneriai</p>
+              {scannerLinks.map((l) => (
                 <Link
                   key={l.href}
                   href={l.href}

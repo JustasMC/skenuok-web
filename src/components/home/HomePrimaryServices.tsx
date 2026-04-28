@@ -18,6 +18,13 @@ const cards = [
     href: "/tools/course-scanner",
     cta: "Bandyti kursų skanerį",
   },
+  {
+    title: "Svetainių kūrimas",
+    kicker: "Nauja",
+    body: "Nuo idėjos iki pilnai SEO optimizuoto Next.js sprendimo su AI integracijomis.",
+    href: "/svetainiu-kurimas",
+    cta: "Peržiūrėti paslaugą",
+  },
 ] as const;
 
 export function HomePrimaryServices() {
@@ -30,7 +37,7 @@ export function HomePrimaryServices() {
           description="Du aiškūs įrankiai: AI SEO auditas (Svetainių analizė) ir Kursų kokybės skenavimas. Toliau — plėtra su SEO strategija, turinio generatoriumi ar individualiu projektu; žr. modulius ir kontaktus toliau puslapyje."
         />
 
-        <ul className="mt-10 grid list-none gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6" role="list">
+        <ul className="mt-10 grid list-none gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3" role="list">
           {cards.map((c) => (
             <li key={c.title}>
               <article className="site-card-interactive flex h-full flex-col p-6 sm:p-8">

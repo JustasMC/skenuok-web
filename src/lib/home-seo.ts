@@ -3,10 +3,10 @@
  * English comments per project rules; user-facing copy is Lithuanian.
  */
 
-export const homePageH1 = "SEO svetainių URL skeneris ir AI auditas";
+export const homePageH1 = "Svetainių kūrimas, URL skeneris ir AI SEO auditas";
 
 export const homePageTitle =
-  "SEO svetainių URL skeneris ir AI auditas | Svetainių analizė — Skenuok.com";
+  "Svetainių kūrimas, URL skeneris ir AI SEO auditas | Svetainių analizė — Skenuok.com";
 
 export const homePageDescription =
   "Nemokamas SEO URL skeneris ir AI SEO auditas: Lighthouse, Core Web Vitals, meta, H1 ir rekomendacijos lietuviškai. Svetainių analizė, kursų skenavimas, SEO strategija. Next.js (React) pagrindu — serverinis renderis (RSC) ir Metaduomenų API, skirti matomumui. Vidinės nuorodos, greitas krovimasis, atitinka profesionalias web paslaugas.";
@@ -24,6 +24,7 @@ export const homePageKeywords = [
   "PageSpeed",
   "Core Web Vitals",
   "Skenuok.com",
+  "Svetainių kūrimas",
 ] as const;
 
 export const homeFaqContent: readonly { q: string; a: string }[] = [
