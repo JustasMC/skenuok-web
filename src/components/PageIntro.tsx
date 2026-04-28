@@ -25,7 +25,7 @@ export function PageIntro({ kicker, title, children, variant = "tool", className
       <h1 className="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">{title}</h1>
       <div
         className={cn(
-          "leading-relaxed text-zinc-400",
+          "leading-relaxed text-zinc-300",
           variant === "tool" && "text-base md:text-lg",
           variant === "page" && "text-sm sm:text-base",
         )}

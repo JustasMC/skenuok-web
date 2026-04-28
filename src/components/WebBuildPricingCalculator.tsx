@@ -46,13 +46,13 @@ export function WebBuildPricingCalculator() {
           Kainos skaičiuoklė
         </p>
         <h3 className="text-2xl font-semibold tracking-tight text-white">Preliminari projekto apimtis</h3>
-        <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
+        <p className="text-sm leading-relaxed text-zinc-300 sm:text-base">
           Pasirinkite projekto tipą slider pagalba ir gaukite orientacinę kainą bei trukmę.
         </p>
       </div>
 
       <div className="mt-6">
-        <label htmlFor="project-type" className="mb-3 block text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+        <label htmlFor="project-type" className="mb-3 block text-xs font-semibold uppercase tracking-[0.14em] text-zinc-300">
           Projekto tipas
         </label>
         <input
@@ -69,7 +69,7 @@ export function WebBuildPricingCalculator() {
           aria-valuenow={index}
           aria-valuetext={selected.name}
         />
-        <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs text-zinc-500">
+        <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs text-zinc-300">
           {plans.map((plan, i) => (
             <button
               key={plan.name}
@@ -85,14 +85,14 @@ export function WebBuildPricingCalculator() {
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_90%,transparent)] p-4">
-          <p className="text-sm text-zinc-500">Preliminari kaina</p>
+          <p className="text-sm text-zinc-300">Preliminari kaina</p>
           <p className="mt-1 text-2xl font-semibold text-white">nuo {selected.priceFrom} EUR</p>
-          <p className="mt-3 text-sm text-zinc-500">Kūrimo trukmė</p>
+          <p className="mt-3 text-sm text-zinc-300">Kūrimo trukmė</p>
           <p className="mt-1 text-lg font-medium text-[var(--color-lime)]">{selected.duration}</p>
         </div>
         <div className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_84%,transparent)] p-4">
           <p className="text-sm font-medium text-zinc-200">Kas įeina</p>
-          <ul className="mt-3 space-y-2 text-sm leading-relaxed text-zinc-400">
+          <ul className="mt-3 space-y-2 text-sm leading-relaxed text-zinc-300">
             {selected.includes.map((item) => (
               <li key={item} className="flex gap-2">
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-electric)]" aria-hidden />

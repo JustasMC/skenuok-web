@@ -24,7 +24,7 @@ const modules = [
 ] as const;
 
 const badgeClass =
-  "inline-block rounded-md border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_75%,var(--color-surface-2))] px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wide text-zinc-500";
+  "inline-block rounded-md border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_75%,var(--color-surface-2))] px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wide text-zinc-300";
 
 export function Services() {
   return (

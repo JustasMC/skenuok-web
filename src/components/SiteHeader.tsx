@@ -71,7 +71,7 @@ export function SiteHeader() {
               aria-label="Skeneriai meniu"
             >
               Skeneriai
-              <span aria-hidden className="text-[10px] text-zinc-500 group-hover:text-zinc-300">
+              <span aria-hidden className="text-[10px] text-zinc-300 group-hover:text-zinc-200">
                 ▾
               </span>
             </button>
@@ -142,7 +142,7 @@ export function SiteHeader() {
                   {l.label}
                 </Link>
               ))}
-              <p className="mt-2 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">Skeneriai</p>
+              <p className="mt-2 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-300">Skeneriai</p>
               {scannerLinks.map((l) => (
                 <Link
                   key={l.href}

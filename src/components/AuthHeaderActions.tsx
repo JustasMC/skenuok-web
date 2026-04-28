@@ -128,7 +128,7 @@ export function AuthHeaderActions() {
     if (credits == null) {
       return (
         <span
-          className={`${creditPillBase} border-[var(--color-border)]/70 bg-zinc-900/40 text-zinc-500`}
+          className={`${creditPillBase} border-[var(--color-border)]/70 bg-zinc-900/40 text-zinc-300`}
           title="Nepavyko užkrauti kreditų. Bandykite atnaujinti puslapį."
           role="status"
         >
@@ -167,7 +167,7 @@ export function AuthHeaderActions() {
         </span>
         <Link
           href={href}
-          className="shrink-0 text-[11px] font-semibold text-zinc-500 underline decoration-zinc-600/55 underline-offset-[3px] motion-safe:transition-colors motion-safe:duration-200 hover:text-[var(--color-lime)] hover:decoration-[color-mix(in_oklab,var(--color-lime)_45%,transparent)] focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/55 sm:text-xs"
+          className="shrink-0 text-[11px] font-semibold text-zinc-300 underline decoration-zinc-400/55 underline-offset-[3px] motion-safe:transition-colors motion-safe:duration-200 hover:text-[var(--color-lime)] hover:decoration-[color-mix(in_oklab,var(--color-lime)_45%,transparent)] focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/55 sm:text-xs"
           aria-label="Kainodara ir prenumeratos planai"
         >
           Planai
@@ -180,7 +180,7 @@ export function AuthHeaderActions() {
     return (
       <div className="flex items-center gap-2 sm:gap-3" aria-busy="true">
         <CreditsSkeleton />
-        <span className="text-xs text-zinc-600">…</span>
+        <span className="text-xs text-zinc-300">…</span>
       </div>
     );
   }
@@ -195,7 +195,7 @@ export function AuthHeaderActions() {
         >
           Darbo vieta
         </Link>
-        <span className="hidden max-w-[10rem] shrink truncate text-xs text-zinc-500 sm:inline" title={session.user.email ?? ""}>
+        <span className="hidden max-w-[10rem] shrink truncate text-xs text-zinc-300 sm:inline" title={session.user.email ?? ""}>
           {session.user.email}
         </span>
         <button

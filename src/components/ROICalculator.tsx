@@ -174,7 +174,7 @@ function Metric({
 }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-wide text-zinc-500">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-zinc-300">{label}</p>
       <p
         className={cn(
           "mt-1 text-2xl font-semibold tabular-nums sm:text-3xl",
@@ -183,7 +183,7 @@ function Metric({
       >
         {value}
       </p>
-      <p className="mt-1 text-xs text-zinc-500">{hint}</p>
+      <p className="mt-1 text-xs text-zinc-300">{hint}</p>
     </div>
   );
 }

@@ -22,7 +22,7 @@ export function HomeFaq() {
           className="mt-10 sm:mt-12"
           items={homeFaqContent}
         />
-        <p className="mt-8 text-center text-sm text-zinc-500 sm:mt-10">
+        <p className="mt-8 text-center text-sm text-zinc-300 sm:mt-10">
           <a className="site-link-inline font-medium" href="#paslaugos">
             Paslaugos
           </a>{" "}

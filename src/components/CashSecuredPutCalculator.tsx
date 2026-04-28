@@ -37,7 +37,7 @@ export function CashSecuredPutCalculator() {
         Cash-Secured Put ROI Calculator
       </p>
       <h3 className="mt-2 text-2xl font-semibold tracking-tight text-white">Opcijų strategijos greita projekcija</h3>
-      <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+      <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
         Įveskite pagrindinius parametrus ir matykite metinę grąžą bei saugumo buferį. Skaičiuoklė skirta edukacinei
         analizei, ne finansinei rekomendacijai.
       </p>
@@ -109,9 +109,9 @@ function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full bg-transparent text-sm text-white outline-none placeholder:text-zinc-500"
+          className="w-full bg-transparent text-sm text-white outline-none placeholder:text-zinc-300"
         />
-        <span className="mt-1 block text-[11px] uppercase tracking-[0.12em] text-zinc-500">{suffix}</span>
+        <span className="mt-1 block text-[11px] uppercase tracking-[0.12em] text-zinc-300">{suffix}</span>
       </div>
     </label>
   );
@@ -120,7 +120,7 @@ function Field({
 function ResultCard({ label, value, accent }: { label: string; value: string; accent: string }) {
   return (
     <article className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_86%,transparent)] p-4">
-      <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">{label}</p>
+      <p className="text-xs uppercase tracking-[0.14em] text-zinc-300">{label}</p>
       <p className={`mt-2 text-2xl font-semibold ${accent}`}>{value}</p>
     </article>
   );

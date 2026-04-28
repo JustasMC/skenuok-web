@@ -73,7 +73,7 @@ export function ContactForm() {
               title="Pradėkime nuo trumpo pokalbio"
               description="Užpildykite formą — įrašas saugomas saugiai, pranešimą gaunu jums patogiu kanalu (pvz. Discord arba Telegram), kai tik peržiūriu užklausą."
             />
-            <ul className="space-y-3 text-sm leading-relaxed text-zinc-500">
+            <ul className="space-y-3 text-sm leading-relaxed text-zinc-300">
               <li className="flex gap-3">
                 <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-electric)]" aria-hidden />
                 <span>Serverinė validacija (Zod), rate limit ir „honeypot“ — mažiau šlamšto.</span>

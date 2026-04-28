@@ -37,7 +37,7 @@ export function FaqAccordion({ items, className, itemClassName, firstOpen }: Pro
               ▼
             </span>
           </summary>
-          <p className="border-t border-[var(--color-border)]/60 px-4 py-3 text-sm leading-relaxed text-zinc-400 sm:px-5 sm:py-4 sm:text-base">
+          <p className="border-t border-[var(--color-border)]/60 px-4 py-3 text-sm leading-relaxed text-zinc-300 sm:px-5 sm:py-4 sm:text-base">
             {item.a}
           </p>
         </details>

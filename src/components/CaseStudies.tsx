@@ -65,7 +65,7 @@ export function CaseStudies() {
                     </li>
                   ))}
                 </ul>
-                <ul className="mt-5 flex flex-1 flex-col gap-3.5 text-sm leading-relaxed text-zinc-400">
+                <ul className="mt-5 flex flex-1 flex-col gap-3.5 text-sm leading-relaxed text-zinc-300">
                   {c.outcomes.map((line) => (
                     <li key={line} className="flex gap-3">
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-lime)]" aria-hidden />
@@ -78,8 +78,8 @@ export function CaseStudies() {
           ))}
         </ul>
 
-        <p className="mt-10 max-w-3xl border-l-2 border-[var(--color-border)] pl-4 text-xs leading-relaxed text-zinc-500 sm:mt-12 sm:text-sm">
-          <strong className="font-medium text-zinc-400">Pastaba:</strong> rodomi rezultatai yra iliustratyvūs — kiekvienas projektas turi savo bazę ir konkurenciją. Prieš viešus KPI sutariame matavimo modelį (GA4, Search Console, pajamos, operacijos).
+        <p className="mt-10 max-w-3xl border-l-2 border-[var(--color-border)] pl-4 text-xs leading-relaxed text-zinc-300 sm:mt-12 sm:text-sm">
+          <strong className="font-medium text-zinc-200">Pastaba:</strong> rodomi rezultatai yra iliustratyvūs — kiekvienas projektas turi savo bazę ir konkurenciją. Prieš viešus KPI sutariame matavimo modelį (GA4, Search Console, pajamos, operacijos).
         </p>
       </div>
     </section>

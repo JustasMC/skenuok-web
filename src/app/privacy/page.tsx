@@ -62,7 +62,7 @@ export default function PrivacyPage() {
           </PageIntro>
 
           <LegalArticle>
-            <p className="rounded-lg border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_70%,transparent)] px-4 py-3 text-xs text-zinc-500">
+            <p className="rounded-lg border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_70%,transparent)] px-4 py-3 text-xs text-zinc-300">
               Paskutinis atnaujinimas: <time dateTime={new Date().toISOString().slice(0, 10)}>{updated}</time>. Kartu su{" "}
               <Link href="/terms" className="site-link-inline font-medium">
                 paslaugų teikimo sąlygomis
@@ -80,7 +80,7 @@ export default function PrivacyPage() {
 
             <LegalSection id="rinkimas" title="2. Duomenų rinkimo metodai ir kategorijos">
               <p>Galime rinkti ir tvarkyti šias duomenų kategorijas:</p>
-              <ul className="list-inside list-disc space-y-2 text-zinc-400">
+              <ul className="list-inside list-disc space-y-2 text-zinc-300">
                 <li>
                   <strong className="text-zinc-300">Kontaktinė forma:</strong> vardas, el. paštas, įmonė (nebūtina), žinutės
                   turinys, paslaugos pasirinkimas — siunčiant užklausą į serverį.
@@ -102,7 +102,7 @@ export default function PrivacyPage() {
             </LegalSection>
 
             <LegalSection id="tikslai" title="3. Duomenų naudojimo tikslai">
-              <ul className="list-inside list-disc space-y-2 text-zinc-400">
+              <ul className="list-inside list-disc space-y-2 text-zinc-300">
                 <li>Paslaugų teikimas, autentifikavimas, kreditų apskaita ir klientų aptarnavimas.</li>
                 <li>Saugumas, sukčiavimo prevencija, serverinių klaidų diagnostika.</li>
                 <li>Teisinių įsipareigojimų vykdymas ir pagrįstų teisinių reikalavimų tenkinimas.</li>

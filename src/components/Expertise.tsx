@@ -42,9 +42,9 @@ export function Expertise() {
                   className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${item.accent} opacity-0 motion-safe:transition-opacity motion-safe:duration-300 group-hover:opacity-100`}
                 />
                 <div className="relative flex h-full flex-col">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500">{item.tech}</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-300">{item.tech}</p>
                   <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">{item.value}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">{item.value}</p>
                 </div>
               </article>
             </li>
