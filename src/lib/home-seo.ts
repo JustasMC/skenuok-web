@@ -9,7 +9,7 @@ export const homePageTitle =
   "Svetainių kūrimas, URL skeneris ir AI SEO auditas | Svetainių analizė — Skenuok.com";
 
 export const homePageDescription =
-  "Svetainių kūrimas, SEO auditas ir Next.js sprendimai: greitos, techniškai tikslios svetainės su AI analitika, kurios didina matomumą ir konversijas.";
+  "Svetainių kūrimas, SEO auditas ir Next.js sprendimai: greitos AI svetainės su techniškai tvarkingu kodu, skirtos matomumui ir konversijoms.";
 
 export const homePageKeywords = [
   "SEO URL skeneris",

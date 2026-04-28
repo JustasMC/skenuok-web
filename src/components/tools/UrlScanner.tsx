@@ -164,7 +164,7 @@ export function UrlScanner() {
               <button
                 type="submit"
                 disabled={loading}
-                className="site-btn-primary w-full min-h-12 min-w-0 sm:min-h-11"
+                className="site-btn-primary w-full min-h-12 min-w-0 text-[#001018] sm:min-h-11"
               >
                 {loading ? "Skenuojama…" : "Paleisti skaną"}
               </button>

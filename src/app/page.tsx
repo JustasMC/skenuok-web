@@ -8,7 +8,6 @@ import { HomeTestimonials } from "@/components/home/HomeTestimonials";
 import { Services } from "@/components/Services";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { TechArsenal } from "@/components/TechArsenal";
 import { TechStack } from "@/components/TechStack";
 import { WhyUs } from "@/components/WhyUs";
 import { homePageDescription, homePageKeywords, homePageTitle } from "@/lib/home-seo";
@@ -31,6 +30,11 @@ const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) =>
       aria-hidden
     />
   ),
+});
+
+const TechArsenal = dynamic(() => import("@/components/TechArsenal").then((m) => m.TechArsenal), {
+  ssr: true,
+  loading: () => <div className="min-h-[600px]" aria-hidden />,
 });
 
 const ogImageUrl = "https://skenuok.com/og-image.png";

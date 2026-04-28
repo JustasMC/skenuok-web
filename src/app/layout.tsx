@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 const siteUrl = getSiteOrigin();
 const ogTitle = "Skenuok.com | Pilna AI & SEO Ekosistema";
 const ogDescription =
-  "Svetainių kūrimas, SEO auditas ir Next.js sprendimai: greitos, techniškai tikslios svetainės su AI analitika, kurios didina matomumą ir konversijas.";
+  "Svetainių kūrimas, SEO auditas ir Next.js sprendimai: greitos AI svetainės su techniškai tvarkingu kodu, skirtos matomumui ir konversijoms.";
 const ogKeywords = ["AI SEO", "Python automation", "React UI", "Kursų analizė", "Market intelligence"];
 const ogImageUrl = "https://skenuok.com/og-image.png";
 
@@ -109,9 +109,9 @@ export default function RootLayout({
             <Script
               id="ga-script"
               src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="afterInteractive"
+              strategy="lazyOnload"
             />
-            <Script id="ga-inline" strategy="afterInteractive">
+            <Script id="ga-inline" strategy="lazyOnload">
               {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());

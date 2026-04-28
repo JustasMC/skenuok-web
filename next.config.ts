@@ -19,7 +19,11 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
   images: {
+    // Prefer modern codecs first; Next/Image will negotiate AVIF/WebP automatically.
     formats: ["image/avif", "image/webp"],
+    deviceSizes: [360, 640, 768, 1024, 1280, 1536],
+    imageSizes: [16, 24, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 2678400,
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",

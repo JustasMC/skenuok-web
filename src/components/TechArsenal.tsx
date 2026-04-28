@@ -17,6 +17,7 @@ const cards = [
     glow: "group-hover:shadow-[0_0_40px_-14px_rgba(34,211,238,0.55)]",
     accent: "from-cyan-400/20 to-transparent",
     size: "md:col-span-2 lg:col-span-2",
+    minHeight: "min-h-[16rem] md:min-h-[17rem]",
   },
   {
     title: "AI Orchestracija",
@@ -26,6 +27,7 @@ const cards = [
     glow: "group-hover:shadow-[0_0_40px_-14px_rgba(163,230,53,0.45)]",
     accent: "from-lime-400/20 to-transparent",
     size: "md:row-span-2 lg:col-span-1 lg:row-span-2",
+    minHeight: "min-h-[16rem] md:min-h-[22rem]",
   },
   {
     title: "Duomenų Intelligence",
@@ -35,6 +37,7 @@ const cards = [
     glow: "group-hover:shadow-[0_0_38px_-14px_rgba(56,189,248,0.5)]",
     accent: "from-sky-400/18 to-transparent",
     size: "md:col-span-1 lg:col-span-1",
+    minHeight: "min-h-[16rem] md:min-h-[17rem]",
   },
   {
     title: "Botai & Web-Automations",
@@ -44,6 +47,7 @@ const cards = [
     glow: "group-hover:shadow-[0_0_42px_-16px_rgba(45,212,191,0.48)]",
     accent: "from-teal-400/20 to-transparent",
     size: "md:col-span-1 lg:col-span-1",
+    minHeight: "min-h-[16rem] md:min-h-[17rem]",
   },
   {
     title: "Fullstack & UX",
@@ -53,6 +57,7 @@ const cards = [
     glow: "group-hover:shadow-[0_0_44px_-16px_rgba(34,211,238,0.55)]",
     accent: "from-cyan-300/20 to-transparent",
     size: "md:col-span-2 lg:col-span-2",
+    minHeight: "min-h-[16rem] md:min-h-[17rem]",
   },
 ] as const;
 
@@ -72,7 +77,7 @@ export function TechArsenal() {
             return (
               <article
                 key={card.title}
-                className={`site-card-interactive group relative overflow-hidden p-6 motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 hover:-translate-y-0.5 ${card.glow} ${card.size}`}
+                className={`site-card-interactive group relative overflow-hidden p-6 ${card.glow} ${card.size} ${card.minHeight}`}
               >
                 <div
                   className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${card.accent} opacity-0 motion-safe:transition-opacity motion-safe:duration-300 group-hover:opacity-100`}
