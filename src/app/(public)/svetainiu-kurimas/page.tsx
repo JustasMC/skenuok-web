@@ -3,8 +3,8 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { getCanonicalPath } from "@/lib/site-url";
 import { siteConfig } from "@/lib/site-config";
+import { getCanonicalPath } from "@/lib/site-url";
 
 const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) => m.ContactForm), {
   loading: () => (

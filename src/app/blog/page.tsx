@@ -16,6 +16,14 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: pageTitle,
     description,
+    keywords: [
+      "blogas",
+      "svetainių kūrimas",
+      "SEO auditas",
+      "AI automatizacija",
+      "augimo strategija",
+      "2026"
+    ],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {

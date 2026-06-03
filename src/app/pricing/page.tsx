@@ -19,10 +19,10 @@ export async function generateMetadata(): Promise<Metadata> {
     title,
     description,
     keywords: [
-      "SEO strategija",
-      "web paslaugos",
-      "Svetainių analizė",
-      "Kursų kokybės skenavimas",
+      "kainodara",
+      "SEO URL skaneris",
+      "turinio planai",
+      "web paslaugos"
     ],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
@@ -31,17 +31,16 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
-      title: "Kainodara | FS·AI",
-      description: "Trys planai — nuo nemokamo skanerio iki komandos licencijos.",
+      title,
+      description,
       images: [{ url: "/pricing/opengraph-image", width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Kainodara | FS·AI",
-      description: "Trys planai — nuo nemokamo skanerio iki komandos licencijos.",
+      title,
+      description,
       images: ["/pricing/opengraph-image"],
     },
-    category: "technology",
   };
 }
 
@@ -103,7 +102,7 @@ export default function PricingPage() {
     <>
       <SiteHeader />
       <main id="main-content" className="site-shell py-16 sm:py-20">
-        <PageIntro variant="page" kicker="Planai" title="Kainodara" className="mb-12 sm:mb-14">
+        <PageIntro variant="page" kicker="Planai" title={title} className="mb-12 sm:mb-14">
           <p>
             Skaneris jau veikia kaip nemokamas kabliukas. Mokamas generatorius kuria sutaupymą:{" "}
             <span className="font-medium text-zinc-200">~20 valandų per mėnesį</span> su AI pagalba, o ne rankiniu kopiju

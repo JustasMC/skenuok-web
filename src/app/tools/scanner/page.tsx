@@ -25,6 +25,14 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: [
+      "SEO URL skeneris",
+      "Svetainių analizė",
+      "Lighthouse",
+      "AI SEO auditas",
+      "PageSpeed",
+      "Core Web Vitals"
+    ],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
@@ -32,27 +40,16 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
-      title: "SEO URL skaneris | PageSpeed, Lighthouse, AI",
-      description:
-        "URL struktūra, našumo ir SEO balai, H1 / meta, AI įžvalgos. Vidinės nuorodos į generatorių ir pagalbą dėl pataisymų.",
+      title,
+      description,
       images: [{ url: "/tools/scanner/opengraph-image", width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "SEO URL skaneris | PageSpeed, Lighthouse, AI",
-      description:
-        "Lighthouse, Core Web Vitals, AI rekomendacijos — Svetainių analizė, skirta patobulinti techninę SEO strategiją.",
+      title,
+      description,
       images: ["/tools/scanner/opengraph-image"],
     },
-    category: "technology",
-    keywords: [
-      "SEO URL skeneris",
-      "Svetainių analizė",
-      "Lighthouse",
-      "AI SEO auditas",
-      "PageSpeed",
-      "Core Web Vitals",
-    ],
   };
 }
 
@@ -61,30 +58,23 @@ export default function ScannerPage() {
     <>
       <SiteHeader />
       <main id="main-content" className="site-page-main">
-        <PageIntro kicker="SEO URL skaneris" title="Svetainių analizė ir AI SEO auditas">
-          <p>
-            <strong className="font-medium text-zinc-200">SEO svetainių</strong> URL ir puslapius tikriname per Lighthouse: našumas, SEO, prieinamumas — su AI paaiškinimais. Ataskaita padeda
-            suderinti <strong className="font-medium text-zinc-200">web dizainą</strong>, greitį ir <strong className="font-medium text-zinc-200">SEO strategiją</strong>. Jei reikia pagalbos
-            dėl taisymų, žr.{" "}
-            <Link href="/#paslaugos" className="site-link-inline">
-              Paslaugas
-            </Link>{" "}
-            arba{" "}
-            <Link href="/#kontaktai" className="site-link-inline">
-              kontaktus
-            </Link>
-            .
-          </p>
-        </PageIntro>
-        <Suspense
-          fallback={
-            <div className="site-skeleton min-h-[26rem]" role="status" aria-live="polite">
-              Kraunama…
-            </div>
-          }
-        >
-          <UrlScanner />
-        </Suspense>
+        <div className="site-shell-wide py-12 sm:py-16">
+          <PageIntro kicker="SEO URL skeneris" title={title}>
+            <p>
+              Tikrino kurso turinį, SEO balus ir AI rekomendacijas. Toliau — kursų strategija, Paslaugos, Kontaktai.
+            </p>
+          </PageIntro>
+
+          <Suspense
+            fallback={
+              <div className="site-skeleton min-h-[26rem]" role="status" aria-live="polite">
+                Kraunama…
+              </div>
+            }
+          >
+            <UrlScanner />
+          </Suspense>
+        </div>
       </main>
       <SiteFooter />
     </>

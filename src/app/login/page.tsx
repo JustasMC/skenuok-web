@@ -16,6 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: [
+      "prisijungimas",
+      "Google",
+      "Magic Link",
+      "saugus prisijungimas"
+    ],
     alternates: { canonical },
     robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
     openGraph: {
@@ -53,7 +59,7 @@ export default function LoginPage() {
       <SiteHeader />
       <main id="main-content" className="site-shell-wide py-16 sm:py-24">
         <div className="mx-auto w-full max-w-lg">
-          <PageIntro variant="page" kicker="Paskyra" title="Prisijungimas">
+          <PageIntro variant="page" kicker="Paskyra" title={title}>
             <p>
               Naudokite Google paskyrą arba Magic Link el. paštu — be atskiro slaptažodžio šioje svetainėje.
             </p>
