@@ -7,11 +7,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
+const title = "Darbo vieta";
+const description =
+  "Jūsų personalus darbo stebėjimo skydas su SEO turinio generatoriu, kreditais ir kitomis funkcijomis.";
+
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/dashboard");
-  const title = "Darbo vieta";
-  const description =
-    "Jūsų personalus darbo stebėjimo skydas su SEO turinio generatoriu, kreditais ir kitomis funkcijomis.";
 
   return {
     title,
