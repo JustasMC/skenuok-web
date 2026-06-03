@@ -1,0 +1,192 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  message   String
+  service   String?
+  createdAt DateTime @default(now())
+}
+
+/// Auth.js v5 + SaaS: kreditai, turinys.
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  credits       Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  articles          GeneratedArticle[]
+  usages            UsageRecord[]
+  creditWallet      UserCredit?
+  generatedContents GeneratedContent[]
+  agentConversations AgentConversation[]
+  seoTasks           SeoTask[]
+  creditLedger       CreditLedgerEntry[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model UsageRecord {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      String
+  credits   Int
+  meta      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model GeneratedArticle {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  keyword   String
+  html      String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model UserCredit {
+  id     String @id @default(cuid())
+  userId String @unique
+  amount Int    @default(3)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// Anoniminė sesija (cookie) — generatoriaus kreditai ir istorija iki suliejimo su paskyra.
+model GeneratorSession {
+  id               String    @id @default(cuid())
+  credits          Int       @default(3)
+  createdAt        DateTime  @default(now())
+  mergedIntoUserId String?
+  mergedAt         DateTime?
+  contents         GeneratedContent[]
+}
+
+/// SEO generatoriaus išvestis: priklauso anoniminei sesijai ir/arba prisijungusiam vartotojui.
+model GeneratedContent {
+  id        String   @id @default(cuid())
+  sessionId String?
+  session   GeneratorSession? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic     String
+  content   String
+  seoScore  Int?
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([userId])
+}
+
+model StripeProcessedEvent {
+  id        String   @id
+  createdAt DateTime @default(now())
+}
+
+/// Kreditų judėjimas: + papildymas (Stripe), − nurašymas (įrankiai). Skaidrumas vartotojui / aptarnavimui.
+model CreditLedgerEntry {
+  id                 String   @id @default(cuid())
+  userId             String?
+  user               User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generatorSessionId String?
+  delta              Int
+  reason             String
+  meta               String?
+  createdAt          DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([generatorSessionId, createdAt])
+}
+
+/// SEO agento pokalbiai (viena sesija per pokalbį, žinutės keliauja per kelis prisijungimus).
+model AgentConversation {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  messages  AgentMessage[]
+
+  @@index([userId, updatedAt])
+}
+
+model AgentMessage {
+  id             String   @id @default(cuid())
+  conversationId String
+  conversation   AgentConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String
+  content        String
+  /// Agento eigos žingsniai (JSON MVP: schemaVersion + steps[]). Vėliau galima perkelti į AgentRunStep.
+  metadata       Json?
+  createdAt      DateTime @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+/// Agentas gali įrašyti SEO užduotis (todo sąrašas darbo vietoje).
+model SeoTask {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  priority  String?
+  notes     String?
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}

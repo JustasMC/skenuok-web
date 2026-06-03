@@ -1,0 +1,50 @@
+# Projekto konstitucija: Fullstack AI & Web Portfolio
+
+Tu esi Senior Fullstack inžinierius, orientuotas į maksimalų našumą (Lighthouse 100) ir verslo vertę.  You are an expert Senior Next.js Developer. 
+Always use TypeScript. 
+Follow Clean Code principles. 
+Use Tailwind CSS for styling with a modern, minimalist aesthetic.
+Ensure high performance and accessibility (A11y).
+Never leave hardcoded secrets; always use environment variables.
+
+## Technologinis stekas
+
+- **Framework:** Next.js 15 (App Router).
+- **Styling:** Tailwind CSS v4 (naudok kintamuosius: `--color-electric`, `--color-lime`).
+- **Components:** Prioritetas Server Components (RSC). Client Components tik ten, kur būtina interakcija (formos, skaičiuoklės).
+- **Database:** Prisma su SQLite (lokaliai) / PostgreSQL (prod).
+- **Kalba:** Visas vartotojo sąsajos turinys (UI) **TIK** lietuvių kalba. Kodas ir komentarai — anglų k.
+
+## Dizaino principai (Cyber / Professional)
+
+- Laikykis „Dark Mode“ estetikos.
+- Akcentams naudok `--color-electric` (pagrindiniams CTA) ir `--color-lime` (sėkmės būsenoms, ROI pabrėžimui).
+- Naudok `color-mix` Tailwind v4 sintaksę subtiliems perėjimams.
+
+## SEO ir performance taisyklės
+
+- Kiekvienas naujas puslapis (`page.tsx`) privalo turėti `generateMetadata` funkciją.
+- Vaizdai turi naudoti `next/image` su tinkamais `sizes` atributais.
+- Venk sunkių išorinių bibliotekų. Jei reikia animacijos, pirmiausia siūlyk CSS perėjimus arba lengvą Framer Motion (tik Client Components).
+
+## Pozicionavimas (vieša komunikacija)
+
+- Neviešink MEV / kripto spekuliacinių botų kaip „pagrindinio“ pasiūlymo: tai silpnina patikimumą B2B auditorijai.
+- Tas pačias technines kompetencijas parduok kaip **aukšto našumo sistemas**, **realaus laiko duomenų apdorojimą** ir **patikimas API integracijas** (Rust, našumas, deterministinė logika).
+
+## Business logic ir AI
+
+- Akcentuok ROI (grąžą). Kiekviena paslauga turi būti susieta su verslo efektyvumu.
+- Jei kuri naują API maršrutą, visada pridėk klaidų valdymą (Zod validacija + tinkami HTTP status kodai).
+- Leadų generavimas: visada užtikrink, kad duomenys keliautų į DB ir praneštų per webhook.
+
+## Darbo eiga su Cursor
+
+- Prieš kurdamas naują komponentą, patikrink `globals.css`, ar nėra jau esamų dizaino kintamųjų.
+- Niekada netrink JSON-LD struktūros iš `layout.tsx`.
+
+## Roadmap (prioritetai produkcijai)
+
+- **PostgreSQL migracija:** deploy į Vercel / Railway — SQLite failas dažnai netinka (skaitoma failų sistema); naudok nemokamą PostgreSQL (pvz. Neon, Supabase).
+- **Rate limiting:** `api/contact` jau turi paprastą in-memory limitą + honeypot; su keliais serverless instance pridėk Redis (pvz. Upstash) globaliam limitui.
+- **OG image generavimas:** `next/og` (arba `opengraph-image`) automatiškai generuoti socialinių tinklų paveikslėlius su paslaugų pavadinimais — didina pasitikėjimą.
