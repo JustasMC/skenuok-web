@@ -7,16 +7,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
-const title = "Darbo vieta";
-const description =
-  "Jūsų personalus darbo stebėjimo skydas su SEO turinio generatoriu, kreditais ir kitomis funkcijomis.";
-
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/dashboard");
 
   return {
-    title,
-    description,
+    title: "Darbo vieta",
+    description:
+      "Jūsų personalus darbo stebėjimo skydas su SEO turinio generatoriu, kreditais ir kitomis funkcijomis.",
     keywords: [
       "darbo vieta",
       "SEO generatorius",
@@ -30,20 +27,24 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
-      title,
-      description,
-      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: title }],
+      title: "Darbo vieta",
+      description:
+        "Jūsų personalus darbo stebėjimo skydas su SEO turinio generatoriu, kreditais ir kitomis funkcijomis.",
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Darbo vieta" }],
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: "Darbo vieta",
+      description:
+        "Jūsų personalus darbo stebėjimo skydas su SEO turinio generatoriu, kreditais ir kitomis funkcijomis.",
       images: ["/og-image.png"],
     },
   };
 }
 
 export default function DashboardPage() {
+  const title = "Paskyra";
+
   return (
     <>
       <SiteHeader />
