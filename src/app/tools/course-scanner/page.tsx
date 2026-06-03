@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
-const CourseScanner = dynamic(() => import("@/components/CourseQualityScanner").then((m) => m.CourseQualityScanner), {
+const CourseScanner = dynamic(() => import("@/components/tools/CourseQualityScanner").then((m) => m.CourseQualityScanner), {
   loading: () => (
     <div className="site-skeleton" role="status" aria-live="polite">
       Kraunama…
