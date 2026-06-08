@@ -11,7 +11,7 @@ type Props = {
   className?: string;
   /** Wider intro text on large screens */
   wide?: boolean;
-  /** Optional anchor id for the section <h2> (landmarks, aria-labelledby) */
+  /** Optional anchor id for المقطع <h2 (landmarks, aria-labelledby) */
   id?: string;
 };
 
@@ -34,3 +34,4 @@ export function SectionHeader({ eyebrow, title, description, className = "", wid
     </div>
   );
 }
+
