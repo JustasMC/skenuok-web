@@ -16,15 +16,16 @@ const ContentGenerator = dynamic(() => import("@/components/tools/ContentGenerat
   ),
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const canonical = getCanonicalPath("/irankiai/seo-generatorius");
-  const title = "SEO turinio generatorius";
-  const description =
+const PAGE_TITLE = "SEO turinio generatorius";
+const PAGE_DESCRIPTION =
     "Generuokite SEO optimizuotą turinį pagal jūsų raktinius žodžius su AI pagrindu. Sutaupykite laiko ir užtikrinkite gerą SEO balą.";
 
+export async function generateMetadata(): Promise<Metadata> {
+  const canonical = getCanonicalPath("/irankiai/seo-generatorius");
+
   return {
-    title,
-    description,
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
     keywords: [
       "SEO generatorius",
       "turinys",
@@ -38,14 +39,14 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
-      title,
-      description,
-      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: title }],
+      title: PAGE_TITLE,
+      description: PAGE_DESCRIPTION,
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: PAGE_TITLE }],
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: PAGE_TITLE,
+      description: PAGE_DESCRIPTION,
       images: ["/og-image.png"],
     },
   };
@@ -57,10 +58,8 @@ export default function SeoGeneratorPage() {
       <SiteHeader />
       <main id="main-content" className="site-page-main">
         <div className="site-shell-wide py-12 sm:py-16">
-          <PageIntro variant="page" kicker="SEO" title={title}>
-            <p>
-              Generuokite SEO optimizuotą turinį pagal jūsų raktinius žodžius su AI pagrindu. Sutaupykite laiko ir užtikrinkite gerą SEO balą.
-            </p>
+          <PageIntro variant="page" kicker="SEO" title={PAGE_TITLE}>
+            <p>{PAGE_DESCRIPTION}</p>
           </PageIntro>
 
           <Suspense
@@ -78,3 +77,4 @@ export default function SeoGeneratorPage() {
     </>
   );
 }
+
