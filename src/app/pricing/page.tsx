@@ -9,11 +9,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
+const title = "Kainodara (SEO URL skaneris, turinio planai)";
+const description =
+  "Kainodara: nemokami ir mokami planai — SEO URL skenavimas, Svetainių analizė, kursų įrankis, straipsnių kreditai. Palyginkite, tada tęskite arba rašykite dėl custom web paslaugos.";
+
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/pricing");
-  const title = "Kainodara (SEO URL skaneris, turinio planai)";
-  const description =
-    "Kainodara: nemokami ir mokami planai — SEO URL skenavimas, Svetainių analizė, kursų įrankis, straipsnių kreditai. Palyginkite, tada tęskite arba rašykite dėl custom web paslaugos.";
 
   return {
     title,

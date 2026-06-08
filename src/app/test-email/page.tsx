@@ -6,11 +6,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
+const title = "Test Email Page";
+const description =
+  "This is a test email page for development purposes.";
+
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/test-email");
-  const title = "Test Email Page";
-  const description =
-    "This is a test email page for development purposes.";
 
   return {
     title,

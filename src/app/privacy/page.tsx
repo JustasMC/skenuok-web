@@ -6,11 +6,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
+const title = "Privatumo politika";
+const description =
+  "Mūsų privatumo politika apie, kaip tvarkome ir saugome jūsų duomenis.";
+
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/privacy");
-  const title = "Privatumo politika";
-  const description =
-    "Mūsų privatumo politika apie, kaip tvarkome ir saugome jūsų duomenis.";
 
   return {
     title,

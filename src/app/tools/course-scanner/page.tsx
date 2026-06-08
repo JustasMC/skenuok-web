@@ -16,11 +16,12 @@ const CourseScanner = dynamic(() => import("@/components/tools/CourseQualityScan
   ),
 });
 
+const title = "Kursų kokybės skaneris";
+const description =
+  "Nemokamas kursų kokybės skaneris: tikrino kurso turinį, SEO balus ir AI rekomendacijas. Toliau — kursų strategija, Paslaugos, Kontaktai.";
+
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/tools/course-scanner");
-  const title = "Kursų kokybės skaneris";
-  const description =
-    "Nemokamas kursų kokybės skaneris: tikrino kurso turinį, SEO balus ir AI rekomendacijas. Toliau — kursų strategija, Paslaugos, Kontaktai.";
 
   return {
     title,

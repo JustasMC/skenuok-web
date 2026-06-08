@@ -6,11 +6,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
+const title = "Terms of Service";
+const description =
+  "Mūsų naudojimo sąlygos apie, kaip naudotis mūsų paslaugomis.";
+
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/terms");
-  const title = "Terms of Service";
-  const description =
-    "Mūsų naudojimo sąlygos apie, kaip naudotis mūsų paslaugomis.";
 
   return {
     title,

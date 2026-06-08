@@ -7,11 +7,12 @@ import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath, getSiteOrigin } from "@/lib/site-url";
 import { LoginForm } from "./LoginForm";
 
+const title = "Prisijungimas";
+const description =
+  "Prisijunkite su Google arba Magic Link — pasiekite SEO turinio generatorių, kreditus ir darbo vietą. Saugi sesija, be atskiro slaptažodžio šioje svetainėje.";
+
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/login");
-  const title = "Prisijungimas";
-  const description =
-    "Prisijunkite su Google arba Magic Link — pasiekite SEO turinio generatorių, kreditus ir darbo vietą. Saugi sesija, be atskiro slaptažodžio šioje svetainėje.";
 
   return {
     title,
