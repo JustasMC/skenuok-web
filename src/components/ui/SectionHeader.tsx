@@ -2,6 +2,8 @@
 
 import { cn } from "@/lib/cn";
 
+const gaId = process.env.NEXT_PUBLIC_GA_ID?.trim() || "G-J29QGBZ1MT";
+
 type Props = {
   eyebrow?: string;
   title: string;
