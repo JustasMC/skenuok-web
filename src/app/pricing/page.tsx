@@ -173,17 +173,6 @@ export default function PricingPage() {
             </Card>
           ))}
         </div>
-
-        <p className="mt-12 max-w-3xl text-pretty text-center text-xs leading-relaxed text-zinc-600 sm:mx-auto">
-          Mokėjimai per Stripe Checkout naudoja katalogo <strong className="font-medium text-zinc-500">Price ID</strong>{" "}
-          (<code className="rounded bg-zinc-900/80 px-1 py-0.5 font-mono text-zinc-500">price_…</code>). Po apmokėjimo —{" "}
-          <Link href="/success" className="text-[var(--color-electric)] hover:underline">
-            /success
-          </Link>
-          , tada generatorius. Kreditus priskiria webhook{" "}
-          <code className="rounded bg-zinc-900/80 px-1 py-0.5 font-mono text-zinc-500">/api/webhooks/stripe</code> ir{" "}
-          <code className="rounded bg-zinc-900/80 px-1 py-0.5 font-mono text-zinc-500">STRIPE_WEBHOOK_SECRET</code>.
-        </p>
       </main>
       <SiteFooter />
     </>
