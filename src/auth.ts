@@ -27,10 +27,10 @@ const devLoginAllowed =
  */
 const useDatabaseSession = googleConfigured || emailConfigured;
 
-const authSecret = env.AUTH_SECRET;
+const authSecret = env.AUTH_SECRET || env.NEXTAUTH_SECRET;
 if (env.NODE_ENV === "production" && !authSecret) {
-  console.error(
-    "[auth] Production: nustatykite AUTH_SECRET (ilgas atsitiktinis stringas). Kitu atveju sesijos nėra saugios.",
+  throw new Error(
+    "[auth] Production requires AUTH_SECRET or NEXTAUTH_SECRET. Set a long random secret for secure session signing.",
   );
 }
 

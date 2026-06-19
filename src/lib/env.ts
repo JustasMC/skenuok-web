@@ -6,6 +6,8 @@ const envSchema = z.object({
   NEXT_PUBLIC_GA_ID: z.string().trim().optional(),
   STRIPE_SECRET_KEY: z.string().trim().optional(),
   AUTH_SECRET: z.string().trim().optional(),
+  NEXTAUTH_SECRET: z.string().trim().optional(),
+  AUTH_URL: z.string().trim().optional(),
   PSI_API_KEY: z.string().trim().optional(),
   PAGESPEED_API_KEY: z.string().trim().optional(),
   GOOGLE_PAGESPEED_API_KEY: z.string().trim().optional(),
