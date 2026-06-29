@@ -28,8 +28,13 @@ const devLoginAllowed =
 const useDatabaseSession = googleConfigured || emailConfigured;
 
 const authSecret = env.AUTH_SECRET || env.NEXTAUTH_SECRET;
-const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
-if (env.NODE_ENV === "production" && !authSecret && !isProductionBuild) {
+/** Next.js build, Railway/Nixpacks image build, ir CI — be AUTH_SECRET. Runtime gamyboje privalomas. */
+const isBuildPhase =
+  process.env.NEXT_PHASE === "phase-production-build" ||
+  process.env.npm_lifecycle_event === "build" ||
+  process.env.CI === "true";
+
+if (env.NODE_ENV === "production" && !authSecret && !isBuildPhase) {
   throw new Error(
     "[auth] Production requires AUTH_SECRET or NEXTAUTH_SECRET. Set a long random secret for secure session signing.",
   );
@@ -43,7 +48,7 @@ const allowEmailAccountLinking = process.env.AUTH_ALLOW_EMAIL_LINKING === "true"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  secret: authSecret || process.env.NEXTAUTH_SECRET?.trim(),
+  secret: authSecret || process.env.NEXTAUTH_SECRET?.trim() || (isBuildPhase ? "build-time-placeholder" : undefined),
   session: {
     strategy: useDatabaseSession ? "database" : "jwt",
     maxAge: 30 * 24 * 60 * 60,
