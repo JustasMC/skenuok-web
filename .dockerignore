@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+README.md
+.cursorrules
+.cursor
+.vscode
+terminals
+*.md
+coverage
+tests
