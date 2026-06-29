@@ -191,7 +191,7 @@ export function AuthHeaderActions() {
         {renderCreditsPill()}
         <Link
           href="/dashboard"
-          className={`${btnOutline} hidden shrink-0 text-zinc-300 hover:border-[var(--color-lime)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50 sm:inline`}
+          className={`${btnOutline} shrink-0 text-zinc-300 hover:border-[var(--color-lime)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50`}
         >
           Darbo vieta
         </Link>

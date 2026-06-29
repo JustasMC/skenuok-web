@@ -73,6 +73,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/test-email",
+        destination: "/",
+        permanent: false,
+      },
+      {
         source: "/generatorius",
         destination: "/irankiai/seo-generatorius",
         permanent: true,

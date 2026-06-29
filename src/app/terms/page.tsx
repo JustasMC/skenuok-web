@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { PageIntro } from "@/components/PageIntro";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { TermsOfServiceContent } from "@/lib/legal-content";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
-const title = "Terms of Service";
+const title = "Paslaugų sąlygos";
 const description =
-  "Mūsų naudojimo sąlygos apie, kaip naudotis mūsų paslaugomis.";
+  "Skenuok.com naudojimo sąlygos: paskyros, kreditai, mokėjimai, AI turinys ir atsakomybės ribos.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/terms");
@@ -15,11 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    keywords: [
-      "naudojimo sąlygos",
-      "paslaugos",
-      "tarpininkavimas"
-    ],
+    keywords: ["paslaugų sąlygos", "naudojimo taisyklės", "kreditai", siteConfig.name],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
@@ -29,13 +26,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: siteConfig.name,
       title,
       description,
-      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: title }],
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: ["/og-image.png"],
+      images: ["/opengraph-image"],
     },
   };
 }
@@ -45,14 +42,11 @@ export default function TermsPage() {
     <>
       <SiteHeader />
       <main id="main-content" className="site-page-main">
-        <div className="site-shell-wide py-12 sm:py-16">
-          <PageIntro variant="page" kicker="Terms" title={title}>
-            <p>
-              Mūsų naudojimo sąlygos apie, kaip naudotis mūsų paslaugomis.
-            </p>
+        <div className="site-shell-wide space-y-10 py-12 sm:py-16">
+          <PageIntro variant="page" kicker="Teisinė informacija" title={title}>
+            <p>{description}</p>
           </PageIntro>
-
-          {/* Add your terms of service content here */}
+          <TermsOfServiceContent />
         </div>
       </main>
       <SiteFooter />

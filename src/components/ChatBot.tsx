@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useVisualKeyboardInset } from "@/hooks/useVisualKeyboardInset";
+import { siteConfig } from "@/lib/site-config";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -207,7 +208,7 @@ export function ChatBot() {
           aria-label="AI konsultantas"
         >
           <div className="border-b border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-electric)_8%,transparent)] px-4 py-3">
-            <p className="text-sm font-semibold tracking-tight text-zinc-100">FS-AI konsultantas</p>
+            <p className="text-sm font-semibold tracking-tight text-zinc-100">{siteConfig.shortName} konsultantas</p>
             <p className="text-xs leading-relaxed text-zinc-500">
               Klauskite apie paslaugas — atsakymai srautu. Galite užsiregistruoti konsultacijai (vardas + el. paštas).
             </p>

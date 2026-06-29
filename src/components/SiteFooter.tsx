@@ -10,14 +10,22 @@ export function SiteFooter() {
       <div className="site-shell flex flex-col gap-8">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
           <div className="max-w-md">
-            <p className="font-semibold tracking-tight text-zinc-200">{siteConfig.name}</p>
+            <p className="font-semibold tracking-tight text-zinc-100">
+              {siteConfig.name}
+              <span className="ml-2 font-normal text-zinc-500">· {siteConfig.shortName}</span>
+            </p>
             <p className="mt-2 text-sm leading-relaxed text-zinc-300">
-              Next.js · serveriniai komponentai · SEO pirmiausia
+              SEO auditas, AI įrankiai ir fullstack sprendimai su Next.js. Matuojami rezultatai, aiški komunikacija.
+            </p>
+            <p className="mt-3">
+              <a href={`mailto:${siteConfig.contactEmail}`} className="site-link-inline text-sm">
+                {siteConfig.contactEmail}
+              </a>
             </p>
           </div>
           <nav className="flex flex-wrap gap-x-6 gap-y-3 text-sm" aria-label="Poraštės nuorodos">
             <Link href="/#paslaugos" className={footerLinkClass}>
-              AI SEO auditas
+              Paslaugos
             </Link>
             <Link href="/#atsiliepimai" className={footerLinkClass}>
               Atsiliepimai
@@ -40,6 +48,9 @@ export function SiteFooter() {
             <Link href="/pricing" className={footerLinkClass}>
               Kainos
             </Link>
+            <Link href="/svetainiu-kurimas" className={footerLinkClass}>
+              Svetainių kūrimas
+            </Link>
             <Link href="/terms" className={footerLinkClass}>
               Paslaugų sąlygos
             </Link>
@@ -48,21 +59,11 @@ export function SiteFooter() {
             </Link>
           </nav>
         </div>
-        <div className="flex flex-col gap-3 border-t border-[var(--color-border)]/80 pt-6 text-xs text-zinc-300 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="flex flex-col gap-3 border-t border-[var(--color-border)]/80 pt-6 text-xs text-zinc-400 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <p>
-            © {new Date().getFullYear()} {siteConfig.name}
+            © {new Date().getFullYear()} {siteConfig.name}. Visos teisės saugomos.
           </p>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:justify-end">
-            <p className="font-mono text-[11px] text-zinc-300">FS·AI</p>
-            <nav className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px]" aria-label="Teisinės nuorodos">
-              <Link href="/terms" className="text-zinc-300 hover:text-[var(--color-electric)]">
-                Terms
-              </Link>
-              <Link href="/privacy" className="text-zinc-300 hover:text-[var(--color-electric)]">
-                Privacy
-              </Link>
-            </nav>
-          </div>
+          <p className="text-zinc-500">Sukurta su Next.js · TypeScript · Tailwind CSS</p>
         </div>
       </div>
     </footer>

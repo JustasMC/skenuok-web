@@ -37,7 +37,7 @@ const TechArsenal = dynamic(() => import("@/components/TechArsenal").then((m) =>
   loading: () => <div className="min-h-[600px]" aria-hidden />,
 });
 
-const ogImageUrl = "https://skenuok.com/og-image.png";
+const ogImageUrl = `${getSiteOrigin().replace(/\/$/, "")}/og-image.png`;
 
 export async function generateMetadata(): Promise<Metadata> {
   const siteUrl = getSiteOrigin();

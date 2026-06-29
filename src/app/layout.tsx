@@ -22,11 +22,10 @@ const geistMono = Geist_Mono({
 });
 
 const siteUrl = getSiteOrigin();
-const ogTitle = "Skenuok.com | Pilna AI & SEO Ekosistema";
-const ogDescription =
-  "Svetainių kūrimas ir SEO auditas su Next.js: greitos AI svetainės su techniškai tvarkingu kodu, skirtos matomumui bei konversijoms Lietuvoje.";
-const ogKeywords = ["AI SEO", "Python automation", "React UI", "Kursų analizė", "Market intelligence"];
-const ogImageUrl = "https://skenuok.com/og-image.png";
+const ogTitle = siteConfig.defaultTitle;
+const ogDescription = siteConfig.defaultDescription;
+const ogKeywords = siteConfig.keywords;
+const ogImageUrl = `${siteUrl.replace(/\/$/, "")}/og-image.png`;
 
 export const viewport: Viewport = {
   themeColor: "#050508",
@@ -88,7 +87,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const jsonLd = getSoftwareServiceJsonLd();
-  const gaId = process.env.NEXT_PUBLIC_GA_ID?.trim() || "G-J29QGBZ1MT";
+  const gaId = process.env.NEXT_PUBLIC_GA_ID?.trim();
 
   return (
     <html lang="lt" className={`${geistSans.variable} ${geistMono.variable}`}>

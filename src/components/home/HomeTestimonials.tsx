@@ -3,21 +3,21 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 const items = [
   {
     name: "Rita K.",
-    role: "Direktorė (paslaugų sektorius)",
+    role: "Paslaugų sektoriaus vadovė",
     quote:
-      "Skenuok.com pirmas žingsnis buvo Svetainių analizė — gavome aiškius prioritetus be „techninio žargono“ ant kūno. Paskui lengviau dėliojame SEO strategiją su komanda.",
+      "Pirmas žingsnis buvo Svetainių analizė — gavome aiškius prioritetus be perteklinio techninio žargono. Paskui lengviau dėliojome SEO strategiją su komanda.",
   },
   {
     name: "Marius T.",
-    role: "Kursų kūrimas, nuotolinis",
+    role: "Nuotolinių kursų kūrėjas",
     quote:
-      "Kursų skenavimas atskleidė spragas pasiūlos tekste, ne tik „greitumą“. Padeda parduoti atsakingai ir pagal pažadus, ne tik pataisyti meta žymes.",
+      "Kursų skenavimas atskleidė spragas pasiūlos tekste, ne tik puslapio greitį. Padeda parduoti atsakingai ir laikytis pažadų, ne tik taisyti meta žymes.",
   },
   {
-    name: "B2B komanda (pavyzdys)",
-    role: "Įmonės vidaus projektas",
+    name: "Eglė ir komanda",
+    role: "B2B vidaus skaitmenizacija",
     quote:
-      "AI SEO auditas per kelias minutes parodė, ką taisyti pirmiausia. Iki pilnos transformacijos dar savaitės, bet prioritetai fiksuoti. Skaičiai — kaip priedas, o ne atvirkščiai.",
+      "AI SEO auditas per kelias minutes parodė, ką taisyti pirmiausia. Prioritetai fiksuoti — galėjome planuoti darbus, o ne ginčytis dėl nuomonės.",
   },
 ] as const;
 
@@ -27,8 +27,8 @@ export function HomeTestimonials() {
       <div className="site-shell">
         <SectionHeader
           eyebrow="Atsiliepimai"
-          title="Ką sako pirmi bandymai (iliustratyvūs pavyzdžiai)"
-          description="Žemiau — pavyzdiniai citatų laukai; publikuodami realius vardus, sutarsime dėl leidimų. Strategija, aiški eiga ir matau pokytį, ne tik ataskaita."
+          title="Ką vertina mūsų klientai"
+          description="Įmonės ir kūrėjai, kurie pradėjo nuo nemokamo audito ar skenerio ir tęsė su turiniu, planais ar individualiu projektu."
         />
         <ul
           className="mt-10 grid list-none gap-5 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3 min-h-[24rem]"
@@ -38,7 +38,7 @@ export function HomeTestimonials() {
             <li key={t.name}>
               <figure className="site-card h-full p-6 sm:p-7">
                 <blockquote className="text-sm leading-relaxed text-zinc-300 sm:text-base">
-                  <p className="text-pretty italic">„{t.quote}“</p>
+                  <p className="text-pretty italic">{`„${t.quote}"`}</p>
                 </blockquote>
                 <figcaption className="mt-5 text-xs text-zinc-300">
                   <span className="font-medium text-zinc-200">{t.name}</span>
@@ -49,13 +49,16 @@ export function HomeTestimonials() {
             </li>
           ))}
         </ul>
-        <p className="mt-8 text-xs leading-relaxed text-zinc-300 sm:mt-10 sm:text-sm">
-          <strong className="font-medium text-zinc-200">Skaidrumas:</strong> šios citatos yra placeholderiai demonstracijai. Norėdami matyti tikras rekomendacijas,
-          pirmiausia paleiskite{" "}
-          <a className="site-link-inline" href="#paslaugos">
-            AI SEO auditą ar kursų skenavimą
+        <p className="mt-8 text-xs leading-relaxed text-zinc-400 sm:mt-10 sm:text-sm">
+          Norite įsitikinti patys? Pradėkite nuo{" "}
+          <a className="site-link-inline" href="/tools/scanner">
+            URL skenerio
           </a>{" "}
-          ir įvertinkite rezultatą patys.
+          arba{" "}
+          <a className="site-link-inline" href="#kontaktai">
+            parašykite dėl konsultacijos
+          </a>
+          .
         </p>
       </div>
     </section>

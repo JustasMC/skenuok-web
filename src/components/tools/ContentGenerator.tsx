@@ -341,7 +341,7 @@ export function ContentGenerator() {
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)]/80 px-4 py-3">
                   <p className="text-sm text-zinc-300">
-                    Prisijunkite el. paštu (Magic Link) — kreditai ir istorija bus saugiai susieti su jūsų paskyra.
+                    Prisijunkite el. paštu (prisijungimo nuoroda) — kreditai ir istorija bus saugiai susieti su jūsų paskyra.
                   </p>
                   <Link
                     href="/login"

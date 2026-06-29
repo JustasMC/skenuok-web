@@ -10,9 +10,9 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 
 const cards = [
   {
-    title: "Hardcore Inžinerija",
-    stack: "C++, Rust, Python, Docker",
-    value: "Maksimalus greitis ir sistemų stabilumas, kai verslui reikia patikimos platformos augti be trikdžių.",
+    title: "Branduolinė inžinerija",
+    stack: "Rust, C++, Python, Docker",
+    value: "Maksimalus greitis ir stabilumas, kai verslui reikia patikimos platformos augti be trikdžių ir nenuspėjamų gedimų.",
     icon: ServerCog,
     glow: "group-hover:shadow-[0_0_40px_-14px_rgba(34,211,238,0.55)]",
     accent: "from-cyan-400/20 to-transparent",
@@ -20,9 +20,9 @@ const cards = [
     minHeight: "min-h-[16rem] md:min-h-[18rem] lg:min-h-[19rem]",
   },
   {
-    title: "AI Orchestration & Next-Gen Development",
-    stack: "Pažangiausios AI ekosistemos, Agentinė automatika, LLM integracijos",
-    value: "Kuriu pasitelkdamas pažangiausias AI ekosistemas, kurios leidžia pasiekti dešimteriopai didesnį efektyvumą. Užuot gaišęs laiką ties standartiniu kodo rašymu, aš architektūruoju ir diriguoju sudėtingiems AI agentams. Tai užtikrina ne tik žaibišką projekto įgyvendinimą, bet ir klaidų prevenciją, kurios nepastebėtų žmogaus akis.",
+    title: "AI agentai ir automatizacija",
+    stack: "LLM integracijos, agentinė logika, API orkestravimas",
+    value: "Architektūruojame AI darbo srautus, kurie sumažina rankinį darbą ir klaidas — nuo SEO užduočių iki duomenų apdorojimo su aiškia atskaitomybe.",
     icon: BrainCircuit,
     glow: "group-hover:shadow-[0_0_40px_-14px_rgba(163,230,53,0.45)]",
     accent: "from-lime-400/20 to-transparent",
@@ -30,9 +30,9 @@ const cards = [
     minHeight: "min-h-[16rem] md:min-h-[24rem] lg:min-h-[26rem]",
   },
   {
-    title: "Duomenų Intelligence",
-    stack: "SQL, MongoDB, PowerBI, Duomenų analitika",
-    value: "Sprendimai, pagrįsti skaičiais, o ne spėjimais: aiškūs KPI, skaidri ataskaitų logika ir tikslūs augimo prioritetai.",
+    title: "Duomenų analitika",
+    stack: "SQL, PostgreSQL, Power BI, GA4",
+    value: "Sprendimai pagal skaičius: aiškūs KPI, skaidrios ataskaitos ir prioritetai, kurie remiasi realiais duomenimis, ne intuicija.",
     icon: Database,
     glow: "group-hover:shadow-[0_0_38px_-14px_rgba(56,189,248,0.5)]",
     accent: "from-sky-400/18 to-transparent",
@@ -40,9 +40,9 @@ const cards = [
     minHeight: "min-h-[16rem] md:min-h-[18rem] lg:min-h-[19rem]",
   },
   {
-    title: "Botai & Web-Automations",
-    stack: "MEV botai, YouTube automatizuotas video kūrimas, Custom botų architektūra",
-    value: "Pasyvių pajamų sistemų kūrimas ir procesų automatizacija, kurie veikia be nuolatinės rankinės priežiūros.",
+    title: "Integracijos ir automatizacija",
+    stack: "Webhook'ai, REST API, e. komercija, pranešimai",
+    value: "Sujungiame jūsų įrankius į vieną sistemą: Stripe, el. paštas, CRM, analitika — kad procesai veiktų be rankinio kopijavimo.",
     icon: Bot,
     glow: "group-hover:shadow-[0_0_42px_-16px_rgba(45,212,191,0.48)]",
     accent: "from-teal-400/20 to-transparent",
@@ -50,9 +50,9 @@ const cards = [
     minHeight: "min-h-[16rem] md:min-h-[18rem] lg:min-h-[19rem]",
   },
   {
-    title: "Fullstack & UX",
-    stack: "Next.js, React, Modernus UI/UX, SEO",
-    value: "Svetainės, kurios ne tik gražios, bet ir pasiekia Google viršūnę per 12 valandų.",
+    title: "Fullstack ir UX",
+    stack: "Next.js, React, SEO, prieinamumas",
+    value: "Svetainės, kurios greitos, indeksuojamos ir konvertuoja — su moderniu UI ir technine baze, kurią galima prižiūrėti ilgą laiką.",
     icon: LayoutPanelTop,
     glow: "group-hover:shadow-[0_0_44px_-16px_rgba(34,211,238,0.55)]",
     accent: "from-cyan-300/20 to-transparent",
@@ -66,9 +66,9 @@ export function TechArsenal() {
     <section id="technologinis-arsenalas" className="site-section border-t border-[var(--color-border)]/60">
       <div className="site-shell">
         <SectionHeader
-          eyebrow="Technologinis Arsenalas"
-          title="Inžinerija, AI ir duomenys vienoje vykdomoje sistemoje"
-          description="Bento stiliaus kompetencijų žemėlapis: nuo branduolinio našumo ir agentinės automatizacijos iki SEO/UX rezultatų, kurie tiesiogiai veikia verslo augimą."
+          eyebrow="Kompetencijos"
+          title="Inžinerija, AI ir duomenys vienoje sistemoje"
+          description="Nuo branduolinio našumo ir agentinės automatizacijos iki SEO/UX rezultatų, kurie tiesiogiai veikia verslo augimą."
         />
 
         <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-12 md:grid-cols-3 md:auto-rows-[minmax(18rem,1fr)] lg:auto-rows-[minmax(19rem,1fr)]">
@@ -97,7 +97,7 @@ export function TechArsenal() {
 
         <p className="mt-8 text-balance rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_88%,transparent)] px-5 py-4 text-center text-base font-medium text-zinc-200 sm:mt-10 sm:text-lg">
           <Sparkles className="mr-2 inline h-4 w-4 text-[var(--color-lime)]" aria-hidden />
-          Aš nekuriu tik kodo. Aš kuriu ekosistemas, kurios dirba už jus.
+          Nekuriame tik kodo — kuriame sistemas, kurios dirba jūsų verslui.
         </p>
       </div>
     </section>

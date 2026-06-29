@@ -1,29 +1,29 @@
 const twitterCreator = process.env.NEXT_PUBLIC_TWITTER_CREATOR?.trim();
 
 export const siteConfig = {
-  name: "Fullstack & AI Solutions",
-  titleTemplate: "%s | Fullstack & AI Solutions",
-  defaultTitle: "Fullstack, AI agentai, SEO, analitika, Rust | Profesionalios paslaugos",
+  /** Viešas prekės ženklas (domenas, SEO, OG). */
+  name: "Skenuok.com",
+  /** Trumpas ženklas logotipe ir manifeste. */
+  shortName: "FS·AI",
+  titleTemplate: "%s | Skenuok.com",
+  defaultTitle: "Svetainių kūrimas, SEO auditas ir AI įrankiai | Skenuok.com",
   defaultDescription:
-    "Profesionalios fullstack ir AI paslaugos: greitos svetainės ant Next.js, SEO optimizacija, duomenų analitika (SQL, Power BI, GA4), API integracijos ir patikimi sprendimai verslui. Draugiškas bendravimas, aiškūs terminai ir matomas rezultatas — rašykite dėl konsultacijos ar projekto.",
+    "Profesionalūs SEO ir AI įrankiai bei fullstack paslaugos: URL skeneris, turinio generatorius, svetainių kūrimas su Next.js. Aiškūs terminai, matuojami rezultatai ir patikima techninė bazė verslui Lietuvoje.",
   locale: "lt_LT",
-  /** Twitter / X „creator“ — tik jei nustatytas NEXT_PUBLIC_TWITTER_CREATOR (pvz. @vartotojas). */
+  contactEmail: "pagalba@skenuok.com",
   twitterCreator: twitterCreator && twitterCreator.startsWith("@") ? twitterCreator : twitterCreator ? `@${twitterCreator}` : undefined,
   keywords: [
-    "fullstack",
+    "Skenuok.com",
+    "SEO auditas",
+    "URL skeneris",
+    "AI SEO",
     "Next.js",
-    "SEO",
-    "AI agentai",
-    "duomenų analitika",
-    "Power BI",
-    "GA4",
-    "PostgreSQL",
-    "Rust",
-    "TypeScript",
-    "React",
-    "automatizacija",
-    "API integracija",
+    "svetainių kūrimas",
+    "turinio generatorius",
     "Lighthouse",
+    "Core Web Vitals",
+    "fullstack",
+    "API integracija",
     "Lietuva",
   ],
 };

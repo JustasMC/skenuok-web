@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { isDevLoginConfigured } from "@/auth";
 import { PageIntro } from "@/components/PageIntro";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -9,7 +10,7 @@ import { LoginForm } from "./LoginForm";
 
 const title = "Prisijungimas";
 const description =
-  "Prisijunkite su Google arba Magic Link — pasiekite SEO turinio generatorių, kreditus ir darbo vietą. Saugi sesija, be atskiro slaptažodžio šioje svetainėje.";
+  "Prisijunkite su Google arba el. pašto nuoroda — pasiekite SEO turinio generatorių, kreditus ir darbo vietą. Saugi sesija, be atskiro slaptažodžio.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/login");
@@ -20,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
     keywords: [
       "prisijungimas",
       "Google",
-      "Magic Link",
+      "prisijungimo nuoroda",
       "saugus prisijungimas"
     ],
     alternates: { canonical },
@@ -62,17 +63,25 @@ export default function LoginPage() {
         <div className="mx-auto w-full max-w-lg">
           <PageIntro variant="page" kicker="Paskyra" title={title}>
             <p>
-              Naudokite Google paskyrą arba Magic Link el. paštu — be atskiro slaptažodžio šioje svetainėje.
+              Naudokite Google paskyrą arba gaukite vienkartinę prisijungimo nuorodą el. paštu.
             </p>
           </PageIntro>
 
-          <LoginForm
-            googleConfigured={googleConfigured}
-            emailConfigured={emailConfigured}
-            devLoginConfigured={isDevLoginConfigured}
-            devLoginEmailHint={devLoginEmailHint}
-            oauthCallbackUrl={oauthCallbackUrl}
-          />
+          <Suspense
+            fallback={
+              <div className="site-skeleton mt-8 min-h-[280px] rounded-2xl" role="status" aria-live="polite">
+                Kraunama…
+              </div>
+            }
+          >
+            <LoginForm
+              googleConfigured={googleConfigured}
+              emailConfigured={emailConfigured}
+              devLoginConfigured={isDevLoginConfigured}
+              devLoginEmailHint={devLoginEmailHint}
+              oauthCallbackUrl={oauthCallbackUrl}
+            />
+          </Suspense>
         </div>
       </main>
       <SiteFooter />

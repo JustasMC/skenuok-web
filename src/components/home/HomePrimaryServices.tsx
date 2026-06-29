@@ -12,7 +12,7 @@ const cards = [
   },
   {
     title: "Kursų kokybės skenavimas",
-    kicker: "PageSpeed + AI",
+    kicker: "Lighthouse + AI",
     body:
       "Jei parduodate mokymus — ne tik metrikas: papildomai vertiname pasiūlos turinį ir atitikimą pažadams. Tinka ilgalaikei SEO strategijai, kai produktas yra pats kursas.",
     href: "/tools/course-scanner",

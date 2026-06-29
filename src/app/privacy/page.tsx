@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { PageIntro } from "@/components/PageIntro";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { PrivacyPolicyContent } from "@/lib/legal-content";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
 const title = "Privatumo politika";
 const description =
-  "Mūsų privatumo politika apie, kaip tvarkome ir saugome jūsų duomenis.";
+  "Kaip Skenuok.com tvarko jūsų duomenis: kontaktai, paskyros, mokėjimai, AI įrankiai, slapukai ir jūsų BDAR teisės.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/privacy");
@@ -15,11 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    keywords: [
-      "privatumo politika",
-      "duomenys",
-      "saugumas"
-    ],
+    keywords: ["privatumo politika", "BDAR", "duomenų apsauga", "Slapukai", siteConfig.name],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
@@ -29,13 +26,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: siteConfig.name,
       title,
       description,
-      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: title }],
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: ["/og-image.png"],
+      images: ["/opengraph-image"],
     },
   };
 }
@@ -45,14 +42,11 @@ export default function PrivacyPage() {
     <>
       <SiteHeader />
       <main id="main-content" className="site-page-main">
-        <div className="site-shell-wide py-12 sm:py-16">
+        <div className="site-shell-wide space-y-10 py-12 sm:py-16">
           <PageIntro variant="page" kicker="Privatumas" title={title}>
-            <p>
-              Mūsų privatumo politika apie, kaip tvarkome ir saugome jūsų duomenis.
-            </p>
+            <p>{description}</p>
           </PageIntro>
-
-          {/* Add your privacy policy content here */}
+          <PrivacyPolicyContent />
         </div>
       </main>
       <SiteFooter />

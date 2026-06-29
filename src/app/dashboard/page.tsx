@@ -1,23 +1,33 @@
 import type { Metadata } from "next";
-import { PageIntro } from "@/components/PageIntro";
+import dynamic from "next/dynamic";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
+const DashboardWorkspace = dynamic(
+  () => import("@/components/dashboard/DashboardWorkspace").then((m) => m.DashboardWorkspace),
+  {
+    loading: () => (
+      <div className="site-skeleton min-h-[60vh] rounded-2xl" role="status" aria-live="polite">
+        Kraunama darbo vieta…
+      </div>
+    ),
+  },
+);
+
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/dashboard");
+  const title = "Darbo vieta";
+  const description =
+    "SEO agentas, kreditų balansas, žurnalas ir greita prieiga prie įrankių — jūsų personali darbo vieta.";
 
   return {
-    title: "Darbo vieta",
-    description:
-      "Jūsų personalus darbo stebėjimo skydas su SEO turinio generatoriu, kreditais ir kitomis funkcijomis.",
-    keywords: [
-      "darbo vieta",
-      "SEO generatorius",
-      "kreditai",
-      "prieiga"
-    ],
+    title,
+    description,
+    keywords: ["darbo vieta", "SEO agentas", "kreditai", "SEO generatorius", "skeneriai"],
     alternates: { canonical },
     robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
     openGraph: {
@@ -25,37 +35,33 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
-      title: "Darbo vieta",
-      description:
-        "Jūsų personalus darbo stebėjimo skydas su SEO turinio generatoriu, kreditais ir kitomis funkcijomis.",
-      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Darbo vieta" }],
+      title,
+      description,
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Darbo vieta",
-      description:
-        "Jūsų personalus darbo stebėjimo skydas su SEO turinio generatoriu, kreditais ir kitomis funkcijomis.",
-      images: ["/og-image.png"],
+      title,
+      description,
+      images: ["/opengraph-image"],
     },
   };
 }
 
-export default function DashboardPage() {
-  const title = "Paskyra";
+export default async function DashboardPage() {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login?callbackUrl=/dashboard");
+  }
 
   return (
     <>
       <SiteHeader />
-      <main id="main-content" className="site-shell py-16 sm:py-20">
-        <div className="mx-auto w-full max-w-lg">
-          <PageIntro variant="page" kicker="Paskyra" title={title}>
-            <p>
-              Jūsų personalus darbo stebėjimo skydas su SEO turinio generatoriu, kreditais ir kitomis funkcijomis.
-            </p>
-          </PageIntro>
-
-          {/* Add your dashboard content here */}
-        </div>
+      <main id="main-content" className="site-shell-wide py-12 sm:py-16">
+        <DashboardWorkspace
+          userName={session.user.name ?? null}
+          userEmail={session.user.email ?? null}
+        />
       </main>
       <SiteFooter />
     </>

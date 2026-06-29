@@ -2,25 +2,25 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 
 const pillars = [
   {
-    title: "High-Performance Web Engineering",
-    body: "Kuriu svetaines, kurios ne tik atrodo moderniai, bet ir veikia žaibiškai. Mano stack\u2019as (Next.js, Tailwind v4, Docker) optimizuotas nuliui klaidų ir maksimaliam Google pasitikėjimui (100/100 SEO & Accessibility).",
+    title: "Aukšto našumo žiniatinklis",
+    body: "Kuriame svetaines, kurios ne tik atrodo moderniai, bet ir veikia greitai. Next.js, Tailwind ir serveriniai komponentai — SEO, prieinamumas ir Core Web Vitals kaip standartas, ne papildomas darbas.",
     accent: "border-[var(--color-electric)]/40",
     glow: "group-hover:shadow-[0_0_36px_-12px_rgba(0,212,255,0.35)]",
-    tag: "Web",
+    tag: "Žiniatinklis",
   },
   {
-    title: "AI Orchestration & Automation",
-    body: "Nerašau kodo rankomis \u2014 aš jam diriguoju. Naudodamas pažangiausius AI agentus, integruoju LLM modelius bei automatizuoju verslo procesus (nuo YouTube turinio iki MEV botų architektūros).",
+    title: "AI ir procesų automatizacija",
+    body: "Integruojame AI agentus ir automatizaciją ten, kur tai sumažina rankinį darbą: turinys, SEO užduotys, duomenų apdorojimas. Visada su aiškia verslo logika ir žmogaus kontrole kritinėse vietose.",
     accent: "border-[var(--color-lime)]/40",
     glow: "group-hover:shadow-[0_0_36px_-12px_rgba(200,255,0,0.3)]",
     tag: "AI",
   },
   {
-    title: "Data-Driven Decisions",
-    body: "Kiekvienas pikselis turi pagrindimą. Naudoju SQL, MongoDB ir PowerBI, kad verslo sprendimai būtų grįsti skaičiais, o ne spėjimais. SEO optimizacija pasiekiama per techninį tikslumą, o ne tik raktažodžius.",
+    title: "Sprendimai pagal duomenis",
+    body: "Kiekvienas prioritetas turi pagrindimą: SQL, GA4, Power BI ir techniniai auditai. SEO strategija remiasi faktais — ne spėjimais ar „gražiais“ ataskaitų skaičiais be konteksto.",
     accent: "border-sky-400/40",
     glow: "group-hover:shadow-[0_0_36px_-12px_rgba(56,189,248,0.35)]",
-    tag: "Data",
+    tag: "Duomenys",
   },
 ] as const;
 
@@ -29,9 +29,9 @@ export function WhyUs() {
     <section id="kodel-mes" className="site-section border-t border-[var(--color-border)]/60">
       <div className="site-shell">
         <SectionHeader
-          eyebrow="Kodėl mes?"
-          title="Rezultatai, kuriuos matuojame realiais skaičiais"
-          description="Mes ne spėliojame, o matuojame. Mūsų pačių platformos SEO balas yra 100/100, o prieinamumas — 97/100. Kuriame svetaines, kurias Google botai dievina, o vartotojai pasiekia akimirksniu."
+          eyebrow="Kodėl mes"
+          title="Rezultatai, kuriuos matuojame skaičiais"
+          description="Ne spėliojame — matuojame. Platforma sukurta pagal tuos pačius SEO ir našumo principus, kuriuos taikome klientų projektuose."
         />
 
         <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-3">
@@ -43,12 +43,8 @@ export function WhyUs() {
               <span className="inline-flex w-fit rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--color-electric)]">
                 {p.tag}
               </span>
-              <h3 className="mt-4 text-lg font-semibold tracking-tight text-white sm:text-xl">
-                {p.title}
-              </h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-300 sm:text-base">
-                {p.body}
-              </p>
+              <h3 className="mt-4 text-lg font-semibold tracking-tight text-white sm:text-xl">{p.title}</h3>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-300 sm:text-base">{p.body}</p>
             </article>
           ))}
         </div>

@@ -11,10 +11,18 @@ const entries: Array<{
   priority: number;
 }> = [
   { path: "/", changeFrequency: "weekly", priority: 1 },
+  { path: "/svetainiu-kurimas", changeFrequency: "weekly", priority: 0.92 },
   { path: "/tools/scanner", changeFrequency: "weekly", priority: 0.9 },
   { path: "/tools/course-scanner", changeFrequency: "weekly", priority: 0.85 },
   { path: "/irankiai/seo-generatorius", changeFrequency: "weekly", priority: 0.85 },
   { path: "/pricing", changeFrequency: "monthly", priority: 0.75 },
+  { path: "/blog", changeFrequency: "weekly", priority: 0.7 },
+  {
+    path: "/blog/svetainiu-kurimas-ir-seo-auditas-planas-2026",
+    changeFrequency: "monthly",
+    priority: 0.65,
+  },
+  { path: "/investavimas", changeFrequency: "monthly", priority: 0.5 },
   { path: "/terms", changeFrequency: "yearly", priority: 0.35 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.35 },
 ];

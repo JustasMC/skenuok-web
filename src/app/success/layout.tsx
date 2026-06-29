@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     locale: siteConfig.locale,
     url: getCanonicalPath("/success"),
     siteName: siteConfig.name,
-    title: "Mokėjimas patvirtintas | Skenuok.com",
+    title: `Mokėjimas patvirtintas | ${siteConfig.name}`,
     description: "Mokėjimas gautas. Galite tęsti darbą su SEO generatoriumi.",
   },
 };

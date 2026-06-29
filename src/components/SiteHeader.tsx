@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AuthHeaderActions } from "@/components/AuthHeaderActions";
+import { siteConfig } from "@/lib/site-config";
 
 const links = [
   { href: "/#paslaugos", label: "Paslaugos" },
@@ -13,7 +14,7 @@ const links = [
   { href: "/svetainiu-kurimas", label: "Svetainių kūrimas" },
   { href: "/irankiai/seo-generatorius", label: "SEO generatorius" },
   { href: "/pricing", label: "Kainos" },
-  { href: "/#stack", label: "Stack" },
+  { href: "/#stack", label: "Technologijos" },
   { href: "/#roi", label: "ROI" },
   { href: "/#kontaktai", label: "Kontaktai" },
 ] as const;
@@ -55,7 +56,7 @@ export function SiteHeader() {
             priority
           />
           <span className="leading-none">
-            FS<span className="text-[var(--color-electric)]">·</span>AI
+            {siteConfig.shortName}
           </span>
         </Link>
 

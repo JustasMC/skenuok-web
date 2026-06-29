@@ -18,7 +18,7 @@ export function Hero() {
         <div className="site-enter flex max-w-2xl flex-col justify-center space-y-7 sm:space-y-8">
           <div className="space-y-3 sm:space-y-4">
             <p className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-surface)_92%,transparent)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-electric)] shadow-sm shadow-black/20 backdrop-blur-sm">
-              Skenuok.com · AI skeneris
+              Skenuok.com · AI SEO platforma
             </p>
             <h1 className="text-balance text-[1.65rem] font-semibold leading-[1.12] tracking-tight text-white min-[400px]:text-4xl sm:text-5xl sm:leading-[1.08] lg:text-[3.25rem] lg:leading-[1.06]">
               {homePageH1}

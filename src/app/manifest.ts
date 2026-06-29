@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/site-config";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: siteConfig.name,
-    short_name: "FS·AI",
+    short_name: siteConfig.shortName,
     description: siteConfig.defaultDescription,
     start_url: "/",
     display: "browser",
@@ -12,7 +12,6 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#050508",
     theme_color: "#050508",
     lang: "lt",
-    categories: ["business", "productivity", "developer tools"],
     icons: [
       {
         src: "/icon",

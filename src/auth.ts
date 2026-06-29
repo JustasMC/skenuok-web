@@ -28,7 +28,8 @@ const devLoginAllowed =
 const useDatabaseSession = googleConfigured || emailConfigured;
 
 const authSecret = env.AUTH_SECRET || env.NEXTAUTH_SECRET;
-if (env.NODE_ENV === "production" && !authSecret) {
+const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+if (env.NODE_ENV === "production" && !authSecret && !isProductionBuild) {
   throw new Error(
     "[auth] Production requires AUTH_SECRET or NEXTAUTH_SECRET. Set a long random secret for secure session signing.",
   );

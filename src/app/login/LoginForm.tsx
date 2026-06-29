@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 
 type Props = {
@@ -45,6 +45,8 @@ export function LoginForm({
   oauthCallbackUrl,
 }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl")?.trim() || "/dashboard";
   const [email, setEmail] = useState("");
   const [devEmail, setDevEmail] = useState(devLoginEmailHint);
   const [devPassword, setDevPassword] = useState("");
@@ -55,7 +57,7 @@ export function LoginForm({
 
   async function onGoogle() {
     setMessage("");
-    await signIn("google", { callbackUrl: "/irankiai/seo-generatorius" });
+    await signIn("google", { callbackUrl });
   }
 
   async function onDevLogin(e: React.FormEvent) {
@@ -72,7 +74,7 @@ export function LoginForm({
         setDevErr("Neteisingas el. paštas arba slaptažodis.");
         return;
       }
-      router.push("/irankiai/seo-generatorius");
+      router.push(callbackUrl);
       router.refresh();
     } finally {
       setDevLoading(false);
@@ -85,7 +87,7 @@ export function LoginForm({
     setMessage("");
     const res = await signIn("nodemailer", {
       email: email.trim(),
-      callbackUrl: "/irankiai/seo-generatorius",
+      callbackUrl,
       redirect: false,
     });
     if (res?.error) {
@@ -119,7 +121,7 @@ export function LoginForm({
           <div className="relative my-8 flex items-center justify-center">
             <div className="absolute inset-x-0 top-1/2 h-px bg-[color-mix(in_oklab,var(--color-border)_90%,transparent)]" />
             <span className="relative bg-[color-mix(in_oklab,black_28%,#0a1020)] px-3 text-xs font-medium uppercase tracking-wide text-zinc-500">
-              arba el. paštu (Magic Link)
+              arba el. paštu (prisijungimo nuoroda)
             </span>
           </div>
 
@@ -251,7 +253,7 @@ export function LoginForm({
         >
           <div>
             <label htmlFor="login-email-solo" className="text-sm font-medium text-zinc-300">
-              El. paštas (Magic Link)
+              El. paštas (prisijungimo nuoroda)
             </label>
             <input
               id="login-email-solo"

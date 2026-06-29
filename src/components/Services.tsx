@@ -4,7 +4,7 @@ const modules = [
   {
     title: "Žiniatinklio sprendimai (Next.js / Rust)",
     body: "Serveriniai komponentai SEO tikslams, aiški maršrutizacija ir tipų saugumas. Rust — ten, kur svarbiausias našumas ar deterministinė logika.",
-    tag: "Fullstack",
+    tag: "Fullstack sprendimai",
   },
   {
     title: "Verslo logika ir automatizacija (Python / AI)",
@@ -52,7 +52,7 @@ export function Services() {
               <p className="relative mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base sm:leading-relaxed">{m.body}</p>
               {m.tag === "Našumas" ? (
                 <ul className="relative mt-5 flex flex-wrap gap-2" aria-label="Technologijos">
-                  {(["Rust", "C++", "gRPC", "Real-time"] as const).map((b) => (
+                  {(["Rust", "C++", "Realaus laiko", "API"] as const).map((b) => (
                     <li key={b}>
                       <span className={badgeClass}>{b}</span>
                     </li>
