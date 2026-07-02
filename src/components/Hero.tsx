@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { homePageH1 } from "@/lib/home-seo";
+import { DEFAULT_OG_IMAGE_PATH } from "@/lib/site-url";
 
 const stats = [
   { k: "AI SEO auditas", v: "Lighthouse + AI pastabos" },
@@ -79,7 +80,7 @@ export function Hero() {
         <div className="site-enter-delay w-full shrink-0 sm:max-w-md lg:max-w-sm lg:self-center">
           <div className="mb-3 overflow-hidden rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface)]/60 sm:mb-4">
             <Image
-              src="/og-image.png"
+              src={DEFAULT_OG_IMAGE_PATH}
               alt="Svetainių kūrimas ir SEO auditas su Next.js"
               width={1200}
               height={630}

@@ -12,6 +12,11 @@ export function getSiteOrigin(): string {
     const host = railway.replace(/^https?:\/\//i, "").replace(/\/+$/, "");
     return `https://${host}`;
   }
+  if (process.env.NODE_ENV === "production") {
+    console.warn(
+      "[site-url] NEXT_PUBLIC_SITE_URL nenustatytas — SEO naudoja localhost. Nustatykite https://skenuok.com Railway kintamuosiuose.",
+    );
+  }
   return "http://localhost:3000";
 }
 
@@ -29,4 +34,11 @@ export function getCanonicalPath(path: string): string {
   const origin = getSiteOrigin().replace(/\/+$/, "");
   const suffix = path.startsWith("/") ? path : `/${path}`;
   return `${origin}${suffix}`;
+}
+
+/** Next.js `opengraph-image.tsx` maršrutas — naudoti vietoje neegzistuojančio `/og-image.png`. */
+export const DEFAULT_OG_IMAGE_PATH = "/opengraph-image" as const;
+
+export function getDefaultOgImageUrl(): string {
+  return getCanonicalPath(DEFAULT_OG_IMAGE_PATH);
 }

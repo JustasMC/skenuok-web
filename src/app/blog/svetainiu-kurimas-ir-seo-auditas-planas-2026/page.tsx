@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
-import { getCanonicalPath } from "@/lib/site-url";
+import { DEFAULT_OG_IMAGE_PATH, getCanonicalPath } from "@/lib/site-url";
 
 const title = "Svetainių kūrimas ir SEO auditas: planas 2026-iesiems";
 const description =
@@ -39,13 +39,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: siteConfig.name,
       title,
       description,
-      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: title }],
+      images: [{ url: DEFAULT_OG_IMAGE_PATH, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: ["/og-image.png"],
+      images: [DEFAULT_OG_IMAGE_PATH],
     },
   };
 }

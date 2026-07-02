@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { siteConfig } from "@/lib/site-config";
 import { getSoftwareServiceJsonLd } from "@/lib/jsonld";
-import { getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
+import { DEFAULT_OG_IMAGE_PATH, getDefaultOgImageUrl, getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
 import { Providers } from "@/app/providers";
 import "./globals.css";
 
@@ -21,65 +21,69 @@ const geistMono = Geist_Mono({
   adjustFontFallback: true,
 });
 
-const siteUrl = getSiteOrigin();
-const ogTitle = siteConfig.defaultTitle;
-const ogDescription = siteConfig.defaultDescription;
-const ogKeywords = siteConfig.keywords;
-const ogImageUrl = `${siteUrl.replace(/\/$/, "")}/og-image.png`;
-
 export const viewport: Viewport = {
   themeColor: "#050508",
   width: "device-width",
   initialScale: 1,
 };
 
-export const metadata: Metadata = {
-  metadataBase: getMetadataBaseUrl(),
-  title: {
-    default: ogTitle,
-    template: siteConfig.titleTemplate,
-  },
-  description: ogDescription,
-  keywords: ogKeywords,
-  authors: [{ name: siteConfig.name }],
-  creator: siteConfig.name,
-  openGraph: {
-    type: "website",
-    locale: siteConfig.locale,
-    url: siteUrl,
-    siteName: siteConfig.name,
-    title: ogTitle,
+export async function generateMetadata(): Promise<Metadata> {
+  const siteUrl = getSiteOrigin();
+  const ogTitle = siteConfig.defaultTitle;
+  const ogDescription = siteConfig.defaultDescription;
+  const ogKeywords = siteConfig.keywords;
+  const ogImageUrl = getDefaultOgImageUrl();
+  const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+
+  return {
+    metadataBase: getMetadataBaseUrl(),
+    title: {
+      default: ogTitle,
+      template: siteConfig.titleTemplate,
+    },
     description: ogDescription,
-    images: [
-      {
-        url: ogImageUrl,
-        width: 1200,
-        height: 630,
-        alt: ogTitle,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: ogTitle,
-    description: ogDescription,
-    ...(siteConfig.twitterCreator ? { creator: siteConfig.twitterCreator } : {}),
-    images: [ogImageUrl],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
-  alternates: {
-    canonical: siteUrl,
-  },
-  formatDetection: {
-    telephone: false,
-    email: false,
-    address: false,
-  },
-};
+    keywords: ogKeywords,
+    authors: [{ name: siteConfig.name }],
+    creator: siteConfig.name,
+    openGraph: {
+      type: "website",
+      locale: siteConfig.locale,
+      url: siteUrl,
+      siteName: siteConfig.name,
+      title: ogTitle,
+      description: ogDescription,
+      images: [
+        {
+          url: DEFAULT_OG_IMAGE_PATH,
+          width: 1200,
+          height: 630,
+          alt: ogTitle,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      description: ogDescription,
+      ...(siteConfig.twitterCreator ? { creator: siteConfig.twitterCreator } : {}),
+      images: [ogImageUrl],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true },
+    },
+    alternates: {
+      canonical: siteUrl,
+    },
+    ...(googleVerification ? { verification: { google: googleVerification } } : {}),
+    formatDetection: {
+      telephone: false,
+      email: false,
+      address: false,
+    },
+  };
+}
 
 export default function RootLayout({
   children,

@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { DEFAULT_OG_IMAGE_PATH } from "@/lib/site-url";
 
 type LighthouseScore = { label: string; before: number; after: number };
 
@@ -39,7 +40,7 @@ const cases: CaseStudy[] = [
       "LCP sumažintas nuo 4.2 s iki 1.1 s (Core Web Vitals)",
       "Mobili konversija pagerėjo ~18 % (mokėjimų analitika)",
     ],
-    image: "/og-image.png",
+    image: DEFAULT_OG_IMAGE_PATH,
     imageAlt: "E. parduotuvės Lighthouse rezultatai po optimizavimo",
   },
   {
@@ -59,7 +60,7 @@ const cases: CaseStudy[] = [
       "NPS pakilo nuo 42 iki 71",
       "Serverio resursų poreikis sumažėjo ~40 %",
     ],
-    image: "/og-image.png",
+    image: DEFAULT_OG_IMAGE_PATH,
     imageAlt: "SaaS skydo Lighthouse rezultatai po optimizavimo",
   },
   {
@@ -79,7 +80,7 @@ const cases: CaseStudy[] = [
       "Puslapio įkrovimas nuo 8.4 s iki 1.3 s",
       "Organinis srautas augo ~120 %",
     ],
-    image: "/og-image.png",
+    image: DEFAULT_OG_IMAGE_PATH,
     imageAlt: "Portfolio svetainės optimizavimo rezultatai",
   },
 ];

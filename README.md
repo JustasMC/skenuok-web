@@ -13,6 +13,9 @@ Paleiskite lokaliai:
 
 Important production setup:
 - Set `AUTH_SECRET` or `NEXTAUTH_SECRET` in production for secure NextAuth session signing.
-- Use the matching `NEXT_PUBLIC_SITE_URL` and Stripe redirect URLs for your deployed domain.
+- Set `NEXT_PUBLIC_SITE_URL=https://your-domain.com` (required for sitemap, canonical URLs, JSON-LD).
+- Set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` after adding the site in Google Search Console.
+- Use the matching Stripe redirect URLs for your deployed domain.
+- If Google cannot crawl the site, check Railway edge rate limits (HTTP 429) — see `docs/seo-analytics-setup.md`.
 
 Papildoma techninė dokumentacija: `docs/seo-analytics-setup.md`.

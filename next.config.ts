@@ -73,6 +73,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.skenuok.com" }],
+        destination: "https://skenuok.com/:path*",
+        permanent: true,
+      },
+      {
         source: "/test-email",
         destination: "/",
         permanent: false,

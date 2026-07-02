@@ -1,9 +1,12 @@
 import type { MetadataRoute } from "next";
 import { getCanonicalPath, getSiteOrigin } from "@/lib/site-url";
 
+/** Runtime env — ne localhost, jei NEXT_PUBLIC_SITE_URL nustatytas tik deploy metu. */
+export const dynamic = "force-dynamic";
+
 /**
  * Dinaminis žemėlapis — Next.js automatiškai patiekia kaip `/sitemap.xml`.
- * URL absoliutūs (pagal NEXT_PUBLIC_SITE_URL / RAILWAY_PUBLIC_DOMAIN build metu).
+ * URL absoliutūs (pagal NEXT_PUBLIC_SITE_URL / RAILWAY_PUBLIC_DOMAIN).
  */
 const entries: Array<{
   path: string;

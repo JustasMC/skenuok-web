@@ -1,8 +1,6 @@
 import { siteConfig } from "@/lib/site-config";
 import { getSiteOrigin } from "@/lib/site-url";
 
-const siteUrl = getSiteOrigin();
-
 function parseSameAs(): string[] | undefined {
   const raw = process.env.NEXT_PUBLIC_ORGANIZATION_SAME_AS?.trim();
   if (!raw) return undefined;
@@ -15,6 +13,7 @@ function parseSameAs(): string[] | undefined {
 
 /** Pagrindinė JSON-LD grafa: WebSite, WebPage, Organization, ProfessionalService (LT). */
 export function getSoftwareServiceJsonLd() {
+  const siteUrl = getSiteOrigin();
   const logoUrl = `${siteUrl}/images/fs-ai-mark.svg`;
   const sameAs = parseSameAs();
 

@@ -4,7 +4,7 @@ import { PageIntro } from "@/components/PageIntro";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
-import { getCanonicalPath } from "@/lib/site-url";
+import { DEFAULT_OG_IMAGE_PATH, getCanonicalPath } from "@/lib/site-url";
 
 const pageTitle = "Blogas: strategija, SEO ir AI";
 
@@ -33,13 +33,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: siteConfig.name,
       title: pageTitle,
       description,
-      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: pageTitle }],
+      images: [{ url: DEFAULT_OG_IMAGE_PATH, width: 1200, height: 630, alt: pageTitle }],
     },
     twitter: {
       card: "summary_large_image",
       title: pageTitle,
       description,
-      images: ["/og-image.png"],
+      images: [DEFAULT_OG_IMAGE_PATH],
     },
   };
 }

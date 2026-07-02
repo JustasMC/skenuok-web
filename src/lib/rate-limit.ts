@@ -11,12 +11,18 @@ import { warnIfUsingLocalRateLimit } from "@/lib/rate-limit-runtime";
 export function isSyntheticCrawler(req: Request): boolean {
   const ua = req.headers.get("user-agent") ?? "";
   return (
+    /googlebot/i.test(ua) ||
+    /bingbot/i.test(ua) ||
+    /yandexbot/i.test(ua) ||
+    /duckduckbot/i.test(ua) ||
+    /slurp/i.test(ua) ||
+    /facebookexternalhit/i.test(ua) ||
+    /twitterbot/i.test(ua) ||
+    /linkedinbot/i.test(ua) ||
     ua.includes("Lighthouse") ||
     ua.includes("Chrome-Lighthouse") ||
     ua.includes("PageSpeed") ||
-    ua.includes("Google Page Speed") ||
-    ua.includes("GoogleBot") ||
-    ua.includes("Googlebot")
+    ua.includes("Google Page Speed")
   );
 }
 

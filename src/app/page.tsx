@@ -12,7 +12,7 @@ import { TechStack } from "@/components/TechStack";
 import { WhyUs } from "@/components/WhyUs";
 import { homePageDescription, homePageKeywords, homePageTitle } from "@/lib/home-seo";
 import { siteConfig } from "@/lib/site-config";
-import { getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
+import { DEFAULT_OG_IMAGE_PATH, getDefaultOgImageUrl, getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
 
 const ROICalculator = dynamic(() => import("@/components/ROICalculator").then((m) => m.ROICalculator), {
   loading: () => (
@@ -37,7 +37,7 @@ const TechArsenal = dynamic(() => import("@/components/TechArsenal").then((m) =>
   loading: () => <div className="min-h-[600px]" aria-hidden />,
 });
 
-const ogImageUrl = `${getSiteOrigin().replace(/\/$/, "")}/og-image.png`;
+const ogImageUrl = getDefaultOgImageUrl();
 
 export async function generateMetadata(): Promise<Metadata> {
   const siteUrl = getSiteOrigin();
@@ -68,7 +68,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       images: [
         {
-          url: ogImageUrl,
+          url: DEFAULT_OG_IMAGE_PATH,
           width: 1200,
           height: 630,
           alt: title,

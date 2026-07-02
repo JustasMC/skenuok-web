@@ -5,7 +5,7 @@ import { PageIntro } from "@/components/PageIntro";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
-import { getCanonicalPath } from "@/lib/site-url";
+import { DEFAULT_OG_IMAGE_PATH, getCanonicalPath } from "@/lib/site-url";
 
 const ContentGenerator = dynamic(() => import("@/components/tools/ContentGenerator").then((m) => m.ContentGenerator), {
   loading: () => (
@@ -40,13 +40,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: siteConfig.name,
       title: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
-      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: PAGE_TITLE }],
+      images: [{ url: DEFAULT_OG_IMAGE_PATH, width: 1200, height: 630, alt: PAGE_TITLE }],
     },
     twitter: {
       card: "summary_large_image",
       title: PAGE_TITLE,
       description: PAGE_DESCRIPTION,
-      images: ["/og-image.png"],
+      images: [DEFAULT_OG_IMAGE_PATH],
     },
   };
 }
