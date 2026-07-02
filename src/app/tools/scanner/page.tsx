@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { Suspense } from "react";
 import { PageIntro } from "@/components/PageIntro";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -63,13 +64,13 @@ export default function ScannerPage() {
             <p>
               Įveskite svetainės URL — gaunate Lighthouse / PageSpeed metrikas, Core Web Vitals, SEO santrauką ir AI
               rekomendacijas lietuviškai. Toliau — turinio strategija,{" "}
-              <a href="/#paslaugos" className="site-link-inline">
+              <Link href="/#paslaugos" className="site-link-inline">
                 paslaugos
-              </a>{" "}
+              </Link>{" "}
               arba{" "}
-              <a href="/#kontaktai" className="site-link-inline">
+              <Link href="/#kontaktai" className="site-link-inline">
                 kontaktai
-              </a>
+              </Link>
               .
             </p>
           </PageIntro>
