@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { PageIntro } from "@/components/PageIntro";
+import { LegalPageShell } from "@/components/legal/LegalPageShell";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { TermsOfServiceContent } from "@/lib/legal-content";
+import { TermsOfServiceContent, termsToc } from "@/lib/legal-content";
 import { siteConfig } from "@/lib/site-config";
-import { getCanonicalPath } from "@/lib/site-url";
+import { DEFAULT_OG_IMAGE_PATH, getCanonicalPath } from "@/lib/site-url";
 
 const title = "Paslaugų sąlygos";
 const description =
-  "Skenuok.com naudojimo sąlygos: paskyros, kreditai, mokėjimai, AI turinys ir atsakomybės ribos.";
+  "Skenuok.com naudojimo sąlygos: paskyros, kreditai, Stripe mokėjimai, AI turinys, intelektinė nuosavybė ir atsakomybės ribos.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/terms");
@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    keywords: ["paslaugų sąlygos", "naudojimo taisyklės", "kreditai", siteConfig.name],
+    keywords: ["paslaugų sąlygos", "naudojimo taisyklės", "kreditai", "SaaS", siteConfig.name],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
@@ -26,13 +26,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: siteConfig.name,
       title,
       description,
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: title }],
+      images: [{ url: DEFAULT_OG_IMAGE_PATH, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: ["/opengraph-image"],
+      images: [DEFAULT_OG_IMAGE_PATH],
     },
   };
 }
@@ -42,12 +42,15 @@ export default function TermsPage() {
     <>
       <SiteHeader />
       <main id="main-content" className="site-page-main">
-        <div className="site-shell-wide space-y-10 py-12 sm:py-16">
-          <PageIntro variant="page" kicker="Teisinė informacija" title={title}>
-            <p>{description}</p>
-          </PageIntro>
+        <LegalPageShell
+          kicker="Teisinė informacija"
+          title={title}
+          description={description}
+          toc={termsToc}
+          backLabel="← Grįžti į pagrindinį"
+        >
           <TermsOfServiceContent />
-        </div>
+        </LegalPageShell>
       </main>
       <SiteFooter />
     </>

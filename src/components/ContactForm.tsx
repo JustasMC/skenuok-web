@@ -154,7 +154,11 @@ export function ContactForm() {
               </p>
             ) : null}
 
-            <button type="submit" disabled={status === "loading"} className="site-btn-lime min-h-11 transition duration-300 ease-in-out hover:bg-[var(--color-lime-dark)]">
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="site-btn-lime min-h-11 transition duration-300 ease-in-out hover:brightness-110"
+            >
               {status === "loading" ? "Siunčiama…" : "Siųsti"}
             </button>
           </form>
@@ -188,7 +192,7 @@ function Field({
         type={type}
         required={required}
         {...(autoComplete ? { autoComplete } : {})}
-        className="site-input min-h-11 w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-zinc-800 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-lime)]"
+        className="site-input min-h-11 w-full text-zinc-100"
       />
     </div>
   );

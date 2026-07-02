@@ -61,7 +61,16 @@ export default function ScannerPage() {
         <div className="site-shell-wide py-12 sm:py-16">
           <PageIntro kicker="SEO URL skeneris" title={title}>
             <p>
-              Tikrino kurso turinį, SEO balus ir AI rekomendacijas. Toliau — kursų strategija, Paslaugos, Kontaktai.
+              Įveskite svetainės URL — gaunate Lighthouse / PageSpeed metrikas, Core Web Vitals, SEO santrauką ir AI
+              rekomendacijas lietuviškai. Toliau — turinio strategija,{" "}
+              <a href="/#paslaugos" className="site-link-inline">
+                paslaugos
+              </a>{" "}
+              arba{" "}
+              <a href="/#kontaktai" className="site-link-inline">
+                kontaktai
+              </a>
+              .
             </p>
           </PageIntro>
 

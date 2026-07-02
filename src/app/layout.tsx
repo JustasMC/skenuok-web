@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
+import { CookieConsent } from "@/components/CookieConsent";
 import { siteConfig } from "@/lib/site-config";
 import { getSoftwareServiceJsonLd } from "@/lib/jsonld";
 import { DEFAULT_OG_IMAGE_PATH, getDefaultOgImageUrl, getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
@@ -91,7 +91,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const jsonLd = getSoftwareServiceJsonLd();
-  const gaId = process.env.NEXT_PUBLIC_GA_ID?.trim();
 
   return (
     <html lang="lt" className={`${geistSans.variable} ${geistMono.variable}`}>
@@ -107,21 +106,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <Providers>{children}</Providers>
-        {gaId ? (
-          <>
-            <Script
-              id="ga-script"
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="lazyOnload"
-            />
-            <Script id="ga-inline" strategy="lazyOnload">
-              {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${gaId}');`}
-            </Script>
-          </>
-        ) : null}
+        <CookieConsent />
       </body>
     </html>
   );

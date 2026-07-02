@@ -25,7 +25,7 @@ GRIEŽTI REIKALAVIMAI (kad balas būtų 100):
 2) Bent 6 skirtingi <h2> skyriai; kur tinka — po H2 naudok <h3>.
 3) Ilgis: bent ${SEO_WORD_TARGET} žodžių (įskaitant lietuviškas raides). Skaičiuojami atskiri žodžiai; trumpi fragmentai neprideda balo. Jei abejoji — rašyk ilgiau: pavyzdžiai, žingsniai, rizikos, santrauka.
 4) Raktažodis: vartotojo TIKSLIĄ frazę panaudok pilname tekste (be HTML žymų) bent 4 kartus natūraliai: įžangoje, keliose vidurinėse dalyse, išvadoje.
-5) Vidinės nuorodos: PRIVALO būti bent dvi: <a href="/paslaugos">…</a> ir <a href="/kontaktai">…</a> (ankoras lietuviškai).
+5) Vidinės nuorodos: PRIVALO būti bent dvi: <a href="/#paslaugos">…</a> ir <a href="/#kontaktai">…</a> (ankoras lietuviškai).
 6) Formatavimas: dažnai <strong>; bent du <ul> sąrašai su po 3–5 <li>.
 7) Kiekviena pastraipa <p>; logiškas srautas.
 8) Draudžiama: <html>, <body>, <head>, <script>, <style>.
@@ -128,7 +128,7 @@ async function runSingleExpandPass(
     [
       {
         role: "system",
-        content: `Tu SEO redaktorius. Grąžink tik pilną HTML fragmentą lietuviškai. Privalai išlaikyti / įterpti <a href="/paslaugos"> ir <a href="/kontaktai">. Pirmiausia užtikrink bent ${SEO_SCORE_MIN_WORDS} žodžių.`,
+        content: `Tu SEO redaktorius. Grąžink tik pilną HTML fragmentą lietuviškai. Privalai išlaikyti / įterpti <a href="/#paslaugos"> ir <a href="/#kontaktai">. Pirmiausia užtikrink bent ${SEO_SCORE_MIN_WORDS} žodžių.`,
       },
       { role: "user", content: userExpand },
     ],

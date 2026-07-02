@@ -55,8 +55,11 @@ export function SiteHeader() {
             className="h-8 w-8 shrink-0"
             priority
           />
-          <span className="leading-none">
-            {siteConfig.shortName}
+          <span className="flex flex-col leading-tight">
+            <span className="text-sm font-semibold sm:text-base">{siteConfig.name}</span>
+            <span className="hidden text-[10px] font-normal tracking-wide text-zinc-500 sm:block">
+              Fullstack &amp; AI sprendimai
+            </span>
           </span>
         </Link>
 
