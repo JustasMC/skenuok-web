@@ -10,6 +10,9 @@ const title = "Privatumo politika";
 const description =
   "Kaip Skenuok.com tvarko jūsų duomenis: kontaktai, paskyros, mokėjimai, AI įrankiai, slapukai, BDAR teisės ir saugumo priemonės.";
 
+/** Visada šviežias HTML — ne 1 metų CDN cache po deploy. */
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/privacy");
 

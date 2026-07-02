@@ -35,6 +35,12 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: "/((?!_next/static|images/).*)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=0, s-maxage=300, stale-while-revalidate=600" },
+        ],
+      },
+      {
         source: "/:path*",
         headers: [
           { key: "X-Robots-Tag", value: "all" },

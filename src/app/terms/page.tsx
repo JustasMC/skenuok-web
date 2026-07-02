@@ -10,6 +10,9 @@ const title = "Paslaugų sąlygos";
 const description =
   "Skenuok.com naudojimo sąlygos: paskyros, kreditai, Stripe mokėjimai, AI turinys, intelektinė nuosavybė ir atsakomybės ribos.";
 
+/** Visada šviežias HTML — ne 1 metų CDN cache po deploy. */
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/terms");
 
