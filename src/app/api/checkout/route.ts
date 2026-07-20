@@ -60,11 +60,11 @@ export async function POST(req: Request) {
 
     const credits =
       pack === "5"
-        ? Math.max(1, Number.parseInt(process.env.STRIPE_CREDITS_5_EUR ?? process.env.STRIPE_CREDITS_PER_PURCHASE ?? "10", 10))
+        ? Math.max(1, Number.parseInt(process.env.STRIPE_CREDITS_5_EUR ?? process.env.STRIPE_CREDITS_PER_PURCHASE ?? "15", 10))
         : Math.max(
             1,
             Number.parseInt(
-              process.env.STRIPE_CREDITS_20_EUR ?? process.env.STRIPE_CREDITS_PER_PURCHASE ?? "50",
+              process.env.STRIPE_CREDITS_20_EUR ?? process.env.STRIPE_CREDITS_PER_PURCHASE ?? "80",
               10,
             ),
           );

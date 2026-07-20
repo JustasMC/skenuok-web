@@ -4,7 +4,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 const cards = [
   {
     title: "AI SEO auditas",
-    kicker: "Nemokamas",
+    kicker: "Nemokamas · 0 kreditų",
     body:
       "Pradėkite nuo greitos Svetainių analizės: Lighthouse, techninė ir prieinamumo diagnostika, AI rekomendacijos lietuvių kalba. Tinka, kai reikia aiškios SEO strategijos techniniam sluoksniui.",
     href: "/tools/scanner",
@@ -12,16 +12,16 @@ const cards = [
   },
   {
     title: "Kursų kokybės skenavimas",
-    kicker: "Lighthouse + AI",
+    kicker: "Nuo 1 kredito",
     body:
-      "Jei parduodate mokymus — ne tik metrikas: papildomai vertiname pasiūlos turinį ir atitikimą pažadams. Tinka ilgalaikei SEO strategijai, kai produktas yra pats kursas.",
+      "Jei parduodate mokymus — ne tik metrikas: papildomai vertiname pasiūlos turinį ir atitikimą pažadams. Reikia prisijungimo; skenavimas kainuoja 1–2 kreditus.",
     href: "/tools/course-scanner",
     cta: "Bandyti kursų skanerį",
   },
   {
     title: "Svetainių kūrimas",
-    kicker: "Nauja",
-    body: "Nuo idėjos iki pilnai SEO optimizuoto Next.js sprendimo su AI integracijomis.",
+    kicker: "Nuo 390 €",
+    body: "Nuo idėjos iki pilnai SEO optimizuoto Next.js sprendimo su AI integracijomis. Orientacinės kainos — skaičiuoklėje.",
     href: "/svetainiu-kurimas",
     cta: "Peržiūrėti paslaugą",
   },

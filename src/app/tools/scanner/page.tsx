@@ -18,7 +18,7 @@ const UrlScanner = dynamic(() => import("@/components/tools/UrlScanner").then((m
 
 const title = "SEO URL skeneris — Lighthouse ir AI auditas";
 const description =
-  "Patikrinkite svetainės URL: PageSpeed / Lighthouse metrikos, Core Web Vitals, SEO santrauka ir AI rekomendacijos lietuviškai.";
+  "Nemokamas SEO URL skeneris: PageSpeed / Lighthouse, Core Web Vitals, SEO santrauka ir AI rekomendacijos lietuviškai. Be kreditų.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/tools/scanner");
@@ -60,10 +60,11 @@ export default function ScannerPage() {
       <SiteHeader />
       <main id="main-content" className="site-page-main">
         <div className="site-shell-wide py-12 sm:py-16">
-          <PageIntro kicker="SEO URL skeneris" title={title}>
+          <PageIntro kicker="Nemokamas · 0 kreditų" title={title}>
             <p>
               Įveskite svetainės URL — gaunate Lighthouse / PageSpeed metrikas, Core Web Vitals, SEO santrauką ir AI
-              rekomendacijas lietuviškai. Toliau — turinio strategija,{" "}
+              rekomendacijas lietuviškai. Šis įrankis <span className="font-medium text-zinc-200">nekainuoja kreditų</span>
+              . Toliau — turinio strategija,{" "}
               <Link href="/#paslaugos" className="site-link-inline">
                 paslaugos
               </Link>{" "}

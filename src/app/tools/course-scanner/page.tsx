@@ -17,7 +17,7 @@ const CourseScanner = dynamic(() => import("@/components/tools/CourseQualityScan
 
 const title = "Kursų kokybės skaneris";
 const description =
-  "Nemokamas kursų kokybės skaneris: tikrino kurso turinį, SEO balus ir AI rekomendacijas. Toliau — kursų strategija, Paslaugos, Kontaktai.";
+  "Kursų kokybės skaneris (nuo 1 kredito): tikrina kurso turinį, SEO balus ir AI rekomendacijas. Reikia prisijungimo.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/tools/course-scanner");
@@ -59,7 +59,9 @@ export default function CourseScannerPage() {
         <div className="site-shell-wide py-12 sm:py-16">
           <PageIntro kicker="Kursų kokybės skaneris" title={title}>
             <p>
-              Tikrino kurso turinį, SEO balus ir AI rekomendacijas. Toliau — kursų strategija, Paslaugos, Kontaktai.
+              Tikrina kurso turinį, SEO balus ir AI rekomendacijas. Kaina:{" "}
+              <span className="font-medium text-zinc-200">1–2 kreditai</span> už skenavimą (reikia prisijungimo). URL
+              skaneris lieka nemokamas.
             </p>
           </PageIntro>
 

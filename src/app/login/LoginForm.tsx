@@ -115,7 +115,7 @@ export function LoginForm({
             Prisijungti su Google
           </button>
           <p className="mt-3 text-xs leading-relaxed text-zinc-500">
-            Google paskyra. Jei turėjote anoniminę generatoriaus sesiją, kreditai bus perkelti po sėkmingo prisijungimo.
+            Pirmą kartą — 3 dovanų kreditai. Jei turėjote anoniminę sesiją, jos kreditai taip pat bus perkelti.
           </p>
 
           <div className="relative my-8 flex items-center justify-center">
@@ -165,7 +165,7 @@ export function LoginForm({
             Prisijungti su Google
           </button>
           <p className="mt-3 text-xs leading-relaxed text-zinc-500">
-            Prisijungsite su Google paskyra. Jei turėjote anoniminę generatoriaus sesiją, kreditai bus perkelti po sėkmingo prisijungimo.
+            Pirmą kartą — 3 dovanų kreditai. Jei turėjote anoniminę sesiją, jos kreditai taip pat bus perkelti.
           </p>
         </div>
       ) : null}

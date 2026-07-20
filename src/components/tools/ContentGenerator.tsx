@@ -77,8 +77,8 @@ export function ContentGenerator() {
       const c = body.mergeFlash.credits;
       setMergeWelcome(
         c > 0
-          ? `Sveiki grįžę! Jūsų sesijos kreditai sėkmingai perkelti į jūsų paskyrą (${c} kreditų).`
-          : "Sveiki grįžę! Jūsų anoniminės sesijos istorija perkelta į paskyrą.",
+          ? `Sveiki! Į jūsų paskyrą įskaityta ${c} kreditų (sesija ir/arba dovanų bonusas).`
+          : "Sveiki! Jūsų anoniminės sesijos istorija perkelta į paskyrą.",
       );
     }
     return typeof body.credits === "number" ? body.credits : null;
@@ -390,10 +390,26 @@ export function ContentGenerator() {
           <p>
             Kreditai:{" "}
             <span className="font-mono font-semibold text-[var(--color-lime)]">{credits ?? "…"}</span>
+            <span className="ml-1 text-zinc-500">
+              {sessionMode === "session"
+                ? "(3 nemokami be paskyros)"
+                : sessionMode === "user"
+                  ? "(1 = 1 straipsnis)"
+                  : null}
+            </span>
           </p>
-          <StripeCheckoutButton className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium text-zinc-200 transition hover:border-[var(--color-electric)] hover:text-white">
-            Pirkti kreditų paketą
-          </StripeCheckoutButton>
+          {sessionMode === "session" ? (
+            <Link
+              href="/login"
+              className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium text-zinc-200 transition hover:border-[var(--color-electric)] hover:text-white"
+            >
+              Prisijungti — +3 dovanų kreditai
+            </Link>
+          ) : (
+            <StripeCheckoutButton className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium text-zinc-200 transition hover:border-[var(--color-electric)] hover:text-white">
+              Pirkti kreditų paketą
+            </StripeCheckoutButton>
+          )}
         </div>
       </div>
 

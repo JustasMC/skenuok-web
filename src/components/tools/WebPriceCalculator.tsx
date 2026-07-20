@@ -8,9 +8,9 @@ import { useMemo, useState } from "react";
 type ProjectType = "landing" | "verslo" | "ecommerce";
 
 const baseRates: Record<ProjectType, { base: number; perPage: number; duration: string }> = {
-  landing: { base: 490, perPage: 0, duration: "5–9 darbo dienos" },
-  verslo: { base: 890, perPage: 70, duration: "2–4 savaitės" },
-  ecommerce: { base: 1490, perPage: 90, duration: "3–6 savaitės" },
+  landing: { base: 390, perPage: 0, duration: "5–9 darbo dienos" },
+  verslo: { base: 690, perPage: 55, duration: "2–4 savaitės" },
+  ecommerce: { base: 1190, perPage: 75, duration: "3–6 savaitės" },
 };
 
 const addons: ReadonlyArray<{
@@ -23,21 +23,21 @@ const addons: ReadonlyArray<{
   {
     id: "seo-pro",
     label: "SEO Pro paketas",
-    price: 190,
+    price: 149,
     tooltip:
       "Techninis SEO ir našumas: meta, schema markup, Core Web Vitals, Search Console ir sitemap. Tikslas — aukšti Lighthouse balai ir tvarkinga indeksavimo bazė.",
   },
   {
     id: "ai-features",
     label: "AI funkcijos (individualios integracijos)",
-    price: 350,
+    price: 279,
     tooltip:
       "AI pagal jūsų procesus: turinio pagalba, SEO auditas, klientų aptarnavimas ar rekomendacijos — sujungta su jūsų duomenimis, ne bendras chatbotas.",
   },
   {
     id: "premium-hosting",
     label: "Hostingas ir palaikymas (3 mėn.)",
-    price: 99,
+    price: 79,
     tooltip:
       "Vienkartinis mokėjimas: diegimas, CDN, atsarginės kopijos ir 3 mėnesių techninė pagalba po paleidimo.",
     defaultChecked: true,
@@ -273,7 +273,7 @@ export function WebPriceCalculator() {
         <div className="grid gap-3 text-sm sm:grid-cols-2">
           <div className="rounded-lg border border-[var(--color-border)]/80 bg-[var(--color-surface)]/40 p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Rinkos orientyras</p>
-            <p className="mt-2 text-xl font-bold tabular-nums text-white">1 200–2 500 €</p>
+            <p className="mt-2 text-xl font-bold tabular-nums text-white">990–1 990 €</p>
             <p className="mt-2 text-xs leading-relaxed text-zinc-400">
               Tipinė agentūrinė kaina už panašią apimtį Lietuvoje: geras dizainas, bet dažnai sunkesnė techninė bazė ir
               ilgesni terminai.

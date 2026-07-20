@@ -156,8 +156,8 @@ export function UrlScanner() {
                 className="site-input min-h-12 w-full cursor-pointer sm:min-h-11"
                 aria-label="Lighthouse: mobilusis ar stalinis vaizdas"
               >
-                <option value="mobile">Mobile</option>
-                <option value="desktop">Desktop</option>
+                <option value="mobile">Mobilus</option>
+                <option value="desktop">Kompiuteris</option>
               </select>
             </div>
             <div className="lg:col-span-3">

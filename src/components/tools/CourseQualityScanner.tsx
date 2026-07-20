@@ -265,8 +265,8 @@ export function CourseQualityScanner() {
         <CardHeader>
           <CardTitle>Kurso / mokymų puslapio URL</CardTitle>
           <CardDescription>
-            Reikia prisijungti ir kreditų (nurašoma po sėkmingos analizės; su Serper gali būti daugiau nei tik bazė).
-            Lighthouse + HTML tekstas + AI verdiktas + pasirinktinai Google/Serper alternatyvos.
+            Kaina: <span className="font-medium text-zinc-200">1–2 kreditai</span> (bazė + Serper, jei įjungta). Reikia
+            prisijungti; nurašoma po sėkmingos analizės. Lighthouse + HTML tekstas + AI verdiktas.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -297,8 +297,8 @@ export function CourseQualityScanner() {
                 onChange={(e) => setStrategy(e.target.value as "mobile" | "desktop")}
                 className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--color-electric)]"
               >
-                <option value="mobile">Mobile</option>
-                <option value="desktop">Desktop</option>
+                <option value="mobile">Mobilus</option>
+                <option value="desktop">Kompiuteris</option>
               </select>
             </div>
             <button

@@ -11,7 +11,7 @@ import { getCanonicalPath } from "@/lib/site-url";
 
 const title = "Kainodara — SEO įrankiai ir kreditų planai";
 const description =
-  "Skenuok.com kainodara: nemokamas URL skaneris, turinio kreditai ir planai verslui. Palyginkite planus arba rašykite dėl individualaus projekto.";
+  "Skenuok.com kainodara: nemokamas URL skaneris, 3 dovanų kreditai po registracijos ir turinio planai verslui.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/pricing");
@@ -50,8 +50,13 @@ const plans = [
     slug: "free" as const,
     name: "Nemokamas",
     price: "0 €",
-    blurb: "Nemokamas pradžios planas: URL skaneris ir bazinės įžvalgos.",
-    features: ["URL skaneris (PageSpeed)", "Lighthouse balai", "AI rekomendacijos (jei sukonfigūruota)", "El. pašto kontaktas"],
+    blurb: "URL skaneris be kreditų + 3 dovanų kreditai po registracijos.",
+    features: [
+      "URL skaneris (be kreditų limito)",
+      "Lighthouse balai ir bazinės įžvalgos",
+      "3 kreditai po registracijos",
+      "El. pašto kontaktas",
+    ],
     cta: { href: "/tools/scanner", label: "Atidaryti skanerį" },
     highlight: false,
   },
@@ -60,7 +65,7 @@ const plans = [
     name: "Pradedantysis",
     price: "5 € / mėn.",
     blurb: "Pradinis planas smulkiam SEO turinio tempui.",
-    features: ["10 kreditų per mėnesį", "SEO HTML turinys pagal raktinį žodį", "Istorija ir eksportas", "El. pašto pagalba"],
+    features: ["15 kreditų per mėnesį", "SEO HTML turinys pagal raktinį žodį", "Istorija ir eksportas", "El. pašto pagalba"],
     cta: { href: "/irankiai/seo-generatorius", label: "Atidaryti generatorių" },
     highlight: false,
   },
@@ -69,7 +74,7 @@ const plans = [
     name: "Profesionalus",
     price: "20 € / mėn.",
     blurb: "Turinio generatorius su kreditais — mažoms komandoms.",
-    features: ["50 kreditų per mėnesį", "SEO HTML turinys pagal raktinį žodį", "Istorija ir eksportas", "Prioritetinis el. paštas"],
+    features: ["80 kreditų per mėnesį", "SEO HTML turinys pagal raktinį žodį", "Istorija ir eksportas", "Prioritetinis el. paštas"],
     cta: { href: "/irankiai/seo-generatorius", label: "Atidaryti generatorių" },
     highlight: true,
     badge: "Populiariausias",
@@ -108,6 +113,10 @@ export default function PricingPage() {
             Skaneris jau veikia kaip nemokamas kabliukas. Mokamas generatorius kuria sutaupymą:{" "}
             <span className="font-medium text-zinc-200">~20 valandų per mėnesį</span> su AI pagalba, o ne rankiniu kopiju
             rašymu.
+          </p>
+          <p className="mt-3 text-sm text-zinc-400">
+            <span className="font-medium text-zinc-300">Kaip veikia kreditai:</span> 1 kreditas = 1 SEO straipsnis;
+            kursų skenavimas — 1–2 kreditai; URL skaneris — visada 0 kreditų.
           </p>
         </PageIntro>
 

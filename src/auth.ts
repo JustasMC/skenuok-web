@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { env } from "@/lib/env";
 import { mergeGeneratorSessionIntoUser } from "@/lib/auth-merge";
 import { prisma } from "@/lib/prisma";
+import { grantSignupBonusIfEligible } from "@/lib/signup-bonus";
 
 /** Google OAuth: `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` (Google Cloud → Credentials → OAuth 2.0 Client). */
 const googleConfigured = Boolean(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET);
@@ -118,17 +119,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       const jar = await cookies();
       const sid = jar.get("gen_session")?.value;
-      if (!sid) return;
+      let flashCredits = 0;
 
-      const merge = await mergeGeneratorSessionIntoUser(id, sid);
-      if (!merge.merged) return;
+      if (sid) {
+        const merge = await mergeGeneratorSessionIntoUser(id, sid);
+        if (merge.merged) {
+          flashCredits += merge.creditsTransferred;
+          jar.delete("gen_session");
+        }
+      }
 
-      jar.set(
-        "auth_merge_flash",
-        JSON.stringify({ credits: merge.creditsTransferred }),
-        { httpOnly: true, sameSite: "lax", path: "/", maxAge: 120, secure: process.env.NODE_ENV === "production" },
-      );
-      jar.delete("gen_session");
+      const bonus = await grantSignupBonusIfEligible(id);
+      if (bonus.granted) {
+        flashCredits += bonus.amount;
+      }
+
+      if (flashCredits > 0) {
+        jar.set(
+          "auth_merge_flash",
+          JSON.stringify({ credits: flashCredits }),
+          { httpOnly: true, sameSite: "lax", path: "/", maxAge: 120, secure: process.env.NODE_ENV === "production" },
+        );
+      }
     },
   },
   trustHost: true,

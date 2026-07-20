@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 const plans = [
   {
     name: "Landing page",
-    priceFrom: 490,
+    priceFrom: 390,
     duration: "5–9 darbo dienos",
     includes: [
       "Vieno puslapio struktūra ir aiškus CTA",
@@ -14,8 +14,18 @@ const plans = [
     ],
   },
   {
+    name: "Verslo svetainė",
+    priceFrom: 690,
+    duration: "2–4 savaitės",
+    includes: [
+      "Iki 5 puslapių (apie, paslaugos, kontaktai)",
+      "Next.js, SEO ir Core Web Vitals bazė",
+      "Kontaktų forma ir matuojami CTA",
+    ],
+  },
+  {
     name: "El. parduotuvė",
-    priceFrom: 1490,
+    priceFrom: 1190,
     duration: "3–6 savaitės",
     includes: [
       "Katalogas, produktų puslapiai, atsiskaitymai",
@@ -25,7 +35,7 @@ const plans = [
   },
   {
     name: "AI aplikacija",
-    priceFrom: 2490,
+    priceFrom: 1990,
     duration: "4–8 savaitės",
     includes: [
       "AI ir API integracijos pagal verslo procesą",
@@ -36,8 +46,8 @@ const plans = [
 ] as const;
 
 export function WebBuildPricingCalculator() {
-  const [index, setIndex] = useState(0);
-  const selected = useMemo(() => plans[index] ?? plans[0], [index]);
+  const [index, setIndex] = useState(1);
+  const selected = useMemo(() => plans[index] ?? plans[1], [index]);
 
   return (
     <section className="site-card-interactive overflow-hidden p-6 sm:p-8">
@@ -69,7 +79,7 @@ export function WebBuildPricingCalculator() {
           aria-valuenow={index}
           aria-valuetext={selected.name}
         />
-        <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs text-zinc-400">
+        <div className="mt-3 grid grid-cols-2 gap-2 text-center text-xs text-zinc-400 sm:grid-cols-4">
           {plans.map((plan, i) => (
             <button
               key={plan.name}

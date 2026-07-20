@@ -10,7 +10,7 @@ import { LoginForm } from "./LoginForm";
 
 const title = "Prisijungimas";
 const description =
-  "Prisijunkite su Google arba el. pašto nuoroda — pasiekite SEO turinio generatorių, kreditus ir darbo vietą. Saugi sesija, be atskiro slaptažodžio.";
+  "Prisijunkite su Google arba el. pašto nuoroda — 3 dovanų kreditai pirmą kartą, SEO generatorius ir darbo vieta.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/login");
@@ -63,7 +63,8 @@ export default function LoginPage() {
         <div className="mx-auto w-full max-w-lg">
           <PageIntro variant="page" kicker="Paskyra" title={title}>
             <p>
-              Naudokite Google paskyrą arba gaukite vienkartinę prisijungimo nuorodą el. paštu.
+              Naudokite Google paskyrą arba gaukite vienkartinę prisijungimo nuorodą el. paštu. Pirmą kartą —{" "}
+              <span className="font-medium text-zinc-200">3 dovanų kreditai</span> generatoriui.
             </p>
           </PageIntro>
 

@@ -15,8 +15,10 @@ type Props = {
 
 export function StripeCheckoutButton({ className, children, disabled, priceKey = "20" }: Props) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function onClick() {
+    setError(null);
     setLoading(true);
     try {
       const res = await fetch("/api/checkout", {
@@ -29,25 +31,32 @@ export function StripeCheckoutButton({ className, children, disabled, priceKey =
         window.location.href = data.url;
         return;
       }
-      alert(data.error ?? "Nepavyko paleisti mokėjimo");
+      setError(data.error ?? "Nepavyko paleisti mokėjimo");
     } catch {
-      alert("Tinklo klaida");
+      setError("Tinklo klaida. Bandykite dar kartą.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <button
-      type="button"
-      disabled={disabled || loading}
-      onClick={() => void onClick()}
-      className={cn(
-        "inline-flex min-h-11 items-center justify-center gap-2 motion-safe:transition-opacity motion-safe:duration-200",
-        className,
-      )}
-    >
-      {loading ? "Kraunama…" : children}
-    </button>
+    <span className="inline-flex max-w-full flex-col items-stretch gap-1.5">
+      <button
+        type="button"
+        disabled={disabled || loading}
+        onClick={() => void onClick()}
+        className={cn(
+          "inline-flex min-h-11 items-center justify-center gap-2 motion-safe:transition-opacity motion-safe:duration-200",
+          className,
+        )}
+      >
+        {loading ? "Kraunama…" : children}
+      </button>
+      {error ? (
+        <span className="text-center text-xs text-rose-400" role="alert">
+          {error}
+        </span>
+      ) : null}
+    </span>
   );
 }

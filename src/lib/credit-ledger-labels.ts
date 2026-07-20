@@ -8,6 +8,8 @@ export function creditLedgerReasonLt(reason: string | null | undefined): string 
       return "Kursų kokybės skaneris";
     case "generator_session_merge":
       return "Anoniminės sesijos kreditai";
+    case "signup_bonus":
+      return "Dovanų kreditai už registraciją";
     default:
       return reason;
   }

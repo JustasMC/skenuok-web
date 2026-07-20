@@ -43,11 +43,11 @@ export function Hero() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-            <Link href="#kontaktai" className="site-btn-primary w-full min-h-11 sm:w-auto">
-              Pradėkime projektą
+            <Link href="/tools/scanner" className="site-btn-primary w-full min-h-11 sm:w-auto">
+              Nemokamas URL skaneris
             </Link>
-            <Link href="#roi" className="site-btn-secondary w-full min-h-11 sm:w-auto">
-              Apskaičiuokite sutaupymą
+            <Link href="#kontaktai" className="site-btn-secondary w-full min-h-11 sm:w-auto">
+              Pradėkime projektą
             </Link>
           </div>
 
