@@ -4,71 +4,69 @@ import { Suspense } from "react";
 import { PageIntro } from "@/components/PageIntro";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
-const CourseScanner = dynamic(() => import("@/components/tools/CourseQualityScanner").then((m) => m.CourseQualityScanner), {
-  loading: () => (
-    <div className="site-skeleton" role="status" aria-live="polite">
-      Kraunama…
-    </div>
-  ),
-});
-
-const title = "Kursų kokybės skaneris";
-const description =
-  "Kursų kokybės skaneris (nuo 1 kredito): tikrina kurso turinį, SEO balus ir AI rekomendacijas. Reikia prisijungimo.";
+const CourseScanner = dynamic(
+  () => import("@/components/tools/CourseQualityScanner").then((m) => m.CourseQualityScanner),
+  {
+    loading: () => (
+      <div className="site-skeleton" role="status" aria-live="polite">
+        …
+      </div>
+    ),
+  },
+);
 
 export async function generateMetadata(): Promise<Metadata> {
+  const { dict, locale } = await getRequestDictionary();
+  const t = dict.tools.course;
   const canonical = getCanonicalPath("/tools/course-scanner");
 
   return {
-    title,
-    description,
-    keywords: [
-      "kursų kokybės skaneris",
-      "SEO",
-      "AI",
-      "kursų strategija"
-    ],
+    title: t.title,
+    description: t.description,
+    keywords: ["course scanner", "SEO", "AI"],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
       type: "website",
-      locale: siteConfig.locale,
+      locale: locale === "en" ? "en_US" : siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
-      title,
-      description,
-      images: [{ url: "/tools/course-scanner/opengraph-image", width: 1200, height: 630, alt: title }],
+      title: t.title,
+      description: t.description,
+      images: [{ url: "/tools/course-scanner/opengraph-image", width: 1200, height: 630, alt: t.title }],
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: t.title,
+      description: t.description,
       images: ["/tools/course-scanner/opengraph-image"],
     },
   };
 }
 
-export default function CourseScannerPage() {
+export default async function CourseScannerPage() {
+  const { dict } = await getRequestDictionary();
+  const t = dict.tools.course;
+
   return (
     <>
       <SiteHeader />
       <main id="main-content" className="site-page-main">
         <div className="site-shell-wide py-12 sm:py-16">
-          <PageIntro kicker="Kursų kokybės skaneris" title={title}>
+          <PageIntro kicker={t.kicker} title={t.title}>
             <p>
-              Tikrina kurso turinį, SEO balus ir AI rekomendacijas. Kaina:{" "}
-              <span className="font-medium text-zinc-200">1–2 kreditai</span> už skenavimą (reikia prisijungimo). URL
-              skaneris lieka nemokamas.
+              {t.introBefore} <span className="font-medium text-zinc-200">{t.introCredits}</span> {t.introAfter}
             </p>
           </PageIntro>
 
           <Suspense
             fallback={
               <div className="site-skeleton min-h-[26rem]" role="status" aria-live="polite">
-                Kraunama…
+                {dict.common.loading}
               </div>
             }
           >

@@ -275,4 +275,106 @@ export const en: Dictionary = {
     homeDescription:
       "Web development and SEO audits with Next.js: fast AI-ready sites with a solid technical foundation.",
   },
+  common: {
+    loading: "Loading…",
+  },
+  tools: {
+    scanner: {
+      title: "SEO URL scanner — Lighthouse and AI audit",
+      description:
+        "Free SEO URL scanner: PageSpeed / Lighthouse, Core Web Vitals, SEO summary and AI recommendations. No credits.",
+      kicker: "Free · 0 credits",
+      introBefore:
+        "Enter a site URL — get Lighthouse / PageSpeed metrics, Core Web Vitals, an SEO summary and AI recommendations. This tool",
+      introFree: "uses no credits",
+      introAfter: ". Next — content strategy,",
+      services: "services",
+      or: "or",
+      contacts: "contact",
+      cardTitle: "Enter the website address",
+      cardDescBefore:
+        "Free SEO URL scan (0 credits) via Google PageSpeed (Lighthouse). Result — site analysis with scores, meta, H1 and recommendations; then continue to SEO strategy, the generator or",
+      cardDescContacts: "Contact",
+      cardDescAfter: "for implementation.",
+      url: "URL",
+      urlPlaceholder: "example.com or https://example.com",
+      strategy: "Strategy",
+      mobile: "Mobile",
+      desktop: "Desktop",
+      run: "Run scan",
+      scanning: "Scanning…",
+      fail: "Scan failed",
+      network: "Network error. Please try again.",
+    },
+    course: {
+      title: "Course quality scanner",
+      description:
+        "Course quality scanner (from 1 credit): checks course content, SEO scores and AI recommendations. Login required.",
+      kicker: "Course quality scanner",
+      introBefore: "Checks course content, SEO scores and AI recommendations. Cost:",
+      introCredits: "1–2 credits",
+      introAfter: "per scan (login required). The URL scanner stays free.",
+      cardTitle: "Course / training page URL",
+      cardDesc:
+        "Cost: 1–2 credits (base + Serper if enabled). Login required; charged after a successful analysis. Lighthouse + HTML text + AI verdict.",
+      url: "URL",
+      urlPlaceholder: "example.com/courses or full https://...",
+      strategy: "Strategy",
+      mobile: "Mobile",
+      desktop: "Desktop",
+      submit: "Assess quality",
+      scanning: "Scanning…",
+      login: "Sign in",
+      buyCredits: "Buy credits",
+      or: "or",
+      dashboard: "dashboard",
+      fail: "Scan failed",
+      network: "Network error. Please try again.",
+      loginRequired: "Sign-in required.",
+      charged: "Charged",
+      creditOne: "credit",
+      creditMany: "credits",
+      left: "left",
+    },
+    generator: {
+      title: "SEO content generator",
+      description:
+        "Generate SEO-optimized content from your keywords with AI. Save time and keep a strong SEO score.",
+      kicker: "SEO",
+      intro:
+        "Enter a topic or bring one from the URL scanner. 3 free credits without an account; +3 after signup. 1 credit = 1 article.",
+    },
+  },
+  blog: {
+    title: "Blog: strategy, SEO and AI",
+    description:
+      "Skenuok.com blog on web development, SEO audits, AI automation and growth strategy.",
+    kicker: "Blog",
+    introBefore: "Practical articles on how to combine",
+    webBuild: "web development",
+    seoAudit: "SEO audits",
+    and: "and",
+    aiAuto: "AI automation",
+    introAfter: "into one growth system.",
+    articleTitle: "Web development and SEO audit: a 2026 plan",
+    articleBody:
+      "From technical foundations to content and analytics: what to do first so the site starts earning quality organic traffic and conversions.",
+    readMore: "Read article →",
+    nextStep: "Next step",
+    asideTitle: "Want an audit — not just an article?",
+    asideBody: "Start with the URL scanner or write to us — we’ll set priorities for your niche.",
+    scanner: "URL scanner",
+    contact: "Contact",
+  },
+  legal: {
+    privacyTitle: "Privacy policy",
+    privacyDescription:
+      "How Skenuok.com handles your data: contacts, accounts, payments, AI tools, cookies, GDPR rights and security.",
+    privacyKicker: "Privacy",
+    termsTitle: "Terms of service",
+    termsDescription:
+      "Skenuok.com terms of service: account, credits, AI content, intellectual property and applicable law.",
+    termsKicker: "Legal",
+    backHome: "← Back to home",
+  },
 };

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useDict } from "@/components/i18n/LocaleProvider";
 import type { FreeAlternativesBundle } from "@/lib/verify-free-alternatives";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LegalDisclaimer } from "@/components/LegalDisclaimer";
@@ -69,6 +70,7 @@ function getPriceAiInsight(input: {
 }
 
 export function CourseQualityScanner() {
+  const t = useDict().tools.course;
   const [url, setUrl] = useState("");
   const [strategy, setStrategy] = useState<"mobile" | "desktop">("mobile");
   const [loading, setLoading] = useState(false);
@@ -207,20 +209,20 @@ export function CourseQualityScanner() {
 
       if (res.status === 401) {
         setAuthGate("login");
-        setError(body.error ?? "Reikalingas prisijungimas.");
+        setError(body.error ?? t.loginRequired);
         return;
       }
       if (res.status === 402) {
         setAuthGate("credits");
         setError(
           body.error ??
-            `Nepakanka kreditų (reikia ${body.creditsRequired ?? "?"}, turite ${body.credits ?? 0}).`,
+            `${t.fail} (${body.creditsRequired ?? "?"}/${body.credits ?? 0}).`,
         );
         return;
       }
 
       if (!res.ok) {
-        setError(body.error ?? "Skanavimas nepavyko");
+        setError(body.error ?? t.fail);
         return;
       }
 
@@ -253,7 +255,7 @@ export function CourseQualityScanner() {
       if (body.instructorCredentialsHint) setInstructorCredentialsHint(body.instructorCredentialsHint);
       if (body.instructorAnalysis) setInstructorAnalysis(body.instructorAnalysis);
     } catch {
-      setError("Tinklo klaida. Bandykite dar kartą.");
+      setError(t.network);
     } finally {
       setLoading(false);
     }
@@ -263,17 +265,14 @@ export function CourseQualityScanner() {
     <div className="space-y-10">
       <Card>
         <CardHeader>
-          <CardTitle>Kurso / mokymų puslapio URL</CardTitle>
-          <CardDescription>
-            Kaina: <span className="font-medium text-zinc-200">1–2 kreditai</span> (bazė + Serper, jei įjungta). Reikia
-            prisijungti; nurašoma po sėkmingos analizės. Lighthouse + HTML tekstas + AI verdiktas.
-          </CardDescription>
+          <CardTitle>{t.cardTitle}</CardTitle>
+          <CardDescription>{t.cardDesc}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit} className="flex flex-col gap-4 sm:flex-row sm:items-end">
             <div className="flex-1 space-y-2">
               <label htmlFor="course-scan-url" className="text-sm font-medium text-zinc-300">
-                URL
+                {t.url}
               </label>
               <input
                 id="course-scan-url"
@@ -282,14 +281,14 @@ export function CourseQualityScanner() {
                 required
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="example.com/kursai arba pilnas https://..."
+                placeholder={t.urlPlaceholder}
                 className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--color-electric)]"
                 autoComplete="url"
               />
             </div>
             <div className="space-y-2 sm:w-44">
               <label htmlFor="course-scan-strategy" className="text-sm font-medium text-zinc-300">
-                Strategija
+                {t.strategy}
               </label>
               <select
                 id="course-scan-strategy"
@@ -297,8 +296,8 @@ export function CourseQualityScanner() {
                 onChange={(e) => setStrategy(e.target.value as "mobile" | "desktop")}
                 className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--color-electric)]"
               >
-                <option value="mobile">Mobilus</option>
-                <option value="desktop">Kompiuteris</option>
+                <option value="mobile">{t.mobile}</option>
+                <option value="desktop">{t.desktop}</option>
               </select>
             </div>
             <button
@@ -306,7 +305,7 @@ export function CourseQualityScanner() {
               disabled={loading}
               className="rounded-lg bg-[var(--color-electric)] px-6 py-2.5 text-sm font-semibold text-[#041014] shadow-[var(--shadow-glow)] transition hover:bg-[var(--color-electric-dim)] disabled:opacity-60"
             >
-              {loading ? "Skenuojama…" : "Vertinti kokybę"}
+              {loading ? t.scanning : t.submit}
             </button>
           </form>
           {error ? (
@@ -315,18 +314,18 @@ export function CourseQualityScanner() {
               {authGate === "login" ? (
                 <p>
                   <Link href="/login" className="font-semibold text-[var(--color-electric)] hover:underline">
-                    Prisijungti
+                    {t.login}
                   </Link>
                 </p>
               ) : null}
               {authGate === "credits" ? (
                 <p>
                   <Link href="/pricing" className="font-semibold text-[var(--color-electric)] hover:underline">
-                    Įsigyti kreditus
+                    {t.buyCredits}
                   </Link>{" "}
-                  arba{" "}
+                  {t.or}{" "}
                   <Link href="/dashboard" className="font-semibold text-zinc-300 hover:underline">
-                    valdymo skydas
+                    {t.dashboard}
                   </Link>
                   .
                 </p>
@@ -340,9 +339,9 @@ export function CourseQualityScanner() {
         <>
           {creditsCharged != null && creditsLeft != null ? (
             <p className="text-center text-sm text-zinc-400">
-              Nurašyta{" "}
-              <span className="font-mono font-semibold text-[var(--color-lime)]">{creditsCharged}</span> kredit
-              {creditsCharged === 1 ? "as" : "ai"} · liko{" "}
+              {t.charged}{" "}
+              <span className="font-mono font-semibold text-[var(--color-lime)]">{creditsCharged}</span>{" "}
+              {creditsCharged === 1 ? t.creditOne : t.creditMany} · {t.left}{" "}
               <span className="font-mono font-semibold text-white">{creditsLeft}</span>
             </p>
           ) : null}

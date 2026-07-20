@@ -4,67 +4,64 @@ import { Suspense } from "react";
 import { PageIntro } from "@/components/PageIntro";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
 import { DEFAULT_OG_IMAGE_PATH, getCanonicalPath } from "@/lib/site-url";
 
 const ContentGenerator = dynamic(() => import("@/components/tools/ContentGenerator").then((m) => m.ContentGenerator), {
   loading: () => (
     <div className="site-skeleton" role="status" aria-live="polite">
-      Kraunama…
+      …
     </div>
   ),
 });
 
-const PAGE_TITLE = "SEO turinio generatorius";
-const PAGE_DESCRIPTION =
-    "Generuokite SEO optimizuotą turinį pagal jūsų raktinius žodžius su AI pagrindu. Sutaupykite laiko ir užtikrinkite gerą SEO balą.";
-
 export async function generateMetadata(): Promise<Metadata> {
+  const { dict, locale } = await getRequestDictionary();
+  const t = dict.tools.generator;
   const canonical = getCanonicalPath("/irankiai/seo-generatorius");
 
   return {
-    title: PAGE_TITLE,
-    description: PAGE_DESCRIPTION,
-    keywords: [
-      "SEO generatorius",
-      "turinys",
-      "AI",
-      "optimizacija"
-    ],
+    title: t.title,
+    description: t.description,
+    keywords: ["SEO generator", "content", "AI", "SEO"],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
       type: "website",
-      locale: siteConfig.locale,
+      locale: locale === "en" ? "en_US" : siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
-      title: PAGE_TITLE,
-      description: PAGE_DESCRIPTION,
-      images: [{ url: DEFAULT_OG_IMAGE_PATH, width: 1200, height: 630, alt: PAGE_TITLE }],
+      title: t.title,
+      description: t.description,
+      images: [{ url: DEFAULT_OG_IMAGE_PATH, width: 1200, height: 630, alt: t.title }],
     },
     twitter: {
       card: "summary_large_image",
-      title: PAGE_TITLE,
-      description: PAGE_DESCRIPTION,
+      title: t.title,
+      description: t.description,
       images: [DEFAULT_OG_IMAGE_PATH],
     },
   };
 }
 
-export default function SeoGeneratorPage() {
+export default async function SeoGeneratorPage() {
+  const { dict } = await getRequestDictionary();
+  const t = dict.tools.generator;
+
   return (
     <>
       <SiteHeader />
       <main id="main-content" className="site-page-main">
         <div className="site-shell-wide py-12 sm:py-16">
-          <PageIntro variant="page" kicker="SEO" title={PAGE_TITLE}>
-            <p>{PAGE_DESCRIPTION}</p>
+          <PageIntro variant="page" kicker={t.kicker} title={t.title}>
+            <p>{t.intro}</p>
           </PageIntro>
 
           <Suspense
             fallback={
               <div className="site-skeleton min-h-[26rem]" role="status" aria-live="polite">
-                Kraunama…
+                {dict.common.loading}
               </div>
             }
           >
@@ -76,4 +73,3 @@ export default function SeoGeneratorPage() {
     </>
   );
 }
-

@@ -331,3 +331,11 @@ export function TermsOfServiceContent() {
     </LegalArticle>
   );
 }
+
+/** English legal content — use directly or via locale-aware pages. */
+export {
+  privacyTocEn,
+  termsTocEn,
+  PrivacyPolicyContentEn,
+  TermsOfServiceContentEn,
+} from "./legal-content-en";

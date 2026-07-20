@@ -2,29 +2,34 @@ import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/legal/LegalPageShell";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { PrivacyPolicyContent, privacyToc } from "@/lib/legal-content";
+import {
+  PrivacyPolicyContent,
+  PrivacyPolicyContentEn,
+  privacyToc,
+  privacyTocEn,
+} from "@/lib/legal-content";
+import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
 import { DEFAULT_OG_IMAGE_PATH, getCanonicalPath } from "@/lib/site-url";
 
-const title = "Privatumo politika";
-const description =
-  "Kaip Skenuok.com tvarko jūsų duomenis: kontaktai, paskyros, mokėjimai, AI įrankiai, slapukai, BDAR teisės ir saugumo priemonės.";
-
-/** Visada šviežias HTML — ne 1 metų CDN cache po deploy. */
+/** Always fresh HTML — avoid long CDN cache after deploy. */
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const { dict, locale } = await getRequestDictionary();
+  const title = dict.legal.privacyTitle;
+  const description = dict.legal.privacyDescription;
   const canonical = getCanonicalPath("/privacy");
 
   return {
     title,
     description,
-    keywords: ["privatumo politika", "BDAR", "duomenų apsauga", "slapukai", "GDPR", siteConfig.name],
+    keywords: ["privacy policy", "GDPR", "data protection", "cookies", siteConfig.name],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
       type: "website",
-      locale: siteConfig.locale,
+      locale: locale === "en" ? "en_US" : siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
       title,
@@ -40,13 +45,22 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const { dict, locale } = await getRequestDictionary();
+  const isEn = locale === "en";
+
   return (
     <>
       <SiteHeader />
       <main id="main-content" className="site-page-main">
-        <LegalPageShell kicker="Privatumas" title={title} description={description} toc={privacyToc}>
-          <PrivacyPolicyContent />
+        <LegalPageShell
+          kicker={dict.legal.privacyKicker}
+          title={dict.legal.privacyTitle}
+          description={dict.legal.privacyDescription}
+          toc={isEn ? privacyTocEn : privacyToc}
+          backLabel={dict.legal.backHome}
+        >
+          {isEn ? <PrivacyPolicyContentEn /> : <PrivacyPolicyContent />}
         </LegalPageShell>
       </main>
       <SiteFooter />

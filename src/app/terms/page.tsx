@@ -2,29 +2,34 @@ import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/legal/LegalPageShell";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { TermsOfServiceContent, termsToc } from "@/lib/legal-content";
+import {
+  TermsOfServiceContent,
+  TermsOfServiceContentEn,
+  termsToc,
+  termsTocEn,
+} from "@/lib/legal-content";
+import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
 import { DEFAULT_OG_IMAGE_PATH, getCanonicalPath } from "@/lib/site-url";
 
-const title = "Paslaugų sąlygos";
-const description =
-  "Skenuok.com naudojimo sąlygos: paskyros, kreditai, Stripe mokėjimai, AI turinys, intelektinė nuosavybė ir atsakomybės ribos.";
-
-/** Visada šviežias HTML — ne 1 metų CDN cache po deploy. */
+/** Always fresh HTML — avoid long CDN cache after deploy. */
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const { dict, locale } = await getRequestDictionary();
+  const title = dict.legal.termsTitle;
+  const description = dict.legal.termsDescription;
   const canonical = getCanonicalPath("/terms");
 
   return {
     title,
     description,
-    keywords: ["paslaugų sąlygos", "naudojimo taisyklės", "kreditai", "SaaS", siteConfig.name],
+    keywords: ["terms of service", "credits", "SaaS", siteConfig.name],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
       type: "website",
-      locale: siteConfig.locale,
+      locale: locale === "en" ? "en_US" : siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
       title,
@@ -40,19 +45,22 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const { dict, locale } = await getRequestDictionary();
+  const isEn = locale === "en";
+
   return (
     <>
       <SiteHeader />
       <main id="main-content" className="site-page-main">
         <LegalPageShell
-          kicker="Teisinė informacija"
-          title={title}
-          description={description}
-          toc={termsToc}
-          backLabel="← Grįžti į pagrindinį"
+          kicker={dict.legal.termsKicker}
+          title={dict.legal.termsTitle}
+          description={dict.legal.termsDescription}
+          toc={isEn ? termsTocEn : termsToc}
+          backLabel={dict.legal.backHome}
         >
-          <TermsOfServiceContent />
+          {isEn ? <TermsOfServiceContentEn /> : <TermsOfServiceContent />}
         </LegalPageShell>
       </main>
       <SiteFooter />

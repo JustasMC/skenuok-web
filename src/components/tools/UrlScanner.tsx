@@ -2,6 +2,7 @@
 
 import { lazy, Suspense, useMemo, useState } from "react";
 import Link from "next/link";
+import { useDict } from "@/components/i18n/LocaleProvider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buildGeneratorUrl, defaultGeneratorTopicFromScan } from "@/lib/generator-deeplink";
 import type { ScanPayload } from "@/components/tools/TopicSuggestions";
@@ -22,6 +23,7 @@ type PageMeta = {
 };
 
 export function UrlScanner() {
+  const t = useDict().tools.scanner;
   const [url, setUrl] = useState("");
   const [strategy, setStrategy] = useState<"mobile" | "desktop">("mobile");
   const [loading, setLoading] = useState(false);
@@ -68,7 +70,7 @@ export function UrlScanner() {
       };
 
       if (!res.ok) {
-        setError(body.error ?? "Skanavimas nepavyko");
+        setError(body.error ?? t.fail);
         return;
       }
 
@@ -81,7 +83,7 @@ export function UrlScanner() {
       setSiteDescription(body.siteDescription ?? null);
       setPage(body.page ?? { title: null, description: null, keywords: [], h1: null });
     } catch {
-      setError("Tinklo klaida. Bandykite dar kartą.");
+      setError(t.network);
     } finally {
       setLoading(false);
     }
@@ -121,21 +123,20 @@ export function UrlScanner() {
     <div className="space-y-8 sm:space-y-10">
       <Card className="overflow-hidden border-[var(--color-border)]/80">
         <CardHeader>
-          <CardTitle>Įveskite svetainės adresą</CardTitle>
+          <CardTitle>{t.cardTitle}</CardTitle>
           <CardDescription>
-            Nemokamas SEO URL skenavimas (0 kreditų) per Google PageSpeed (Lighthouse). Rezultatas — Svetainių analizė su
-            balais, meta, H1 ir rekomendacijomis; toliau galite eiti į SEO strategiją, generatorių ar{" "}
+            {t.cardDescBefore}{" "}
             <Link href="/#kontaktai" className="text-[var(--color-electric)] hover:underline">
-              Kontaktus
+              {t.cardDescContacts}
             </Link>{" "}
-            dėl įgyvendinimo.
+            {t.cardDescAfter}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit} className="grid gap-4 lg:grid-cols-12 lg:items-end">
             <div className="min-w-0 space-y-2 lg:col-span-7">
               <label htmlFor="scan-url" className="text-sm font-medium text-zinc-300">
-                URL
+                {t.url}
               </label>
               <input
                 id="scan-url"
@@ -145,24 +146,24 @@ export function UrlScanner() {
                 required
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="example.com arba https://example.com"
+                placeholder={t.urlPlaceholder}
                 className="site-input min-h-12 w-full text-base sm:min-h-11 sm:text-sm"
                 autoComplete="url"
               />
             </div>
             <div className="w-full space-y-2 lg:col-span-2">
               <label htmlFor="scan-strategy" className="text-sm font-medium text-zinc-300">
-                Strategija
+                {t.strategy}
               </label>
               <select
                 id="scan-strategy"
                 value={strategy}
                 onChange={(e) => setStrategy(e.target.value as "mobile" | "desktop")}
                 className="site-input min-h-12 w-full cursor-pointer sm:min-h-11"
-                aria-label="Lighthouse: mobilusis ar stalinis vaizdas"
+                aria-label={t.strategy}
               >
-                <option value="mobile">Mobilus</option>
-                <option value="desktop">Kompiuteris</option>
+                <option value="mobile">{t.mobile}</option>
+                <option value="desktop">{t.desktop}</option>
               </select>
             </div>
             <div className="lg:col-span-3">
@@ -171,7 +172,7 @@ export function UrlScanner() {
                 disabled={loading}
                 className="site-btn-primary w-full min-h-12 min-w-0 text-[#001018] sm:min-h-11"
               >
-                {loading ? "Skenuojama…" : "Paleisti skaną"}
+                {loading ? t.scanning : t.run}
               </button>
             </div>
           </form>

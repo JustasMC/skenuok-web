@@ -278,6 +278,111 @@ export const lt = {
     homeDescription:
       "Svetainių kūrimas ir SEO auditas su Next.js: greitos AI svetainės su techniškai tvarkingu kodu Lietuvoje.",
   },
+  common: {
+    loading: "Kraunama…",
+  },
+  tools: {
+    scanner: {
+      title: "SEO URL skeneris — Lighthouse ir AI auditas",
+      description:
+        "Nemokamas SEO URL skeneris: PageSpeed / Lighthouse, Core Web Vitals, SEO santrauka ir AI rekomendacijos. Be kreditų.",
+      kicker: "Nemokamas · 0 kreditų",
+      introBefore: "Įveskite svetainės URL — gaunate Lighthouse / PageSpeed metrikas, Core Web Vitals, SEO santrauką ir AI rekomendacijas. Šis įrankis",
+      introFree: "nekainuoja kreditų",
+      introAfter: ". Toliau — turinio strategija,",
+      services: "paslaugos",
+      or: "arba",
+      contacts: "kontaktai",
+      cardTitle: "Įveskite svetainės adresą",
+      cardDescBefore:
+        "Nemokamas SEO URL skenavimas (0 kreditų) per Google PageSpeed (Lighthouse). Rezultatas — Svetainių analizė su balais, meta, H1 ir rekomendacijomis; toliau galite eiti į SEO strategiją, generatorių ar",
+      cardDescContacts: "Kontaktus",
+      cardDescAfter: "dėl įgyvendinimo.",
+      url: "URL",
+      urlPlaceholder: "example.com arba https://example.com",
+      strategy: "Strategija",
+      mobile: "Mobilus",
+      desktop: "Kompiuteris",
+      run: "Paleisti skaną",
+      scanning: "Skenuojama…",
+      fail: "Skanavimas nepavyko",
+      network: "Tinklo klaida. Bandykite dar kartą.",
+    },
+    course: {
+      title: "Kursų kokybės skaneris",
+      description:
+        "Kursų kokybės skaneris (nuo 1 kredito): tikrina kurso turinį, SEO balus ir AI rekomendacijas. Reikia prisijungimo.",
+      kicker: "Kursų kokybės skaneris",
+      introBefore: "Tikrina kurso turinį, SEO balus ir AI rekomendacijas. Kaina:",
+      introCredits: "1–2 kreditai",
+      introAfter: "už skenavimą (reikia prisijungimo). URL skaneris lieka nemokamas.",
+      cardTitle: "Kurso / mokymų puslapio URL",
+      cardDesc:
+        "Kaina: 1–2 kreditai (bazė + Serper, jei įjungta). Reikia prisijungti; nurašoma po sėkmingos analizės. Lighthouse + HTML tekstas + AI verdiktas.",
+      url: "URL",
+      urlPlaceholder: "example.com/kursai arba pilnas https://...",
+      strategy: "Strategija",
+      mobile: "Mobilus",
+      desktop: "Kompiuteris",
+      submit: "Vertinti kokybę",
+      scanning: "Skenuojama…",
+      login: "Prisijungti",
+      buyCredits: "Įsigyti kreditus",
+      or: "arba",
+      dashboard: "valdymo skydas",
+      fail: "Skanavimas nepavyko",
+      network: "Tinklo klaida. Bandykite dar kartą.",
+      loginRequired: "Reikalingas prisijungimas.",
+      charged: "Nurašyta",
+      creditOne: "kreditas",
+      creditMany: "kreditai",
+      left: "liko",
+    },
+    generator: {
+      title: "SEO turinio generatorius",
+      description:
+        "Generuokite SEO optimizuotą turinį pagal raktinius žodžius su AI. Sutaupykite laiko ir užtikrinkite gerą SEO balą.",
+      kicker: "SEO",
+      intro:
+        "Įveskite temą arba atkelkite ją iš URL skanerio. 3 nemokami kreditai be paskyros; po registracijos — +3 dovanų. 1 kreditas = 1 straipsnis.",
+    },
+  },
+  blog: {
+    title: "Blogas: strategija, SEO ir AI",
+    description:
+      "Skenuok.com blogas apie svetainių kūrimą, SEO auditus, AI automatizaciją ir augimo strategijas.",
+    kicker: "Blogas",
+    introBefore: "Praktiniai straipsniai apie tai, kaip sujungti",
+    webBuild: "svetainių kūrimą",
+    seoAudit: "SEO auditą",
+    and: "ir",
+    aiAuto: "AI automatizaciją",
+    introAfter: "į vieną augimo sistemą.",
+    articleTitle: "Svetainių kūrimas ir SEO auditas: planas 2026-iesiems",
+    articleBody:
+      "Nuo techninės bazės iki turinio ir analitikos: ką daryti pirmiausia, kad svetainė pradėtų rinkti kokybišką organinį srautą ir konversijas.",
+    readMore: "Skaityti straipsnį →",
+    nextStep: "Kitas žingsnis",
+    asideTitle: "Norite audito, o ne tik straipsnio?",
+    asideBody: "Pradėkite nuo URL skenerio arba parašykite — sudėliosime prioritetus pagal jūsų nišą.",
+    scanner: "URL skaneris",
+    contact: "Kontaktai",
+  },
+  legal: {
+    privacyTitle: "Privatumo politika",
+    privacyDescription:
+      "Kaip Skenuok.com tvarko jūsų duomenis: kontaktai, paskyros, mokėjimai, AI įrankiai, slapukai, BDAR teisės ir saugumo priemonės.",
+    privacyKicker: "Privatumas",
+    termsTitle: "Paslaugų sąlygos",
+    termsDescription:
+      "Skenuok.com paslaugų sąlygos: paskyra, kreditai, AI turinys, intelektinė nuosavybė ir taikytina teisė.",
+    termsKicker: "Teisinė informacija",
+    backHome: "← Grįžti į pagrindinį",
+  },
 } as const;
 
-export type Dictionary = typeof lt;
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringify<T[K]>;
+};
+
+export type Dictionary = DeepStringify<typeof lt>;
