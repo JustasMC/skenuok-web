@@ -1,4 +1,10 @@
 import type { Dictionary } from "@/lib/i18n/dictionaries/lt";
+import { courseReportEn } from "@/lib/i18n/dictionaries/parts/course-report";
+import { generatorUiEn } from "@/lib/i18n/dictionaries/parts/generator-ui";
+import {
+  agentEn,
+  dashboardEn,
+} from "@/lib/i18n/dictionaries/parts/dashboard-agent";
 
 export const en: Dictionary = {
   skipToContent: "Skip to content",
@@ -685,6 +691,8 @@ export const en: Dictionary = {
         "Enter a topic or bring one from the URL scanner. 3 free credits without an account; +3 after signup. 1 credit = 1 article.",
       closeToast: "Dismiss notification",
     },
+    courseReport: courseReportEn,
+    generatorUi: generatorUiEn,
     scanReport: {
       aria: "Scan report",
       heading: "Report",
@@ -771,6 +779,8 @@ export const en: Dictionary = {
     scanner: "URL scanner",
     contact: "Contact",
   },
+  dashboard: dashboardEn,
+  agent: agentEn,
   legal: {
     privacyTitle: "Privacy policy",
     privacyDescription:

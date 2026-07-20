@@ -2,37 +2,36 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { DashboardPageLoading } from "@/components/dashboard/DashboardLoading";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
 const DashboardWorkspace = dynamic(
   () => import("@/components/dashboard/DashboardWorkspace").then((m) => m.DashboardWorkspace),
   {
-    loading: () => (
-      <div className="site-skeleton min-h-[60vh] rounded-2xl" role="status" aria-live="polite">
-        Kraunama darbo vieta…
-      </div>
-    ),
+    loading: () => <DashboardPageLoading />,
   },
 );
 
 export async function generateMetadata(): Promise<Metadata> {
+  const { dict, locale } = await getRequestDictionary();
+  const t = dict.dashboard.meta;
   const canonical = getCanonicalPath("/dashboard");
-  const title = "Darbo vieta";
-  const description =
-    "SEO agentas, kreditų balansas, žurnalas ir greita prieiga prie įrankių — jūsų personali darbo vieta.";
+  const title = t.title;
+  const description = t.description;
 
   return {
     title,
     description,
-    keywords: ["darbo vieta", "SEO agentas", "kreditai", "SEO generatorius", "skeneriai"],
+    keywords: [...t.keywords],
     alternates: { canonical },
     robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
     openGraph: {
       type: "website",
-      locale: siteConfig.locale,
+      locale: locale === "en" ? "en_US" : siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
       title,

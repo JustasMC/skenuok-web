@@ -32,45 +32,38 @@ type CheckItem = { ok: boolean; text: string };
 
 type VerdictRec = "search_free" | "consider" | "likely_fair" | "unclear";
 
-function verdictLabel(r: VerdictRec): string {
-  switch (r) {
-    case "search_free":
-      return "Pirmiausia – nemokami šaltiniai";
-    case "consider":
-      return "Verta svarstyti";
-    case "likely_fair":
-      return "Kaina gali būti pagrįsta";
-    case "unclear":
-      return "Neaišku / nepakanka duomenų";
-    default:
-      return r;
-  }
-}
-
 function estimateModuleCount(text: string): number {
   const m = text.match(/\d+/g);
   if (!m) return 0;
   return m.map((n) => Number.parseInt(n, 10)).filter(Number.isFinite).reduce((a, b) => a + b, 0);
 }
 
-function getPriceAiInsight(input: {
-  priceText: string | null;
-  priceQuality: number | null;
-  syllabusSummary: string;
-}): string {
+function getPriceAiInsight(
+  input: {
+    priceText: string | null;
+    priceQuality: number | null;
+    syllabusSummary: string;
+  },
+  labels: {
+    noPrice: string;
+    raisePrice: string;
+    marketAverage: string;
+    highPrice: string;
+    default: string;
+  },
+): string {
   const p = input.priceQuality;
   const modules = estimateModuleCount(input.syllabusSummary);
-  if (!input.priceText) return "Kaina tekste neidentifikuota — rekomenduojama aiškiai pateikti kainodarą ir pasiūlos lygį.";
-  if (modules >= 12 && (p == null || p < 70)) {
-    return "Rekomenduojama kelti kainą dėl didelio modulių skaičiaus, jei aiškiai parodyta praktinė vertė ir rezultatai.";
-  }
-  if (p != null && p >= 75) return "Atitinka rinkos vidurkį pagal pateiktą turinį ir vertės signalus.";
-  if (p != null && p < 45) return "Kaina gali būti aukšta pagal dabartinį turinio aiškumą — verta stiprinti pažadų konkretumą.";
-  return "Kaina atrodo pagrįsta, bet galutiniam sprendimui svarbu palyginti su 2–3 alternatyvomis.";
+  if (!input.priceText) return labels.noPrice;
+  if (modules >= 12 && (p == null || p < 70)) return labels.raisePrice;
+  if (p != null && p >= 75) return labels.marketAverage;
+  if (p != null && p < 45) return labels.highPrice;
+  return labels.default;
 }
 
 export function CourseQualityScanner() {
   const t = useDict().tools.course;
+  const r = useDict().tools.courseReport;
   const { locale } = useLocale();
   const [url, setUrl] = useState("");
   const [strategy, setStrategy] = useState<"mobile" | "desktop">("mobile");
@@ -125,12 +118,12 @@ export function CourseQualityScanner() {
 
   const generatorHref = useMemo(() => {
     if (!extractedOffer) return null;
-    const topicBase = page?.title?.trim() || "Kursų pasiūla";
-    const topic = `${topicBase}: SEO straipsnis pagal kursų turinį ir kainą`;
+    const topicBase = page?.title?.trim() || r.criteria.generatorTopicDefault;
+    const topic = `${topicBase}${r.criteria.generatorTopicSuffix}`;
     const context = extractedOffer.syllabusSummary || extractedOffer.outcomesSummary || scannedUrl || null;
     const tone = extractedOffer.outcomesSummary || page?.description || null;
     return buildGeneratorUrl(topic, context, tone);
-  }, [extractedOffer, page?.title, page?.description, scannedUrl]);
+  }, [extractedOffer, page?.title, page?.description, scannedUrl, r.criteria]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -369,7 +362,7 @@ export function CourseQualityScanner() {
             >
               <CardHeader className="space-y-3">
                 <div className="flex flex-wrap items-center gap-3">
-                  <CardTitle className="text-white">Eksperto išvada</CardTitle>
+                  <CardTitle className="text-white">{r.expertVerdict.title}</CardTitle>
                   <CourseVerdictBadge verdict={skepticVerdict} />
                   {instructorIdentity && instructorPresence ? (
                     <InstructorBadge
@@ -379,38 +372,34 @@ export function CourseQualityScanner() {
                     />
                   ) : null}
                 </div>
-                <CardDescription className="text-zinc-400">
-                  Pirmiausia – skeptiko sluoksnis (kaina, rizika, raudonos vėliavos); žemiau – papildomas rinkos kontekstas.
-                </CardDescription>
+                <CardDescription className="text-zinc-400">{r.expertVerdict.description}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 text-sm">
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">Skeptiko sluoksnis</p>
-                  <p className="mt-1 text-xs text-zinc-500">
-                    Vertė už pinigus ir pažadų tikroviškumas – ne techninis SEO.
-                  </p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">{r.expertVerdict.skepticLayer}</p>
+                  <p className="mt-1 text-xs text-zinc-500">{r.expertVerdict.skepticHint}</p>
                 </div>
                 {priceBenchmarkAnalysis ? (
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Kainos vertinimas</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{r.expertVerdict.priceAssessment}</p>
                     <p className="mt-1 leading-relaxed text-zinc-200">{priceBenchmarkAnalysis}</p>
                   </div>
                 ) : null}
                 {contentQualityAssessment ? (
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Turinio kokybė</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{r.expertVerdict.contentQuality}</p>
                     <p className="mt-1 leading-relaxed text-zinc-200">{contentQualityAssessment}</p>
                   </div>
                 ) : null}
                 {instructorAnalysis ? (
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Lektoriaus autoritetas (AI)</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{r.expertVerdict.instructorAuthority}</p>
                     <p className="mt-1 leading-relaxed text-zinc-300">{instructorAnalysis}</p>
                   </div>
                 ) : null}
                 {redFlags.length > 0 ? (
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-rose-300/90">Raudonos vėliavos</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-rose-300/90">{r.expertVerdict.redFlags}</p>
                     <ul className="mt-2 list-inside list-disc space-y-1 text-rose-100/90">
                       {redFlags.map((f) => (
                         <li key={f}>{f}</li>
@@ -428,18 +417,16 @@ export function CourseQualityScanner() {
                 ) : null}
                 {skepticFinalRecommendation ? (
                   <div className="rounded-lg border border-zinc-700/60 bg-black/20 p-3">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Skeptiko rekomendacija</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">{r.expertVerdict.skepticRecommendation}</p>
                     <p className="mt-1 font-medium leading-relaxed text-white">{skepticFinalRecommendation}</p>
                   </div>
                 ) : null}
 
                 {marketVerdict ? (
                   <div className="border-t border-zinc-700/50 pt-5">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">Rinkos kontekstas</p>
-                    <p className="mt-1 text-xs text-zinc-500">
-                      Palyginimas su nemokamais šaltiniais ir bendras rinkos tonas – papildo, bet ne pakeičia skeptiko verdikto.
-                    </p>
-                    <p className="mt-3 text-xs font-medium text-amber-200/80">{verdictLabel(marketVerdict.recommendation)}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">{r.expertVerdict.marketContext}</p>
+                    <p className="mt-1 text-xs text-zinc-500">{r.expertVerdict.marketContextHint}</p>
+                    <p className="mt-3 text-xs font-medium text-amber-200/80">{r.verdictRec[marketVerdict.recommendation]}</p>
                     <p className="mt-2 text-base font-semibold text-white">{marketVerdict.headline}</p>
                     <p className="mt-2 leading-relaxed text-zinc-400">{marketVerdict.body}</p>
                   </div>
@@ -449,9 +436,9 @@ export function CourseQualityScanner() {
           ) : marketVerdict ? (
             <Card className="border-amber-500/25 bg-[color-mix(in_oklab,var(--color-bg)_92%,#b45309_8%)]">
               <CardHeader>
-                <CardTitle className="text-amber-100/95">Rinkos verdiktas</CardTitle>
+                <CardTitle className="text-amber-100/95">{r.marketVerdict.title}</CardTitle>
                 <CardDescription className="text-amber-200/70">
-                  {verdictLabel(marketVerdict.recommendation)}
+                  {r.verdictRec[marketVerdict.recommendation]}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
@@ -475,22 +462,22 @@ export function CourseQualityScanner() {
               <CardHeader>
                 <CardTitle>
                   {freeAlternatives.status === "completed" && freeAlternatives.serperMode === "full"
-                    ? "Rinkos kontekstas ir alternatyvos (Serper)"
-                    : "Nemokamos alternatyvos (Google / Serper)"}
+                    ? r.freeAlternatives.titleFull
+                    : r.freeAlternatives.titleDefault}
                 </CardTitle>
                 <CardDescription>
                   {freeAlternatives.status === "skipped"
                     ? freeAlternatives.reason
                     : freeAlternatives.serperMode === "full"
-                      ? "Pilnas režimas (ATSARGIAI / SAUGU): YouTube, atsiliepimų / konkurentų kontekstas ir nemokamos alternatyvos. Tikri top rezultatai – patikrinkite patys."
-                      : "Rizikos / taupymo režimas: tik YouTube ir dokumentacija – saugus išėjimo kelias; be plačios rinkos paieškos."}
+                      ? r.freeAlternatives.descFull
+                      : r.freeAlternatives.descRisk}
                 </CardDescription>
               </CardHeader>
               {freeAlternatives.status === "completed" ? (
                 <CardContent className="space-y-6 text-sm">
                   {searchTopics.length > 0 ? (
                     <p className="text-xs text-zinc-500">
-                      Temos:{" "}
+                      {r.freeAlternatives.topicsLabel}{" "}
                       <span className="text-zinc-300">
                         {searchTopics.join(" · ")}
                       </span>
@@ -503,7 +490,7 @@ export function CourseQualityScanner() {
                         <p className="font-medium text-white">{block.topic}</p>
                         <p className="mt-1 font-mono text-[10px] text-zinc-600 break-all">{block.query}</p>
                         {block.items.length === 0 ? (
-                          <p className="mt-2 text-amber-400/90">Rezultatų nerasta arba klaida.</p>
+                          <p className="mt-2 text-amber-400/90">{r.freeAlternatives.noResults}</p>
                         ) : (
                           <ul className="mt-3 space-y-3 border-l border-[var(--color-border)] pl-4">
                             {block.items.map((it) => (
@@ -534,7 +521,7 @@ export function CourseQualityScanner() {
           <div className="grid gap-6 lg:grid-cols-3">
             <Card className="lg:col-span-1">
               <CardHeader>
-                <CardTitle>Bendras įspūdis</CardTitle>
+                <CardTitle>{r.overall.title}</CardTitle>
                 <CardDescription>
                   {scannedUrl ? <span className="break-all text-zinc-400">{scannedUrl}</span> : null}
                 </CardDescription>
@@ -542,20 +529,20 @@ export function CourseQualityScanner() {
               <CardContent className="space-y-6">
                 <div className="flex flex-wrap items-end gap-6">
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Kokybės indeksas</p>
+                    <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{r.overall.qualityIndex}</p>
                     <p className="mt-1 text-4xl font-semibold tabular-nums text-white">{overallScore}</p>
-                    <p className="text-xs text-zinc-500">0–100 (suvestinis)</p>
+                    <p className="text-xs text-zinc-500">{r.overall.qualityIndexHint}</p>
                   </div>
                   {valueIndex != null ? (
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Vertės indeksas</p>
+                      <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{r.overall.valueIndex}</p>
                       <p className="mt-1 text-3xl font-semibold tabular-nums text-[var(--color-lime)]">{valueIndex}</p>
-                      <p className="text-xs text-zinc-500">žinios / kaina / struktūra</p>
+                      <p className="text-xs text-zinc-500">{r.overall.valueIndexHint}</p>
                     </div>
                   ) : null}
-                  <ScoreRing label="Našumas" value={scores.performance} />
-                  <ScoreRing label="SEO" value={scores.seo} />
-                  <ScoreRing label="Prieiga" value={scores.accessibility} />
+                  <ScoreRing label={r.overall.performance} value={scores.performance} />
+                  <ScoreRing label={r.overall.seo} value={scores.seo} />
+                  <ScoreRing label={r.overall.accessibility} value={scores.accessibility} />
                 </div>
                 {meta?.lighthouseVersion ? (
                   <p className="font-mono text-[10px] text-zinc-600">Lighthouse {meta.lighthouseVersion}</p>
@@ -569,19 +556,15 @@ export function CourseQualityScanner() {
                     }`}
                   >
                     {assessmentSource === "openai"
-                      ? locale === "en"
-                        ? "Assessment: full AI audit (curriculum, pricing, instructor, red flags)"
-                        : "Vertinimas: pilnas AI auditas (programa, kaina, lektorius, raudonos vėliavos)"
-                      : locale === "en"
-                        ? "Limited mode: AI assessment unavailable — Lighthouse/meta only. Retry when OpenAI is configured."
-                        : "Ribotas režimas: AI nepasiekiamas — tik Lighthouse/meta. Pakartokite su veikiančiu OPENAI_API_KEY."}
+                      ? r.overall.assessmentOpenAi
+                      : r.overall.assessmentFallback}
                   </p>
                 ) : null}
                 {pageScrape ? (
                   <p className="text-xs text-zinc-500">
-                    HTML tekstas:{" "}
+                    {r.overall.htmlText}{" "}
                     {pageScrape.ok
-                      ? `~${pageScrape.charCount} simb. ${pageScrape.truncated ? "(apkarpyta AI limitui)" : ""}`
+                      ? `${r.overall.htmlChars.replace("{n}", String(pageScrape.charCount))} ${pageScrape.truncated ? r.overall.htmlTruncated : ""}`
                       : pageScrape.error}
                   </p>
                 ) : null}
@@ -590,12 +573,12 @@ export function CourseQualityScanner() {
 
             <Card className="lg:col-span-2">
               <CardHeader>
-                <CardTitle>Mokymų puslapio kriterijai</CardTitle>
+                <CardTitle>{r.criteria.title}</CardTitle>
                 <CardDescription>
                   {summary ? (
                     <span className="text-zinc-400">{summary}</span>
                   ) : (
-                    "Pillarų komentarai po skenavimo."
+                    r.criteria.defaultDesc
                   )}
                 </CardDescription>
               </CardHeader>
@@ -603,15 +586,15 @@ export function CourseQualityScanner() {
                 {valueMetrics ? (
                   <div className="grid gap-3 sm:grid-cols-3">
                     <div className="rounded-lg border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_50%,transparent)] p-3 text-sm">
-                      <p className="text-xs text-zinc-500">Žinių unikalumas</p>
+                      <p className="text-xs text-zinc-500">{r.criteria.uniqueKnowledge}</p>
                       <p className="mt-1 text-xl font-semibold tabular-nums text-white">{valueMetrics.uniqueKnowledge}</p>
                     </div>
                     <div className="rounded-lg border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_50%,transparent)] p-3 text-sm">
-                      <p className="text-xs text-zinc-500">Struktūros vertė</p>
+                      <p className="text-xs text-zinc-500">{r.criteria.structureValue}</p>
                       <p className="mt-1 text-xl font-semibold tabular-nums text-white">{valueMetrics.structureValue}</p>
                     </div>
                     <div className="rounded-lg border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_50%,transparent)] p-3 text-sm">
-                      <p className="text-xs text-zinc-500">Kaina / kokybė</p>
+                      <p className="text-xs text-zinc-500">{r.criteria.priceQuality}</p>
                       <p className="mt-1 text-xl font-semibold tabular-nums text-white">{valueMetrics.priceQuality}</p>
                     </div>
                   </div>
@@ -619,31 +602,31 @@ export function CourseQualityScanner() {
 
                 {extractedOffer ? (
                   <div className="rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-4 text-sm">
-                    <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Ištraukta iš puslapio (AI)</p>
+                    <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{r.criteria.extractedTitle}</p>
                     <div className="mt-3 overflow-hidden rounded-lg border border-[var(--color-border)]/80">
                       <table className="w-full text-left text-sm">
                         <tbody>
                           <tr className="border-b border-[var(--color-border)]/70">
                             <th className="w-44 bg-[var(--color-surface)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                              Kaina
+                              {r.criteria.price}
                             </th>
                             <td className="px-3 py-2 text-white">
                               {extractedOffer.priceText ? (
                                 <span className="text-[var(--color-lime)]">{extractedOffer.priceText}</span>
                               ) : (
-                                <span className="text-zinc-500">Nerasta aiškios kainos</span>
+                                <span className="text-zinc-500">{r.criteria.noPrice}</span>
                               )}
                             </td>
                           </tr>
                           <tr className="border-b border-[var(--color-border)]/70">
                             <th className="w-44 bg-[var(--color-surface)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                              Programa
+                              {r.criteria.program}
                             </th>
                             <td className="px-3 py-2 text-zinc-300">{extractedOffer.syllabusSummary}</td>
                           </tr>
                           <tr>
                             <th className="w-44 bg-[var(--color-surface)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                              Pažadai / rezultatai
+                              {r.criteria.outcomes}
                             </th>
                             <td className="px-3 py-2 text-zinc-300">{extractedOffer.outcomesSummary}</td>
                           </tr>
@@ -651,19 +634,22 @@ export function CourseQualityScanner() {
                       </table>
                     </div>
                     <div className="mt-3 rounded-md border border-[color-mix(in_oklab,var(--color-electric)_35%,var(--color-border))] bg-[color-mix(in_oklab,var(--color-electric)_9%,var(--color-surface))] px-3 py-2.5">
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-electric)]">AI įžvalga apie kainą</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-electric)]">{r.criteria.priceInsightTitle}</p>
                       <p className="mt-1.5 text-sm leading-relaxed text-zinc-200">
-                        {getPriceAiInsight({
-                          priceText: extractedOffer.priceText,
-                          priceQuality: valueMetrics?.priceQuality ?? null,
-                          syllabusSummary: extractedOffer.syllabusSummary,
-                        })}
+                        {getPriceAiInsight(
+                          {
+                            priceText: extractedOffer.priceText,
+                            priceQuality: valueMetrics?.priceQuality ?? null,
+                            syllabusSummary: extractedOffer.syllabusSummary,
+                          },
+                          r.priceInsight,
+                        )}
                       </p>
                     </div>
                     {generatorHref ? (
                       <div className="mt-4">
                         <Link href={generatorHref} className="site-btn-primary w-full sm:w-auto">
-                          Generuoti SEO tekstą pagal šį turinį
+                          {r.criteria.generatorCta}
                         </Link>
                       </div>
                     ) : null}
@@ -672,12 +658,12 @@ export function CourseQualityScanner() {
 
                 {page?.title || page?.description ? (
                   <div className="rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-4 text-sm">
-                    <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Title / description</p>
+                    <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{r.criteria.metaTitle}</p>
                     {page.title ? <p className="mt-2 font-medium text-white">{page.title}</p> : null}
                     {page.description ? <p className="mt-2 text-zinc-400">{page.description}</p> : null}
                     {page.keywords.length > 0 ? (
                       <p className="mt-3 text-xs text-zinc-500">
-                        Raktažodžiai:{" "}
+                        {r.criteria.keywordsLabel}{" "}
                         <span className="text-[var(--color-electric)]">{page.keywords.join(", ")}</span>
                       </p>
                     ) : null}
@@ -701,7 +687,7 @@ export function CourseQualityScanner() {
 
                 {checklist.length > 0 ? (
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Greita kontrolė</p>
+                    <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{r.criteria.quickCheck}</p>
                     <ul className="mt-3 space-y-2 text-sm">
                       {checklist.map((c, i) => (
                         <li key={`${i}-${c.text.slice(0, 20)}`} className="flex gap-2 text-zinc-300">
@@ -716,14 +702,13 @@ export function CourseQualityScanner() {
                 ) : null}
 
                 <div className="rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_60%,transparent)] p-4 text-sm text-zinc-400">
-                  <p className="font-medium text-zinc-200">Pastaba</p>
+                  <p className="font-medium text-zinc-200">{r.criteria.noteTitle}</p>
                   <p className="mt-2">
-                    Verdiktas remiasi matomu tekstu ir bendra žinių baze — ne realiu pirkimu ar platformos įrašais. Video
-                    kokybę ar sertifikatą vertinkite atskirai. Norite pagalbos su SEO ar landings —{" "}
+                    {r.criteria.noteBefore}{" "}
                     <Link href="/#kontaktai" className="font-semibold text-[var(--color-electric)] hover:underline">
-                      susisiekite
+                      {r.criteria.noteContact}
                     </Link>
-                    .
+                    {r.criteria.noteAfter}
                   </p>
                 </div>
               </CardContent>

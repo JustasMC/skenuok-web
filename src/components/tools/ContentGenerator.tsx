@@ -18,6 +18,7 @@ type HistoryRow = { id: string; topic: string; seoScore: number | null; createdA
 export function ContentGenerator() {
   const { locale } = useLocale();
   const dict = useDict();
+  const ui = dict.tools.generatorUi;
   const sp = useSearchParams();
   const topicFromUrl = useMemo(() => {
     const raw = sp.get("topic");
@@ -79,13 +80,11 @@ export function ContentGenerator() {
     if (body.mergeFlash) {
       const c = body.mergeFlash.credits;
       setMergeWelcome(
-        c > 0
-          ? `Sveiki! Į jūsų paskyrą įskaityta ${c} kreditų (sesija ir/arba dovanų bonusas).`
-          : "Sveiki! Jūsų anoniminės sesijos istorija perkelta į paskyrą.",
+        c > 0 ? ui.mergeWelcome.withCredits.replace("{credits}", String(c)) : ui.mergeWelcome.historyOnly,
       );
     }
     return typeof body.credits === "number" ? body.credits : null;
-  }, []);
+  }, [ui.mergeWelcome]);
 
   const refreshHistory = useCallback(async () => {
     const res = await fetch("/api/generator/history");
@@ -119,9 +118,7 @@ export function ContentGenerator() {
 
     const genHint = sp.get("gen_session_hint");
     if (genHint) {
-      setSuccessToast(
-        `Mokėjimas sėkmingas. Jei vėliau prisijungsite kitame įrenginyje, įveskite šį sesijos ID darbo vietoje („Pasisavinti“): ${genHint}`,
-      );
+      setSuccessToast(ui.checkout.sessionHint.replace("{hint}", genHint));
     }
 
     const stripeSessionId = sp.get("session_id")?.trim() ?? "";
@@ -152,7 +149,7 @@ export function ContentGenerator() {
             error?: string;
           };
           if (!cancelled && r.ok && b.applied && typeof b.credits === "number") {
-            setSuccessToast(`Kreditai įskaityti (+${b.credits}). Galite generuoti straipsnius.`);
+            setSuccessToast(ui.checkout.creditsApplied.replace("{credits}", String(b.credits)));
           }
         } catch {
           /* webhook / sync neprivalomas tinklui */
@@ -164,7 +161,7 @@ export function ContentGenerator() {
         if (i > 0) await new Promise((r) => setTimeout(r, 2000));
         const c = await refreshSession();
         if (typeof c === "number" && c > baseline) {
-          if (!cancelled) setSuccessToast("Kreditai atnaujinti — galite generuoti straipsnius.");
+          if (!cancelled) setSuccessToast(ui.checkout.creditsUpdated);
           break;
         }
       }
@@ -173,7 +170,7 @@ export function ContentGenerator() {
     return () => {
       cancelled = true;
     };
-  }, [sp, refreshSession]);
+  }, [sp, refreshSession, ui.checkout]);
 
   useEffect(() => {
     if (!postCheckoutSuccess || checkoutConfettiDoneRef.current) return;
@@ -214,18 +211,18 @@ export function ContentGenerator() {
       };
 
       if (res.status === 402 || body.needCredits) {
-        setError("Kreditai baigėsi — papildykite balansą arba pasirinkite planą.");
+        setError(ui.one.outOfCredits);
         setCredits(0);
         return;
       }
 
       if (res.status === 401) {
-        setError(body.error ?? "Reikia prisijungti.");
+        setError(body.error ?? ui.one.loginRequired);
         return;
       }
 
       if (!res.ok) {
-        setError(body.error ?? "Generavimas nepavyko");
+        setError(body.error ?? ui.one.generateFailed);
         return;
       }
 
@@ -233,14 +230,14 @@ export function ContentGenerator() {
       if (body.seo) setSeo(body.seo);
       if (typeof body.creditsLeft === "number") setCredits(body.creditsLeft);
       if (body.seo) {
-        setSuccessToast(`✅ Straipsnis paruoštas! SEO balas: ${body.seo.score}/100`);
+        setSuccessToast(ui.one.articleReadyWithScore.replace("{score}", String(body.seo.score)));
       } else {
-        setSuccessToast("✅ Straipsnis paruoštas!");
+        setSuccessToast(ui.one.articleReady);
       }
       fireSuccessConfetti("generate");
       void refreshHistory();
     } catch {
-      setError("Tinklo klaida.");
+      setError(ui.one.network);
     } finally {
       setLoading(false);
     }
@@ -278,26 +275,15 @@ export function ContentGenerator() {
           {sessionMode === "user" ? (
             <>
               <div className="space-y-2">
-                <p className="text-lg font-semibold tracking-tight text-white">Mokėjimas gautas</p>
-                <p className="text-zinc-300">
-                  Kreditai paprastai atsiranda per kelias sekundes. Jei skaičius viršuje dar rodo 0 — palaukite arba
-                  spauskite „Atnaujinti kreditus“.
-                </p>
+                <p className="text-lg font-semibold tracking-tight text-white">{ui.checkout.paymentReceived}</p>
+                <p className="text-zinc-300">{ui.checkout.userHint}</p>
                 {process.env.NODE_ENV === "development" ? (
                   <details className="group rounded-lg border border-zinc-700/80 bg-zinc-950/50 text-xs text-zinc-400">
                     <summary className="cursor-pointer select-none px-3 py-2 font-medium text-zinc-500 marker:text-zinc-600 hover:text-zinc-400">
-                      Kūrėjams: Stripe webhook ant localhost
+                      {ui.checkout.devWebhookTitle}
                     </summary>
                     <div className="space-y-2 border-t border-zinc-800 px-3 py-2 leading-relaxed">
-                      <p>
-                        Stripe negali pats kviesti <code className="rounded bg-zinc-900 px-1 text-zinc-300">localhost</code>.
-                        Paleiskite terminale{" "}
-                        <code className="rounded bg-zinc-900 px-1 text-zinc-300">stripe listen --forward-to …/api/webhooks/stripe</code>,{" "}
-                        gautą <code className="rounded bg-zinc-900 px-1 text-zinc-300">whsec_…</code> įrašykite į{" "}
-                        <code className="rounded bg-zinc-900 px-1 text-zinc-300">STRIPE_WEBHOOK_SECRET</code> faile{" "}
-                        <code className="rounded bg-zinc-900 px-1 text-zinc-300">.env</code>, tada perkraukite{" "}
-                        <code className="rounded bg-zinc-900 px-1 text-zinc-300">npm run dev</code>.
-                      </p>
+                      <p>{ui.checkout.devWebhookBody}</p>
                     </div>
                   </details>
                 ) : null}
@@ -308,50 +294,40 @@ export function ContentGenerator() {
                   onClick={() => void refreshSession()}
                   className="inline-flex rounded-lg border border-[var(--color-electric)]/50 bg-[color-mix(in_oklab,var(--color-electric)_12%,transparent)] px-4 py-2 text-sm font-semibold text-[var(--color-electric)] transition hover:bg-[color-mix(in_oklab,var(--color-electric)_18%,transparent)]"
                 >
-                  Atnaujinti kreditus dabar
+                  {ui.checkout.refreshCredits}
                 </button>
                 <button
                   type="button"
                   onClick={() => setPostCheckoutSuccess(false)}
                   className="inline-flex rounded-lg border border-zinc-600 px-4 py-2 text-sm font-medium text-zinc-400 transition hover:border-zinc-500 hover:text-zinc-200"
                 >
-                  Uždaryti
+                  {ui.checkout.close}
                 </button>
               </div>
             </>
           ) : sessionMode === "session" ? (
             <>
               <div className="space-y-2">
-                <p className="text-lg font-semibold tracking-tight text-white">Mokėjimas gautas</p>
-                <p className="text-zinc-300">
-                  Kreditai pridedami anoniminei sesijai. Kad neprarastumėte jų išvalę slapukus, susiekite sesiją su el.
-                  paštu.
-                </p>
-                <p className="text-xs text-zinc-500">
-                  Jei skaičius dar 0 — palaukite kelias sekundes arba perkraukite puslapį.
-                </p>
+                <p className="text-lg font-semibold tracking-tight text-white">{ui.checkout.paymentReceived}</p>
+                <p className="text-zinc-300">{ui.checkout.sessionHintBody}</p>
+                <p className="text-xs text-zinc-500">{ui.checkout.sessionWait}</p>
                 {process.env.NODE_ENV === "development" ? (
                   <details className="mt-2 rounded-lg border border-zinc-700/80 bg-zinc-950/50 text-xs text-zinc-400">
                     <summary className="cursor-pointer select-none px-3 py-2 font-medium text-zinc-500 hover:text-zinc-400">
-                      Kūrėjams: webhook lokaliai
+                      {ui.checkout.devWebhookShort}
                     </summary>
-                    <div className="border-t border-zinc-800 px-3 py-2">
-                      Naudokite <code className="text-zinc-300">stripe listen</code> ir{" "}
-                      <code className="text-zinc-300">STRIPE_WEBHOOK_SECRET</code> faile <code className="text-zinc-300">.env</code>.
-                    </div>
+                    <div className="border-t border-zinc-800 px-3 py-2">{ui.checkout.devWebhookShortBody}</div>
                   </details>
                 ) : null}
               </div>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)]/80 px-4 py-3">
-                  <p className="text-sm text-zinc-300">
-                    Prisijunkite el. paštu (prisijungimo nuoroda) — kreditai ir istorija bus saugiai susieti su jūsų paskyra.
-                  </p>
+                  <p className="text-sm text-zinc-300">{ui.checkout.loginPrompt}</p>
                   <Link
                     href="/login"
                     className="mt-3 inline-flex text-sm font-medium text-[var(--color-electric)] underline-offset-4 hover:underline"
                   >
-                    Prisijungti →
+                    {ui.checkout.loginLink}
                   </Link>
                 </div>
                 <button
@@ -359,12 +335,12 @@ export function ContentGenerator() {
                   onClick={() => setPostCheckoutSuccess(false)}
                   className="shrink-0 self-start rounded-lg border border-zinc-600 px-4 py-2 text-sm font-medium text-zinc-400 transition hover:border-zinc-500 hover:text-zinc-200 sm:self-end"
                 >
-                  Uždaryti
+                  {ui.checkout.close}
                 </button>
               </div>
             </>
           ) : (
-            <p className="text-zinc-400">Gaunama paskyros informacija…</p>
+            <p className="text-zinc-400">{ui.checkout.loadingAccount}</p>
           )}
         </div>
       ) : null}
@@ -378,7 +354,7 @@ export function ContentGenerator() {
               tab === "one" ? "bg-[var(--color-electric)] text-[#041014]" : "text-zinc-400 hover:text-white"
             }`}
           >
-            Vienas straipsnis
+            {ui.tabs.one}
           </button>
           <button
             type="button"
@@ -387,18 +363,18 @@ export function ContentGenerator() {
               tab === "bulk" ? "bg-[var(--color-lime)] text-[#101300]" : "text-zinc-400 hover:text-white"
             }`}
           >
-            Masinis SEO
+            {ui.tabs.bulk}
           </button>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-sm text-zinc-500">
           <p>
-            Kreditai:{" "}
+            {ui.credits.label}{" "}
             <span className="font-mono font-semibold text-[var(--color-lime)]">{credits ?? "…"}</span>
             <span className="ml-1 text-zinc-500">
               {sessionMode === "session"
-                ? "(3 nemokami be paskyros)"
+                ? ui.credits.sessionFree
                 : sessionMode === "user"
-                  ? "(1 = 1 straipsnis)"
+                  ? ui.credits.userRate
                   : null}
             </span>
           </p>
@@ -407,11 +383,11 @@ export function ContentGenerator() {
               href="/login"
               className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium text-zinc-200 transition hover:border-[var(--color-electric)] hover:text-white"
             >
-              Prisijungti — +3 dovanų kreditai
+              {ui.credits.loginBonus}
             </Link>
           ) : null}
           <StripeCheckoutButton className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium text-zinc-200 transition hover:border-[var(--color-electric)] hover:text-white">
-            Pirkti kreditų paketą
+            {ui.credits.buyPack}
           </StripeCheckoutButton>
         </div>
       </div>
@@ -419,28 +395,24 @@ export function ContentGenerator() {
       {tab === "one" ? (
         <Card>
           <CardHeader>
-            <CardTitle>SEO straipsnio generatorius</CardTitle>
-            <CardDescription>
-              Įveskite temą arba atkelkite ją iš URL skanerio. Sugeneruojamas struktūrizuotas HTML ir SEO balas pagal
-              taisykles (H1, dažnis, vidinės nuorodos, ilgis).
-            </CardDescription>
+            <CardTitle>{ui.one.cardTitle}</CardTitle>
+            <CardDescription>{ui.one.cardDesc}</CardDescription>
           </CardHeader>
           <CardContent>
             <form id="generator-form" onSubmit={onGenerate} className="space-y-4">
               {topicFromUrl ? (
                 <div className="rounded-lg border border-[var(--color-electric)]/35 bg-[color-mix(in_oklab,var(--color-electric)_10%,transparent)] px-3 py-2 text-xs leading-relaxed text-zinc-300">
-                  <span className="font-semibold text-[var(--color-electric)]">Iš URL skanerio: </span>
-                  patikrinkite H1 antraštę žemiau ir spauskite generuoti. Kontekstas iš skenavimo bus pridėtas prie
-                  užklausos.
+                  <span className="font-semibold text-[var(--color-electric)]">{ui.one.fromScanner} </span>
+                  {ui.one.fromScannerBody}
                   {scannerNiche ? (
                     <span className="mt-1 block text-zinc-200">
-                      <span className="text-zinc-500">Niša: </span>
+                      <span className="text-zinc-500">{ui.one.nicheLabel} </span>
                       {scannerNiche}
                     </span>
                   ) : null}
                   {scannerTone ? (
                     <details className="mt-2 rounded border border-[var(--color-border)]/80 bg-[var(--color-bg)]/50 px-2 py-1.5 text-zinc-400">
-                      <summary className="cursor-pointer select-none text-xs text-zinc-500">Tonas / veiklos santrauka</summary>
+                      <summary className="cursor-pointer select-none text-xs text-zinc-500">{ui.one.toneSummary}</summary>
                       <p className="mt-1 text-[11px] leading-relaxed text-zinc-400">{scannerTone}</p>
                     </details>
                   ) : null}
@@ -449,7 +421,7 @@ export function ContentGenerator() {
 
               <div>
                 <label htmlFor="gen-topic" className="text-sm font-medium text-zinc-300">
-                  Straipsnio antraštė (H1) / tema
+                  {ui.one.topicLabel}
                 </label>
                 <textarea
                   id="gen-topic"
@@ -457,7 +429,7 @@ export function ContentGenerator() {
                   onChange={(e) => setTopic(e.target.value)}
                   rows={3}
                   className="mt-1 w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-sm text-white outline-none focus:border-[var(--color-electric)]"
-                  placeholder="Pvz., 5 klaidos renkantis valymo paslaugas Vilniuje (ir kaip jų išvengti)"
+                  placeholder={ui.one.topicPlaceholder}
                   required
                 />
               </div>
@@ -465,15 +437,15 @@ export function ContentGenerator() {
               {outOfCredits ? (
                 <div className="flex flex-wrap items-center gap-3">
                   <StripeCheckoutButton className="inline-flex rounded-lg bg-[var(--color-lime)] px-4 py-2 text-sm font-semibold text-[#101300] transition hover:bg-[var(--color-lime-dim)]">
-                    Papildyti balansą (Stripe)
+                    {ui.one.topUpStripe}
                   </StripeCheckoutButton>
                   <Link
                     href="/pricing"
                     className="text-sm font-medium text-[var(--color-electric)] underline-offset-4 hover:underline"
                   >
-                    Kainodara
+                    {ui.one.pricing}
                   </Link>
-                  <span className="text-sm text-zinc-500">Arba Business planas — susisiekite.</span>
+                  <span className="text-sm text-zinc-500">{ui.one.businessHint}</span>
                 </div>
               ) : (
                 <button
@@ -481,7 +453,7 @@ export function ContentGenerator() {
                   disabled={loading || !topic.trim()}
                   className="rounded-lg bg-[var(--color-electric)] px-5 py-2.5 text-sm font-semibold text-[#041014] shadow-[var(--shadow-glow)] transition hover:bg-[var(--color-electric-dim)] disabled:opacity-50"
                 >
-                  {loading ? "Generuojama…" : "Generuoti straipsnį (1 kreditas)"}
+                  {loading ? ui.one.generating : ui.one.generate}
                 </button>
               )}
 
@@ -503,7 +475,7 @@ export function ContentGenerator() {
 
             {html && !loading ? (
               <div className="mt-8 space-y-2">
-                <p className="text-sm font-medium text-[var(--color-lime)]">Peržiūra (HTML) · paruošta</p>
+                <p className="text-sm font-medium text-[var(--color-lime)]">{ui.one.previewReady}</p>
                 <div
                   className="prose prose-invert max-w-none rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4 text-sm text-zinc-300 [&_a]:text-[var(--color-electric)]"
                   dangerouslySetInnerHTML={{ __html: html }}
@@ -515,15 +487,12 @@ export function ContentGenerator() {
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>Masinis SEO</CardTitle>
-            <CardDescription>
-              Reikia 50+ straipsnių vienu metu? Kol kas tai darome rankiniu būdu su individualia analitika — palikite užklausą.
-              Automatinė eilė (QStash / worker) bus prasminga tik tada, kai matysime paklausą.
-            </CardDescription>
+            <CardTitle>{ui.bulk.cardTitle}</CardTitle>
+            <CardDescription>{ui.bulk.cardDesc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="rounded-lg border border-dashed border-[var(--color-electric)]/30 bg-[var(--color-bg)] px-3 py-2 text-xs text-zinc-500">
-              Early access: užpildykite formą — gausite atsakymą el. paštu. Vėliau čia atsiras progresas ir santraukos.
+              {ui.bulk.earlyAccess}
             </p>
             <BulkSeoEarlyAccessForm />
           </CardContent>
@@ -532,9 +501,9 @@ export function ContentGenerator() {
 
       <Card className="border-[color-mix(in_oklab,var(--color-border)_90%,var(--color-electric))]/40">
         <CardHeader>
-          <CardTitle>Darbo vieta</CardTitle>
+          <CardTitle>{ui.workspace.cardTitle}</CardTitle>
           <CardDescription>
-            Santrauka ir istorija — {sessionMode === "user" ? "prisijungusi paskyra" : "anoniminė sesija (slapukas)"}.
+            {sessionMode === "user" ? ui.workspace.cardDescUser : ui.workspace.cardDescSession}
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -1,27 +1,23 @@
 "use client";
 
+import { useMemo } from "react";
 import type { AgentSsePhase } from "@/lib/agent/agent-stream-events";
+import { useDict } from "@/components/i18n/LocaleProvider";
 
 /** Sinchronizuota su serverio `phase` lauku (SSE). */
 export type AgentPipelinePhase = AgentSsePhase | null;
 
-const STEPS: { phase: AgentSsePhase; label: string; short: string }[] = [
-  { phase: "context", label: "Kontekstas", short: "1" },
-  { phase: "model", label: "Modelis", short: "2" },
-  { phase: "tools", label: "Skenavimas", short: "3" },
-  { phase: "answer", label: "Atsakymas", short: "4" },
-];
-
-function phaseIndex(p: AgentSsePhase): number {
-  return STEPS.findIndex((s) => s.phase === p);
+function phaseIndex(p: AgentSsePhase, steps: readonly { phase: AgentSsePhase }[]): number {
+  return steps.findIndex((s) => s.phase === p);
 }
 
 /** Iš serverio `status` teksto nustato aktyvų etapą (atsarginis kelias). */
 export function inferPipelinePhaseFromStatus(content: string): AgentSsePhase {
   const c = content.toLowerCase();
-  if (c.includes("formuluoju")) return "answer";
-  if (c.includes("žingsnis") || c.includes("modelis")) return "model";
-  if (c.includes("kontekst") || c.includes("renku")) return "context";
+  if (c.includes("formuluoju") || c.includes("formulating")) return "answer";
+  if (c.includes("žingsnis") || c.includes("modelis") || c.includes("step") || c.includes("model")) return "model";
+  if (c.includes("kontekst") || c.includes("renku") || c.includes("context") || c.includes("gathering"))
+    return "context";
   return "model";
 }
 
@@ -39,19 +35,31 @@ type Props = {
  * 4 etapų progresas: kontekstas → modelis → įrankiai → atsakymas.
  */
 export function AgentProgressPipeline({ active }: Props) {
+  const p = useDict().agent.pipeline;
+  const steps = useMemo(
+    () =>
+      [
+        { phase: "context" as const, label: p.context, short: "1" },
+        { phase: "model" as const, label: p.model, short: "2" },
+        { phase: "tools" as const, label: p.tools, short: "3" },
+        { phase: "answer" as const, label: p.answer, short: "4" },
+      ] as const,
+    [p.answer, p.context, p.model, p.tools],
+  );
+
   if (active == null) return null;
 
-  const idx = phaseIndex(active);
+  const idx = phaseIndex(active, steps);
 
   return (
     <div
       className="mb-3 rounded-xl border border-[color-mix(in_oklab,var(--color-border)_90%,white_5%)] bg-[color-mix(in_oklab,black_25%,transparent)] px-3 py-3 sm:px-4"
       aria-live="polite"
-      aria-label="Agento eiga"
+      aria-label={p.ariaLabel}
     >
-      <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500">Eiga</p>
+      <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500">{p.heading}</p>
       <ol className="grid grid-cols-4 gap-2">
-        {STEPS.map((step, i) => {
+        {steps.map((step, i) => {
           const done = i < idx;
           const current = i === idx;
           return (

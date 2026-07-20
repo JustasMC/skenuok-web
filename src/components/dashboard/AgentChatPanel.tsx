@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AgentSseEvent } from "@/lib/agent/agent-stream-events";
-import { SEO_WAIT_TIPS_LT } from "@/lib/agent/seo-wait-tips";
+import { getSeoWaitTips } from "@/lib/agent/seo-wait-tips";
 import {
   AgentProgressPipeline,
   resolvePipelinePhase,
@@ -10,7 +10,7 @@ import {
 } from "@/components/dashboard/AgentProgressPipeline";
 import { AgentRunTimeline } from "@/components/dashboard/AgentRunTimeline";
 import { AgentToolsSkeleton } from "@/components/dashboard/AgentToolsSkeleton";
-import { useLocale } from "@/components/i18n/LocaleProvider";
+import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 import { parseAgentMessageMetadata } from "@/lib/agent/agent-message-metadata";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -34,6 +34,8 @@ const STORAGE_KEY = "fsai-agent-conversation-id";
 
 export function AgentChatPanel() {
   const { locale } = useLocale();
+  const t = useDict().agent;
+  const waitTips = useMemo(() => getSeoWaitTips(t), [t]);
   const [conversations, setConversations] = useState<ConversationListItem[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -66,7 +68,7 @@ export function AgentChatPanel() {
   const loadConversation = useCallback(async (id: string) => {
     const res = await fetch(`/api/agent/conversations/${id}`);
     if (!res.ok) {
-      setError("Nepavyko įkelti pokalbio.");
+      setError(t.errors.loadConversation);
       return;
     }
     const data = (await res.json()) as {
@@ -79,7 +81,7 @@ export function AgentChatPanel() {
     } catch {
       /* ignore */
     }
-  }, []);
+  }, [t.errors.loadConversation]);
 
   const refreshList = useCallback(async () => {
     const res = await fetch("/api/agent/conversations");
@@ -102,7 +104,7 @@ export function AgentChatPanel() {
         }
         const res = await fetch("/api/agent/conversations");
         if (!res.ok) {
-          setError("Nepavyko įkelti pokalbių sąrašo.");
+          setError(t.errors.loadList);
           return;
         }
         const data = (await res.json()) as { conversations: ConversationListItem[] };
@@ -140,7 +142,7 @@ export function AgentChatPanel() {
     return () => {
       cancelled = true;
     };
-  }, [loadConversation]);
+  }, [loadConversation, t.errors.loadList]);
 
   useEffect(() => {
     scrollToBottom();
@@ -179,23 +181,23 @@ export function AgentChatPanel() {
     const parsed = meta != null ? parseAgentMessageMetadata(meta) : null;
     const legacyWithoutMetadata = parsed == null;
     const selectionHint =
-      lastAssistantId && activeAnalysisId && lastAssistantId !== activeAnalysisId ? "Ankstesnis atsakymas" : null;
+      lastAssistantId && activeAnalysisId && lastAssistantId !== activeAnalysisId ? t.previousAnswer : null;
     return { metadata: meta ?? null, legacyWithoutMetadata, selectionHint };
-  }, [messages, activeAnalysisId, lastAssistantId]);
+  }, [messages, activeAnalysisId, lastAssistantId, t.previousAnswer]);
 
   useEffect(() => {
     if (!loading || pipelinePhase !== "tools") return;
     const id = setInterval(() => {
-      setTipIndex((i) => (i + 1) % SEO_WAIT_TIPS_LT.length);
+      setTipIndex((i) => (i + 1) % waitTips.length);
     }, 8000);
     return () => clearInterval(id);
-  }, [loading, pipelinePhase]);
+  }, [loading, pipelinePhase, waitTips.length]);
 
   async function newConversation() {
     setError(null);
     const res = await fetch("/api/agent/conversations", { method: "POST" });
     if (!res.ok) {
-      setError("Nepavyko sukurti naujo pokalbio.");
+      setError(t.errors.createConversation);
       return;
     }
     const created = (await res.json()) as { id: string };
@@ -212,10 +214,10 @@ export function AgentChatPanel() {
 
   async function deleteConversation() {
     if (!conversationId) return;
-    if (!window.confirm("Ištrinti šį pokalbį?")) return;
+    if (!window.confirm(t.deleteConfirm)) return;
     const res = await fetch(`/api/agent/conversations/${conversationId}`, { method: "DELETE" });
     if (!res.ok) {
-      setError("Nepavyko ištrinti.");
+      setError(t.errors.deleteFailed);
       return;
     }
     try {
@@ -257,7 +259,7 @@ export function AgentChatPanel() {
     if (!cid) {
       const post = await fetch("/api/agent/conversations", { method: "POST" });
       if (!post.ok) {
-        setError("Nepavyko sukurti pokalbio.");
+        setError(t.errors.createConversationShort);
         return;
       }
       const created = (await post.json()) as { id: string };
@@ -292,14 +294,14 @@ export function AgentChatPanel() {
       if (!res.ok) {
         const body = (await res.json().catch(() => ({}))) as { error?: string };
         setMessages((m) => m.filter((x) => x.id !== optimisticId));
-        setError(body.error ?? `Klaida (${res.status})`);
+        setError(body.error ?? t.errors.errorStatus.replace("{status}", String(res.status)));
         setPipelinePhase(null);
         return;
       }
 
       if (!res.body) {
         setMessages((m) => m.filter((x) => x.id !== optimisticId));
-        setError("Naršyklė nepalaiko srauto.");
+        setError(t.errors.streamUnsupported);
         setPipelinePhase(null);
         return;
       }
@@ -345,7 +347,11 @@ export function AgentChatPanel() {
             }
             case "tool_end": {
               const j = json as Extract<AgentSseEvent, { type: "tool_end" }>;
-              setStreamHint(j.ok ? `${toolLabel(j.name)} — baigta` : `${toolLabel(j.name)} — klaida`);
+              setStreamHint(
+                j.ok
+                  ? `${toolLabel(j.name)} — ${t.tools.doneSuffix}`
+                  : `${toolLabel(j.name)} — ${t.tools.errorSuffix}`,
+              );
               break;
             }
             case "delta":
@@ -387,7 +393,7 @@ export function AgentChatPanel() {
       setPipelinePhase(null);
     } catch {
       setMessages((m) => m.filter((x) => x.id !== optimisticId));
-      setError("Tinklo klaida.");
+      setError(t.errors.network);
       setStreamHint(null);
       setStreamingReply("");
       setPipelinePhase(null);
@@ -399,11 +405,11 @@ export function AgentChatPanel() {
   function toolLabel(name: string): string {
     switch (name) {
       case "scan_site_seo":
-        return "Skenuoju puslapį";
+        return t.tools.scan_site_seo;
       case "compare_sites_seo":
-        return "Lyginu dvi svetaines";
+        return t.tools.compare_sites_seo;
       case "save_seo_tasks":
-        return "Įrašau užduotis";
+        return t.tools.save_seo_tasks;
       default:
         return name;
     }
@@ -428,14 +434,12 @@ export function AgentChatPanel() {
     <Card className="border-[var(--color-border)] bg-[var(--color-surface)]">
       <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <CardTitle>SEO analizės sesija</CardTitle>
-          <CardDescription>
-            Struktūrizuotas darbo srautas: Lighthouse duomenys, palyginimai, užduotys DB — ne bendras pokalbių botas.
-          </CardDescription>
+          <CardTitle>{t.title}</CardTitle>
+          <CardDescription>{t.description}</CardDescription>
         </div>
         <div className="flex flex-wrap gap-2">
           <select
-            aria-label="Pasirinkti pokalbį"
+            aria-label={t.selectConversation}
             className="max-w-[220px] rounded-lg border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-surface)_50%,black)] px-3 py-2 text-sm text-zinc-200"
             value={conversationId ?? ""}
             disabled={loadingList}
@@ -444,7 +448,7 @@ export function AgentChatPanel() {
               if (id) void loadConversation(id);
             }}
           >
-            <option value="">— Pokalbis —</option>
+            <option value="">{t.conversationPlaceholder}</option>
             {conversations.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.title.slice(0, 42)}
@@ -455,24 +459,24 @@ export function AgentChatPanel() {
           <button
             type="button"
             onClick={() => void newConversation()}
-            aria-label="Pradėti naują pokalbį"
+            aria-label={t.newConversationAria}
             className="rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm text-zinc-200 transition hover:border-[var(--color-electric)] hover:text-white"
           >
-            Naujas pokalbis
+            {t.newConversation}
           </button>
           <button
             type="button"
             onClick={() => void deleteConversation()}
-            aria-label="Ištrinti pokalbį"
+            aria-label={t.deleteAria}
             className="rounded-lg border border-zinc-700 px-3 py-2 text-sm text-zinc-300 transition hover:border-red-900 hover:text-red-300"
           >
-            Ištrinti
+            {t.delete}
           </button>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         {loadingList ? (
-          <p className="text-sm text-zinc-500">Kraunama…</p>
+          <p className="text-sm text-zinc-500">{t.loading}</p>
         ) : (
           <>
             <div className="grid gap-4 lg:grid-cols-[1fr_minmax(260px,300px)] lg:items-start">
@@ -487,14 +491,11 @@ export function AgentChatPanel() {
               {loading && pipelinePhase === "tools" && (
                 <div className="min-h-[132px] space-y-2">
                   {!streamHint?.trim() ? <AgentToolsSkeleton /> : null}
-                  <p className="text-xs leading-relaxed text-zinc-500">{SEO_WAIT_TIPS_LT[tipIndex]}</p>
+                  <p className="text-xs leading-relaxed text-zinc-500">{waitTips[tipIndex]}</p>
                 </div>
               )}
               {messages.length === 0 && !loading && (
-                <p className="text-sm text-zinc-500">
-                  Pavyzdžiui: „Nuskaityk mobile SEO mano svetainei example.com“ arba „Palygink example.com ir competitor.com
-                  SEO balus.“
-                </p>
+                <p className="text-sm text-zinc-500">{t.emptyHint}</p>
               )}
               {messages.map((m) => (
                 <div
@@ -508,7 +509,7 @@ export function AgentChatPanel() {
                   ) : (
                     <button
                       type="button"
-                      title="Rodyti šios analizės eigą šone"
+                      title={t.showTimelineTitle}
                       onClick={() => setActiveAnalysisId(m.id)}
                       className={`max-w-[92%] rounded-2xl px-4 py-3 text-left text-sm leading-relaxed transition sm:max-w-[85%] ${
                         activeAnalysisId === m.id
@@ -531,7 +532,7 @@ export function AgentChatPanel() {
               {loading && !streamingReply && !streamHint && (
                 <div className="flex justify-start">
                   <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-zinc-400">
-                    Jungiamasi…
+                    {t.connecting}
                   </div>
                 </div>
               )}
@@ -551,7 +552,7 @@ export function AgentChatPanel() {
 
             <form onSubmit={onSubmit} className="flex flex-col gap-3 sm:flex-row sm:items-end">
               <label className="sr-only" htmlFor="agent-input">
-                Žinutė
+                {t.messageLabel}
               </label>
               <textarea
                 ref={agentInputRef}
@@ -560,7 +561,7 @@ export function AgentChatPanel() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onFocus={handleAgentInputFocus}
-                placeholder="Užduotis: URL, palyginimas, užduočių sąrašas…"
+                placeholder={t.placeholder}
                 className="min-h-[80px] flex-1 resize-y rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,black_40%,transparent)] px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-[var(--color-electric)] focus:outline-none"
                 disabled={loading}
               />
@@ -569,7 +570,7 @@ export function AgentChatPanel() {
                 disabled={loading || !input.trim()}
                 className="shrink-0 rounded-xl bg-[var(--color-electric)] px-6 py-3 text-sm font-semibold text-[#041014] transition hover:bg-[var(--color-electric-dim)] disabled:opacity-40"
               >
-                Siųsti
+                {t.send}
               </button>
             </form>
           </>

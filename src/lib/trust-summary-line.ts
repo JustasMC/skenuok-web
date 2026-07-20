@@ -1,3 +1,4 @@
+import type { Dictionary } from "@/lib/i18n/dictionaries/lt";
 import type { InstructorPresence } from "@/lib/course-quality-scan";
 import type { SkepticVerdict } from "@/lib/course-skeptic-types";
 
@@ -7,47 +8,43 @@ type ScanScores = {
   accessibility: number | null;
 };
 
+export type TrustSummaryLabels = Dictionary["tools"]["courseReport"]["trustSummary"];
+
 /**
- * Viena suvestinė eilutė iš jau apskaičiuotų signalų (be papildomo AI).
+ * Single summary line from computed signals (no extra AI).
  */
-export function buildTrustSummaryLine(input: {
-  skepticVerdict: SkepticVerdict;
-  instructorPresence: InstructorPresence | null;
-  valueIndex: number | null;
-  overallScore: number;
-  scores: ScanScores;
-}): string {
+export function buildTrustSummaryLine(
+  input: {
+    skepticVerdict: SkepticVerdict;
+    instructorPresence: InstructorPresence | null;
+    valueIndex: number | null;
+    overallScore: number;
+    scores: ScanScores;
+  },
+  labels: TrustSummaryLabels,
+): string {
   const { skepticVerdict: sv, instructorPresence: ip, valueIndex, overallScore, scores } = input;
 
-  const verdictLt =
-    sv === "SCAM"
-      ? "skeptikas laiko tai tikėtina apgaule"
-      : sv === "RIZIKA"
-        ? "skeptikas mato padidėjusią riziką"
-        : sv === "ATSARGIAI"
-          ? "reikia atsargumo"
-          : "signalai santykinai palankesni";
+  const verdictText = labels.verdict[sv];
 
   const low = [scores.performance, scores.seo, scores.accessibility].some((s) => s != null && s < 70);
-  const techLt = low
-    ? "techninis Lighthouse pagrindas silpnesnis"
-    : "techninis Lighthouse pagrindas neblogas";
+  const techText = low ? labels.techWeak : labels.techGood;
 
-  const instLt =
+  const instText =
     ip === "anonymous"
-      ? "lektorius anoniminis arba neįvardytas"
+      ? labels.instructor.anonymous
       : ip === "pseudonym"
-        ? "lektorius pristatytas slapyvardžiu"
+        ? labels.instructor.pseudonym
         : ip === "named_real"
-          ? "lektorius įvardytas kaip konkretus asmuo"
+          ? labels.instructor.named_real
           : ip === "unclear"
-            ? "lektoriaus tapatybė neaiški"
-            : "lektoriaus tapatybė neįvertinta";
+            ? labels.instructor.unclear
+            : labels.instructor.none;
 
-  const valLt =
+  const valText =
     valueIndex != null
-      ? `vertės indeksas ${valueIndex}/100`
-      : `kokybės indeksas ${overallScore}/100`;
+      ? labels.valueIndex.replace("{n}", String(valueIndex))
+      : labels.qualityIndex.replace("{n}", String(overallScore));
 
-  return `Santrauka: ${verdictLt}; ${techLt}; ${instLt}; ${valLt}.`;
+  return `${labels.prefix} ${verdictText}; ${techText}; ${instText}; ${valText}.`;
 }

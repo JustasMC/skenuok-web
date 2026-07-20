@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useDict } from "@/components/i18n/LocaleProvider";
 
 export function ClaimSessionCredits() {
+  const t = useDict().dashboard.claim;
   const sp = useSearchParams();
   const [sessionId, setSessionId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,16 +38,18 @@ export function ClaimSessionCredits() {
         creditsLeft?: number;
       };
       if (!res.ok) {
-        setMessage({ ok: false, text: body.error ?? "Nepavyko" });
+        setMessage({ ok: false, text: body.error ?? t.failed });
         return;
       }
       setMessage({
         ok: true,
-        text: `Perkelta ${body.creditsTransferred ?? 0} kreditų. Dabar balanse: ${body.creditsLeft ?? "—"}.`,
+        text: t.transferred
+          .replace("{count}", String(body.creditsTransferred ?? 0))
+          .replace("{balance}", String(body.creditsLeft ?? "—")),
       });
       setSessionId("");
     } catch {
-      setMessage({ ok: false, text: "Tinklo klaida." });
+      setMessage({ ok: false, text: t.networkError });
     } finally {
       setLoading(false);
     }
@@ -53,19 +57,18 @@ export function ClaimSessionCredits() {
 
   return (
     <div className="rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-4">
-      <p className="text-sm font-medium text-zinc-200">Anoniminiai kreditai iš kito įrenginio?</p>
+      <p className="text-sm font-medium text-zinc-200">{t.title}</p>
       <p className="mt-1 text-xs text-zinc-500">
-        Tas pats, kas automatiškai suliejama prisijungus su tuo pačiu įrenginiu. Jei pirkote kitoje vietoje – įveskite{" "}
-        <span className="text-zinc-400">sesijos ID</span> (naršyklės slapukas „gen_session“ vertė arba išsaugotas
-        kopijuotas ID). Po anoniminio Stripe mokėjimo tas pats ID gali būti atsiųstas el. paštu. Kūrėjams: Application →
-        Cookies → <span className="font-mono">gen_session</span>.
+        {t.bodyBefore}{" "}
+        <span className="text-zinc-400">{t.sessionId}</span> {t.bodyMid}{" "}
+        <span className="font-mono">gen_session</span>.
       </p>
       <form onSubmit={onSubmit} className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-end">
         <input
           type="text"
           value={sessionId}
           onChange={(e) => setSessionId(e.target.value)}
-          placeholder="Sesijos ID (pvz. clx…)"
+          placeholder={t.placeholder}
           className="min-w-0 flex-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 font-mono text-xs text-white outline-none focus:border-[var(--color-electric)]"
           autoComplete="off"
         />
@@ -74,7 +77,7 @@ export function ClaimSessionCredits() {
           disabled={loading || !sessionId.trim()}
           className="shrink-0 rounded-lg bg-[var(--color-electric)] px-4 py-2 text-sm font-semibold text-[#041014] transition hover:bg-[var(--color-electric-dim)] disabled:opacity-50"
         >
-          {loading ? "…" : "Pasisavinti"}
+          {loading ? "…" : t.submit}
         </button>
       </form>
       {message ? (

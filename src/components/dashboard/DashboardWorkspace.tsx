@@ -2,37 +2,35 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { AgentChatPanelLoading } from "@/components/dashboard/DashboardLoading";
 import { ClaimSessionCredits } from "@/components/dashboard/ClaimSessionCredits";
 import { CreditLedgerTable } from "@/components/dashboard/CreditLedgerTable";
+import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const AgentChatPanel = dynamic(
   () => import("@/components/dashboard/AgentChatPanel").then((m) => m.AgentChatPanel),
   {
-    loading: () => (
-      <div className="site-skeleton min-h-[420px] rounded-2xl" role="status" aria-live="polite">
-        Kraunama agento panelė…
-      </div>
-    ),
+    loading: () => <AgentChatPanelLoading />,
   },
 );
 
-const quickLinks = [
-  { href: "/irankiai/seo-generatorius", label: "SEO generatorius", desc: "AI turinys pagal raktinius žodžius" },
-  { href: "/tools/scanner", label: "URL skaneris", desc: "Lighthouse ir techninė SEO analizė" },
-  { href: "/tools/course-scanner", label: "Kursų skaneris", desc: "Kursų kokybės ir pasitikėjimo vertinimas" },
-  { href: "/pricing", label: "Kreditai ir planai", desc: "Papildykite balansą per Stripe" },
-] as const;
-
-function formatLtCredits(n: number): string {
+function formatCredits(
+  n: number,
+  labels: { one: string; few: string; many: string },
+  locale: string,
+): string {
+  if (locale === "en") {
+    return `${n} ${n === 1 ? labels.one : labels.few}`;
+  }
   const abs = Math.abs(n);
   const mod100 = abs % 100;
   const mod10 = abs % 10;
   let word: string;
-  if (mod10 === 1 && mod100 !== 11) word = "kreditas";
-  else if (mod10 >= 2 && mod10 <= 9 && (mod100 < 12 || mod100 > 19)) word = "kreditai";
-  else word = "kreditų";
+  if (mod10 === 1 && mod100 !== 11) word = labels.one;
+  else if (mod10 >= 2 && mod10 <= 9 && (mod100 < 12 || mod100 > 19)) word = labels.few;
+  else word = labels.many;
   return `${n} ${word}`;
 }
 
@@ -42,7 +40,20 @@ type Props = {
 };
 
 export function DashboardWorkspace({ userName, userEmail }: Props) {
+  const { locale } = useLocale();
+  const t = useDict().dashboard;
   const [credits, setCredits] = useState<number | null>(null);
+
+  const quickLinks = useMemo(
+    () =>
+      [
+        { href: "/irankiai/seo-generatorius", ...t.quickLinks.seoGenerator },
+        { href: "/tools/scanner", ...t.quickLinks.urlScanner },
+        { href: "/tools/course-scanner", ...t.quickLinks.courseScanner },
+        { href: "/pricing", ...t.quickLinks.pricing },
+      ] as const,
+    [t.quickLinks],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -57,15 +68,18 @@ export function DashboardWorkspace({ userName, userEmail }: Props) {
     };
   }, []);
 
-  const displayName = userName?.trim() || userEmail?.split("@")[0] || "Vartotojas";
+  const displayName = userName?.trim() || userEmail?.split("@")[0] || t.defaultUser;
+  const creditLabels = { one: t.creditsOne, few: t.creditsFew, many: t.creditsMany };
 
   return (
     <div className="space-y-8 sm:space-y-10">
       <section className="site-card overflow-hidden p-6 sm:p-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">Darbo vieta</p>
-            <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">Sveiki, {displayName}</h1>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">{t.badge}</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+              {t.greeting.replace("{name}", displayName)}
+            </h1>
             {userEmail ? <p className="text-sm text-zinc-400">{userEmail}</p> : null}
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -73,16 +87,16 @@ export function DashboardWorkspace({ userName, userEmail }: Props) {
               className="rounded-xl border border-[color-mix(in_oklab,var(--color-lime)_35%,var(--color-border))] bg-[color-mix(in_oklab,var(--color-lime)_8%,transparent)] px-5 py-3 text-center"
               role="status"
             >
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">Likutis</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{t.balance}</p>
               <p className="mt-0.5 text-xl font-semibold tabular-nums text-[var(--color-lime)]">
-                {credits == null ? "…" : formatLtCredits(credits)}
+                {credits == null ? "…" : formatCredits(credits, creditLabels, locale)}
               </p>
             </div>
             <Link
               href="/pricing#prenumerata"
               className="rounded-xl bg-[var(--color-electric)] px-5 py-3 text-sm font-semibold text-[#041014] transition hover:bg-[var(--color-electric-dim)]"
             >
-              Papildyti kreditus
+              {t.topUp}
             </Link>
           </div>
         </div>
@@ -104,7 +118,7 @@ export function DashboardWorkspace({ userName, userEmail }: Props) {
       <Suspense
         fallback={
           <div className="site-skeleton h-28 rounded-xl" role="status">
-            Kraunama…
+            {t.creditLedger.loading}
           </div>
         }
       >
@@ -115,8 +129,8 @@ export function DashboardWorkspace({ userName, userEmail }: Props) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Kreditų žurnalas</CardTitle>
-          <CardDescription>Paskutiniai papildymai ir nurašymai — skaidrumas jūsų paskyroje.</CardDescription>
+          <CardTitle>{t.ledger.title}</CardTitle>
+          <CardDescription>{t.ledger.description}</CardDescription>
         </CardHeader>
         <CardContent>
           <CreditLedgerTable />

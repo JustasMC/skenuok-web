@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDict } from "@/components/i18n/LocaleProvider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buildManualSeoTask, buildSeoTasksFromInsights } from "@/lib/insights-to-seo-tasks";
 import type { SeoTask, SeoTaskPriority } from "@/lib/seo-task-types";
@@ -12,17 +13,6 @@ import {
   mergeSeoTasksDeduped,
   saveSeoTasksToLocalStorage,
 } from "@/lib/seo-tasks-local";
-
-const PRIORITY_LABEL: Record<SeoTaskPriority, string> = {
-  high: "Aukštas",
-  medium: "Vidutinis",
-  low: "Žemas",
-};
-
-const SOURCE_LABEL: Record<SeoTask["source"], string> = {
-  insight: "Iš skenavimo",
-  manual: "Rankinė",
-};
 
 function priorityClass(p: SeoTaskPriority): string {
   if (p === "high") {
@@ -48,6 +38,7 @@ type Props = {
 };
 
 export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
+  const t = useDict().tools.generatorUi.seoTasks;
   const [tasks, setTasks] = useState<SeoTask[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [manualDraft, setManualDraft] = useState("");
@@ -66,10 +57,10 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
 
   const displayTasks = useMemo(() => {
     const ins = tasks
-      .filter((t) => t.source === "insight")
+      .filter((task) => task.source === "insight")
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     const man = tasks
-      .filter((t) => t.source === "manual")
+      .filter((task) => task.source === "manual")
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     return [...ins, ...man];
   }, [tasks]);
@@ -77,7 +68,7 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
   const canGenerate = Boolean(scannedUrl && insights.length > 0);
   const canAddManual = Boolean(scannedUrl?.trim());
 
-  const pendingCount = useMemo(() => tasks.filter((t) => !t.done).length, [tasks]);
+  const pendingCount = useMemo(() => tasks.filter((task) => !task.done).length, [tasks]);
 
   const ingestFromInsights = useCallback(() => {
     if (!scannedUrl || insights.length === 0) return;
@@ -95,24 +86,24 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
   }, [manualDraft, scannedUrl]);
 
   const toggleDone = useCallback((id: string) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
+    setTasks((prev) => prev.map((task) => (task.id === id ? { ...task, done: !task.done } : task)));
   }, []);
 
   const removeTask = useCallback((id: string) => {
-    setTasks((prev) => prev.filter((t) => t.id !== id));
+    setTasks((prev) => prev.filter((task) => task.id !== id));
     setEditingId((e) => (e === id ? null : e));
   }, []);
 
   const clearAll = useCallback(() => {
-    if (typeof window !== "undefined" && !window.confirm("Ištrinti visas SEO užduotis šiame įrenginyje?")) return;
+    if (typeof window !== "undefined" && !window.confirm(t.clearConfirm)) return;
     setTasks([]);
     setEditingId(null);
-  }, []);
+  }, [t.clearConfirm]);
 
-  const startEdit = useCallback((t: SeoTask) => {
-    if (t.source !== "manual") return;
-    setEditingId(t.id);
-    setEditDraft(t.title);
+  const startEdit = useCallback((task: SeoTask) => {
+    if (task.source !== "manual") return;
+    setEditingId(task.id);
+    setEditDraft(task.title);
   }, []);
 
   const commitEdit = useCallback(() => {
@@ -123,7 +114,7 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
       return;
     }
     setTasks((prev) =>
-      prev.map((t) => (t.id === editingId && t.source === "manual" ? { ...t, title: next } : t)),
+      prev.map((task) => (task.id === editingId && task.source === "manual" ? { ...task, title: next } : task)),
     );
     setEditingId(null);
   }, [editDraft, editingId]);
@@ -143,13 +134,12 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>SEO užduotys</CardTitle>
+        <CardTitle>{t.title}</CardTitle>
         <CardDescription>
-          Darbo vieta: įžvalgos iš skenavimo ir jūsų pastabos vienoje vietoje. Duomenys — šioje naršyklėje (localStorage);
-          eksportas JSON / CSV.
+          {t.description}
           {siteTopic ? (
             <span className="mt-2 block text-zinc-500">
-              Kontekstas: <span className="text-zinc-400">{siteTopic}</span>
+              {t.contextLabel} <span className="text-zinc-400">{siteTopic}</span>
             </span>
           ) : null}
         </CardDescription>
@@ -162,7 +152,7 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
             onClick={ingestFromInsights}
             className="rounded-lg border border-[color-mix(in_oklab,var(--color-lime)_40%,var(--color-border))] bg-[color-mix(in_oklab,var(--color-lime)_10%,transparent)] px-4 py-2.5 text-sm font-semibold text-[var(--color-lime)] shadow-[0_0_20px_-6px_color-mix(in_oklab,var(--color-lime)_35%,transparent)] transition hover:bg-[color-mix(in_oklab,var(--color-lime)_16%,transparent)] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Įrašyti užduotis iš įžvalgų
+            {t.ingest}
           </button>
           <button
             type="button"
@@ -170,7 +160,7 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
             onClick={onExportJson}
             className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm font-medium text-zinc-200 transition hover:border-[var(--color-electric)]/50 disabled:opacity-40"
           >
-            Eksportuoti JSON
+            {t.exportJson}
           </button>
           <button
             type="button"
@@ -178,7 +168,7 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
             onClick={onExportCsv}
             className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm font-medium text-zinc-200 transition hover:border-[var(--color-electric)]/50 disabled:opacity-40"
           >
-            Eksportuoti CSV
+            {t.exportCsv}
           </button>
           {tasks.length > 0 ? (
             <button
@@ -186,7 +176,7 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
               onClick={clearAll}
               className="text-sm text-rose-400/90 underline-offset-2 hover:text-rose-300 hover:underline sm:ml-auto"
             >
-              Išvalyti viską
+              {t.clearAll}
             </button>
           ) : null}
         </div>
@@ -200,14 +190,14 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
         >
           <div className="min-w-0 flex-1 space-y-1.5">
             <label htmlFor="seo-task-manual" className="text-xs font-medium text-zinc-500">
-              Savo užduotis (prie šio skano)
+              {t.manualLabel}
             </label>
             <input
               id="seo-task-manual"
               type="text"
               value={manualDraft}
               onChange={(e) => setManualDraft(e.target.value)}
-              placeholder="Pvz. atnaujinti telefoną hero bloke, pakeisti nuotrauką „Apie mus“…"
+              placeholder={t.manualPlaceholder}
               disabled={!canAddManual}
               className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-[var(--color-electric)] disabled:opacity-50"
               autoComplete="off"
@@ -218,45 +208,43 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
             disabled={!canAddManual || !manualDraft.trim()}
             className="shrink-0 rounded-lg border border-[color-mix(in_oklab,var(--color-electric)_45%,var(--color-border))] bg-[color-mix(in_oklab,var(--color-electric)_12%,transparent)] px-4 py-2.5 text-sm font-semibold text-[var(--color-electric)] transition hover:bg-[color-mix(in_oklab,var(--color-electric)_18%,transparent)] disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Pridėti
+            {t.add}
           </button>
         </form>
-        {!canAddManual ? (
-          <p className="text-xs text-zinc-600">Rankinėms užduotims reikia nuskanuoto URL (paleiskite skaną aukščiau).</p>
-        ) : null}
+        {!canAddManual ? <p className="text-xs text-zinc-600">{t.needScan}</p> : null}
 
         {!hydrated ? (
-          <p className="text-sm text-zinc-500">Kraunama…</p>
+          <p className="text-sm text-zinc-500">{t.loading}</p>
         ) : tasks.length === 0 ? (
           <p className="rounded-lg border border-dashed border-zinc-700 bg-zinc-950/40 px-4 py-6 text-center text-sm text-zinc-500">
-            Užduočių dar nėra — įrašykite iš įžvalgų arba pridėkite savo pastabą.
+            {t.empty}
           </p>
         ) : (
           <>
             <p className="text-xs text-zinc-500">
-              Iš viso: {tasks.length}
-              {pendingCount > 0 ? ` · laukia: ${pendingCount}` : " · visos atliktos"}
-              <span className="ml-2 text-zinc-600">
-                (įžvalgos viršuje, rankinės apačioje — bendras „workspace“, be rišimo prie kategorijų)
-              </span>
+              {t.total.replace("{n}", String(tasks.length))}
+              {pendingCount > 0
+                ? t.pending.replace("{n}", String(pendingCount))
+                : t.allDone}
+              <span className="ml-2 text-zinc-600">{t.listHint}</span>
             </p>
             <ul className="space-y-3">
-              {displayTasks.map((t) => (
+              {displayTasks.map((task) => (
                 <li
-                  key={t.id}
+                  key={task.id}
                   className="flex gap-3 rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-3 sm:gap-4"
                 >
                   <div className="flex shrink-0 items-start pt-0.5">
                     <input
                       type="checkbox"
-                      checked={t.done}
-                      onChange={() => toggleDone(t.id)}
-                      aria-label={t.done ? "Žymėti užduotį kaip nepadarytą" : "Žymėti užduotį kaip padarytą"}
+                      checked={task.done}
+                      onChange={() => toggleDone(task.id)}
+                      aria-label={task.done ? t.markUndone : t.markDone}
                       className="mt-0.5 h-4 w-4 cursor-pointer rounded border-zinc-600 bg-zinc-900 text-[var(--color-electric)] focus:ring-[var(--color-electric)]"
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    {t.source === "manual" && editingId === t.id ? (
+                    {task.source === "manual" && editingId === task.id ? (
                       <input
                         type="text"
                         value={editDraft}
@@ -273,41 +261,41 @@ export function SeoTaskPanel({ insights, scannedUrl, siteTopic }: Props) {
                         }}
                         className="w-full rounded-md border border-[var(--color-electric)]/50 bg-zinc-950 px-2 py-1.5 text-sm text-white outline-none"
                         autoFocus
-                        aria-label="Redaguoti užduotį"
+                        aria-label={t.editTask}
                       />
                     ) : (
                       <p
-                        className={`text-sm leading-relaxed ${t.done ? "text-zinc-500 line-through" : "text-zinc-200"}`}
-                        title={t.source === "insight" ? "Tekstas iš įžvalgos — redaguoti negalima" : undefined}
+                        className={`text-sm leading-relaxed ${task.done ? "text-zinc-500 line-through" : "text-zinc-200"}`}
+                        title={task.source === "insight" ? t.insightReadonly : undefined}
                       >
-                        {t.title}
+                        {task.title}
                       </p>
                     )}
                     <p className="mt-1.5 flex flex-wrap items-center gap-2 text-[11px] text-zinc-500">
-                      <span className={`rounded-md border px-1.5 py-0.5 font-medium ${sourceClass(t.source)}`}>
-                        {SOURCE_LABEL[t.source]}
+                      <span className={`rounded-md border px-1.5 py-0.5 font-medium ${sourceClass(task.source)}`}>
+                        {t.source[task.source]}
                       </span>
-                      <span className={`rounded-md border px-1.5 py-0.5 font-medium ${priorityClass(t.priority)}`}>
-                        {PRIORITY_LABEL[t.priority]}
+                      <span className={`rounded-md border px-1.5 py-0.5 font-medium ${priorityClass(task.priority)}`}>
+                        {t.priority[task.priority]}
                       </span>
-                      <span className="break-all text-zinc-600">{t.sourceUrl}</span>
+                      <span className="break-all text-zinc-600">{task.sourceUrl}</span>
                     </p>
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-1">
-                    {t.source === "manual" && editingId !== t.id ? (
+                    {task.source === "manual" && editingId !== task.id ? (
                       <button
                         type="button"
-                        onClick={() => startEdit(t)}
+                        onClick={() => startEdit(task)}
                         className="rounded-md px-2 py-1 text-xs text-[var(--color-electric)] hover:bg-zinc-800"
                       >
-                        Redaguoti
+                        {t.edit}
                       </button>
                     ) : null}
                     <button
                       type="button"
-                      onClick={() => removeTask(t.id)}
+                      onClick={() => removeTask(task.id)}
                       className="rounded-md px-2 py-1 text-xs text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300"
-                      aria-label="Pašalinti užduotį"
+                      aria-label={t.removeTask}
                     >
                       ✕
                     </button>

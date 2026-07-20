@@ -1,4 +1,8 @@
-/** Straipsnio „layout“ imitacija generavimo metu — greitesnis pojūtis nei tuščias loader. */
+"use client";
+
+import { useDict } from "@/components/i18n/LocaleProvider";
+
+/** Article layout imitation while generating — feels faster than an empty loader. */
 
 function Bar({ className }: { className?: string }) {
   return (
@@ -9,11 +13,13 @@ function Bar({ className }: { className?: string }) {
 }
 
 export function ArticleGenerationSkeleton() {
+  const t = useDict().tools.generatorUi.skeleton;
+
   return (
     <div className="mt-8 space-y-4 rounded-xl border border-[var(--color-border)]/80 bg-[var(--color-bg)]/50 p-4">
       <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-zinc-500">
         <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-[var(--color-electric)]" />
-        Generuojama struktūra ir tekstas…
+        {t.generating}
       </div>
       <Bar className="h-8 w-4/5 max-w-xl" />
       <Bar className="h-3 w-full" />
@@ -25,7 +31,7 @@ export function ArticleGenerationSkeleton() {
       </div>
       <Bar className="h-3 w-3/4" />
       <Bar className="h-3 w-[70%]" />
-      <p className="pt-2 text-center text-[11px] text-zinc-600">AI rašo pagal jūsų temą — tai gali užtrukti 15–45 s</p>
+      <p className="pt-2 text-center text-[11px] text-zinc-600">{t.waitHint}</p>
     </div>
   );
 }

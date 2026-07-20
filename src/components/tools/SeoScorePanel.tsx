@@ -1,5 +1,6 @@
 "use client";
 
+import { useDict } from "@/components/i18n/LocaleProvider";
 import type { SeoScoreBreakdown } from "@/lib/seo-score";
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 };
 
 export function SeoScorePanel({ seo, onRefine }: Props) {
+  const t = useDict().tools.generatorUi.seoScore;
   const v = Math.max(0, Math.min(100, seo.score));
   const r = 54;
   const c = 2 * Math.PI * r;
@@ -20,7 +22,7 @@ export function SeoScorePanel({ seo, onRefine }: Props) {
   return (
     <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,220px)_1fr]">
       <div className="flex flex-col items-center justify-center rounded-2xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-surface)_80%,transparent)] p-6">
-        <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">SEO signalas</p>
+        <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">{t.signal}</p>
         <div className="relative mt-4 h-36 w-36">
           <svg width="144" height="144" viewBox="0 0 120 120" className="-rotate-90" aria-hidden>
             <circle cx="60" cy="60" r={r} fill="none" stroke="currentColor" strokeWidth="9" className="text-[var(--color-border)]" />
@@ -39,29 +41,28 @@ export function SeoScorePanel({ seo, onRefine }: Props) {
           </svg>
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
             <span className="text-4xl font-bold tabular-nums text-white">{v}</span>
-            <span className="text-[10px] uppercase tracking-wider text-zinc-500">iš 100</span>
+            <span className="text-[10px] uppercase tracking-wider text-zinc-500">{t.outOf100}</span>
           </div>
         </div>
         <p className="mt-4 text-center text-xs text-zinc-500">
           {failed === 0 ? (
-            <span className="text-[var(--color-lime)]">Visi kontroliniai taškai — žalia.</span>
+            <span className="text-[var(--color-lime)]">{t.allPass}</span>
           ) : (
             <span>
-              <span className="font-semibold text-rose-300">{failed}</span> punktai reikalauja patobulinimo — žemiau
-              „remonto“ sąrašas.
+              <span className="font-semibold text-rose-300">{failed}</span> {t.failedPrefix}
             </span>
           )}
         </p>
       </div>
 
       <div className="space-y-3">
-        <p className="text-sm font-medium text-zinc-200">Ką pataisyti, kad priartėtumėte prie 100</p>
+        <p className="text-sm font-medium text-zinc-200">{t.fixHeading}</p>
         <ul className="space-y-3">
-          {seo.checks.map((c) => (
+          {seo.checks.map((check) => (
             <li
-              key={c.id}
+              key={check.id}
               className={`rounded-xl border px-4 py-3 text-sm ${
-                c.pass
+                check.pass
                   ? "border-[color-mix(in_oklab,var(--color-lime)_35%,var(--color-border))] bg-[color-mix(in_oklab,var(--color-lime)_8%,transparent)]"
                   : "border-rose-500/35 bg-rose-950/25"
               }`}
@@ -69,15 +70,15 @@ export function SeoScorePanel({ seo, onRefine }: Props) {
               <div className="flex items-start gap-3">
                 <span
                   className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-mono text-xs font-bold ${
-                    c.pass ? "bg-[var(--color-lime)] text-[#101300]" : "bg-rose-500/20 text-rose-300"
+                    check.pass ? "bg-[var(--color-lime)] text-[#101300]" : "bg-rose-500/20 text-rose-300"
                   }`}
                   aria-hidden
                 >
-                  {c.pass ? "OK" : "!"}
+                  {check.pass ? "OK" : "!"}
                 </span>
                 <div>
-                  <p className={`font-medium ${c.pass ? "text-zinc-200" : "text-rose-100"}`}>{c.label}</p>
-                  {!c.pass ? <p className="mt-1 text-xs leading-relaxed text-zinc-400">{c.fixHint}</p> : null}
+                  <p className={`font-medium ${check.pass ? "text-zinc-200" : "text-rose-100"}`}>{check.label}</p>
+                  {!check.pass ? <p className="mt-1 text-xs leading-relaxed text-zinc-400">{check.fixHint}</p> : null}
                 </div>
               </div>
             </li>
@@ -86,9 +87,10 @@ export function SeoScorePanel({ seo, onRefine }: Props) {
 
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-dashed border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_40%,transparent)] px-4 py-3 text-xs text-zinc-500">
           <span>
-            Žodžių: <strong className="text-zinc-300">{seo.wordCount}</strong> · Raktažodis tekste:{" "}
-            <strong className="text-zinc-300">{seo.keywordOccurrences}×</strong> · Vidinės nuorodos:{" "}
-            <strong className="text-zinc-300">{seo.internalLinks}</strong>
+            {t.stats
+              .replace("{words}", String(seo.wordCount))
+              .replace("{keyword}", String(seo.keywordOccurrences))
+              .replace("{links}", String(seo.internalLinks))}
           </span>
         </div>
 
@@ -98,7 +100,7 @@ export function SeoScorePanel({ seo, onRefine }: Props) {
             onClick={onRefine}
             className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] py-2.5 text-sm font-medium text-[var(--color-electric)] transition hover:border-[var(--color-electric)]"
           >
-            Bandyti dar kartą (patikslinta tema)
+            {t.refine}
           </button>
         ) : null}
       </div>

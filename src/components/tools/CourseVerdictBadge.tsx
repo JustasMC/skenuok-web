@@ -1,13 +1,7 @@
 "use client";
 
+import { useDict } from "@/components/i18n/LocaleProvider";
 import type { SkepticVerdict } from "@/lib/course-skeptic-types";
-
-const LABELS: Record<SkepticVerdict, string> = {
-  SAUGU: "Skeptiko verdiktas: saugu",
-  ATSARGIAI: "Skeptiko verdiktas: atsargiai",
-  RIZIKA: "Skeptiko verdiktas: rizika",
-  SCAM: "Skeptiko verdiktas: tikėtinas scam",
-};
 
 export function CourseVerdictBadge({
   verdict,
@@ -16,6 +10,7 @@ export function CourseVerdictBadge({
   verdict: SkepticVerdict;
   className?: string;
 }) {
+  const labels = useDict().tools.courseReport.verdictBadge;
   const base =
     "inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-bold uppercase tracking-wide sm:text-sm";
 
@@ -52,7 +47,7 @@ export function CourseVerdictBadge({
   return (
     <span className={`${base} ${styles[verdict]} ${className}`} role="status">
       {icon}
-      {LABELS[verdict]}
+      {labels[verdict]}
     </span>
   );
 }

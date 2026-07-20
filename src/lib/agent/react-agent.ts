@@ -18,6 +18,7 @@ import {
 } from "@/lib/agent/tools/seo-scan-tool";
 import type { Locale } from "@/lib/i18n/config";
 import { analysisLanguageInstruction } from "@/lib/i18n/analysis-locale";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 const AGENT_OPENAI_TOOLS = [seoScanOpenAiTool, compareSitesOpenAiTool, saveSeoTasksOpenAiTool];
 
@@ -200,6 +201,7 @@ export async function runReactSeoAgent(opts: ReactAgentOptions): Promise<ReactAg
 
   const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
   const locale = opts.locale ?? "lt";
+  const a = getDictionary(locale).agent;
   const system = opts.systemPrompt ?? defaultSystemPrompt(locale);
   const scanSlots = createScanSlotTracker(opts.limits.maxToolScans);
   const toolCtx: AgentToolRuntimeContext = {
@@ -229,13 +231,13 @@ export async function runReactSeoAgent(opts: ReactAgentOptions): Promise<ReactAg
 
   const emit = opts.sse?.onEvent;
 
-  emit?.({ type: "status", content: "Renku kontekstą ir rengiu užklausą modeliui…", phase: "context" });
+  emit?.({ type: "status", content: a.statusContext, phase: "context" });
 
   for (let i = 0; i < opts.limits.maxSteps; i++) {
     if (opts.abortSignal?.aborted) {
       return {
         ok: false,
-        error: "Užklausa nutraukta arba baigėsi skirtasis laikas.",
+        error: a.errAborted,
         steps,
         toolScansUsed,
         toolInsights,
@@ -245,7 +247,7 @@ export async function runReactSeoAgent(opts: ReactAgentOptions): Promise<ReactAg
     if (approximateDialogTokens(messages) > opts.limits.maxEstimatedTokens) {
       return {
         ok: false,
-        error: "Pasiektas apytikslis tokenų biudžetas. Sutrumpinkite užklausą arba pradėkite naują pokalbį.",
+        error: a.errTokenBudget,
         steps,
         toolScansUsed,
         toolInsights,
@@ -256,7 +258,7 @@ export async function runReactSeoAgent(opts: ReactAgentOptions): Promise<ReactAg
 
     emit?.({
       type: "status",
-      content: `Žingsnis ${steps}: modelis sprendžia…`,
+      content: a.statusModel.replace("{n}", String(steps)),
       phase: "model",
     });
 
@@ -367,7 +369,7 @@ export async function runReactSeoAgent(opts: ReactAgentOptions): Promise<ReactAg
           ...meta,
         });
         const observation = await dispatchAgentTool(name, args, toolCtx, emit);
-        toolInsights.push(extractToolInsightForMetadata(name, observation));
+        toolInsights.push(extractToolInsightForMetadata(name, observation, locale));
         toolScansUsed = scanSlots.getUsed();
         emit?.({
           type: "tool_end",
@@ -387,7 +389,7 @@ export async function runReactSeoAgent(opts: ReactAgentOptions): Promise<ReactAg
     }
 
     if (emit) {
-      emit({ type: "status", content: "Formuluoju atsakymą…", phase: "answer" });
+      emit({ type: "status", content: a.statusAnswer, phase: "answer" });
       await emitAnswerAsDeltas(text, (e) => emit(e));
     }
 

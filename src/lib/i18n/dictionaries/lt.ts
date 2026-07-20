@@ -1,3 +1,11 @@
+import { courseReportLt } from "@/lib/i18n/dictionaries/parts/course-report";
+import { generatorUiLt } from "@/lib/i18n/dictionaries/parts/generator-ui";
+
+import {
+  agentLt,
+  dashboardLt,
+} from "@/lib/i18n/dictionaries/parts/dashboard-agent";
+
 export const lt = {
   skipToContent: "Peršokti prie turinio",
   nav: {
@@ -687,6 +695,8 @@ export const lt = {
         "Įveskite temą arba atkelkite ją iš URL skanerio. 3 nemokami kreditai be paskyros; po registracijos — +3 dovanų. 1 kreditas = 1 straipsnis.",
       closeToast: "Uždaryti pranešimą",
     },
+    courseReport: courseReportLt,
+    generatorUi: generatorUiLt,
     scanReport: {
       aria: "Skenavimo ataskaita",
       heading: "Ataskaita",
@@ -773,6 +783,8 @@ export const lt = {
     scanner: "URL skaneris",
     contact: "Kontaktai",
   },
+  dashboard: dashboardLt,
+  agent: agentLt,
   legal: {
     privacyTitle: "Privatumo politika",
     privacyDescription:

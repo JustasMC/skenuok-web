@@ -2,6 +2,7 @@
 
 import type { AgentRunStepRecord } from "@/lib/agent/agent-message-metadata";
 import { parseAgentMessageMetadata } from "@/lib/agent/agent-message-metadata";
+import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 
 function stepDotClass(step: AgentRunStepRecord): string {
   if (step.kind === "tool_result") {
@@ -15,10 +16,11 @@ function stepDotClass(step: AgentRunStepRecord): string {
   return "bg-zinc-500 ring-zinc-600";
 }
 
-function formatClock(iso: string): string {
+function formatClock(iso: string, locale: string): string {
   try {
     const d = new Date(iso);
-    return d.toLocaleTimeString("lt-LT", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    const dateLocale = locale === "en" ? "en-GB" : "lt-LT";
+    return d.toLocaleTimeString(dateLocale, { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   } catch {
     return "";
   }
@@ -34,16 +36,17 @@ type Props = {
 };
 
 export function AgentRunTimeline({ metadata, legacyWithoutMetadata, selectionHint }: Props) {
+  const { locale } = useLocale();
+  const tl = useDict().agent.timeline;
+
   if (legacyWithoutMetadata) {
     return (
       <div className="rounded-xl border border-dashed border-zinc-600/50 bg-[color-mix(in_oklab,black_35%,#0c1018)] p-4 shadow-[inset_0_0_24px_-12px_rgba(0,0,0,0.5)]">
-        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Analizės eiga</p>
-        <p className="mt-2 text-sm leading-relaxed text-zinc-400">
-          Šiai istorinei žinutei nėra įrašytos eigos (prieš įvedant chronologiją arba be SSE srauto).
-        </p>
+        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{tl.heading}</p>
+        <p className="mt-2 text-sm leading-relaxed text-zinc-400">{tl.legacyBody}</p>
         <p className="mt-3 text-sm font-medium text-[var(--color-electric)]">
-          Paleiskite naują analizę: įveskite užklausą ir spauskite <span className="whitespace-nowrap">„Siųsti“</span> —
-          užfiksuosime visą žingsnių seką su srautu.
+          {tl.legacyCtaBefore}{" "}
+          <span className="whitespace-nowrap">„{tl.legacyCtaButton}“</span> {tl.legacyCtaAfter}
         </p>
       </div>
     );
@@ -52,10 +55,8 @@ export function AgentRunTimeline({ metadata, legacyWithoutMetadata, selectionHin
   if (metadata == null) {
     return (
       <div className="rounded-xl border border-dashed border-[var(--color-border)] bg-[color-mix(in_oklab,black_25%,transparent)] p-4">
-        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Analizės eiga</p>
-        <p className="mt-2 text-sm leading-relaxed text-zinc-500">
-          Čia bus rodomi etapai (kontekstas, įrankiai, rezultatai), kai užbaigsite SEO analizės sesiją su srautu.
-        </p>
+        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{tl.heading}</p>
+        <p className="mt-2 text-sm leading-relaxed text-zinc-500">{tl.emptyBody}</p>
       </div>
     );
   }
@@ -64,8 +65,8 @@ export function AgentRunTimeline({ metadata, legacyWithoutMetadata, selectionHin
   if (!parsed) {
     return (
       <div className="rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,black_30%,transparent)] p-4">
-        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Analizės eiga</p>
-        <p className="mt-2 text-sm text-zinc-500">Šiai žinutei nėra įrašytų metaduomenų.</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{tl.heading}</p>
+        <p className="mt-2 text-sm text-zinc-500">{tl.noMetadata}</p>
       </div>
     );
   }
@@ -74,16 +75,15 @@ export function AgentRunTimeline({ metadata, legacyWithoutMetadata, selectionHin
     const { summary } = parsed;
     return (
       <div className="rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,black_30%,transparent)] p-4">
-        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Analizės suvestinė</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{tl.summaryHeading}</p>
         {selectionHint ? (
           <p className="mt-1 text-[11px] font-medium text-[color-mix(in_oklab,var(--color-electric)_85%,white)]">{selectionHint}</p>
         ) : null}
         <p className="mt-2 text-sm text-zinc-300">
-          Agentas: {summary.agentSteps} žingsn. · Skenavimų: {summary.toolScansUsed}
+          {tl.agentSteps.replace("{steps}", String(summary.agentSteps))} ·{" "}
+          {tl.toolScans.replace("{scans}", String(summary.toolScansUsed))}
         </p>
-        <p className="mt-2 text-xs leading-relaxed text-zinc-500">
-          Chronologinį žingsnių sąrašą gaunate per SSE srautą (įprastas „Siųsti“). Ne-JSON API palieka tik šią suvestinę.
-        </p>
+        <p className="mt-2 text-xs leading-relaxed text-zinc-500">{tl.chronologyHint}</p>
       </div>
     );
   }
@@ -94,12 +94,14 @@ export function AgentRunTimeline({ metadata, legacyWithoutMetadata, selectionHin
     <div className="rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,black_30%,transparent)] p-4">
       <div className="flex items-start justify-between gap-2 border-b border-[var(--color-border)] pb-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Analizės eiga</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{tl.heading}</p>
           {selectionHint ? (
             <p className="mt-1 text-[11px] font-medium text-[color-mix(in_oklab,var(--color-electric)_85%,white)]">{selectionHint}</p>
           ) : null}
           <p className="mt-1 text-xs text-zinc-500">
-            Žingsniai: {summary.agentSteps} · Skenavimų: {summary.toolScansUsed}
+            {tl.stepsLine
+              .replace("{steps}", String(summary.agentSteps))
+              .replace("{scans}", String(summary.toolScansUsed))}
           </p>
         </div>
       </div>
@@ -116,7 +118,7 @@ export function AgentRunTimeline({ metadata, legacyWithoutMetadata, selectionHin
               ) : null}
             </div>
             <div className="min-w-0 flex-1 pt-0">
-              <p className="text-[11px] font-mono text-zinc-500">{formatClock(step.at)}</p>
+              <p className="text-[11px] font-mono text-zinc-500">{formatClock(step.at, locale)}</p>
               <p className="text-sm font-medium leading-snug text-zinc-100">{step.title}</p>
               {step.subtitle ? (
                 <p className="mt-0.5 break-words text-xs leading-relaxed text-zinc-400">{step.subtitle}</p>

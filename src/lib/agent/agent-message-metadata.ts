@@ -2,6 +2,8 @@ import type { AgentSseEvent, AgentSsePhase } from "@/lib/agent/agent-stream-even
 import { COMPARE_SITES_TOOL_NAME } from "@/lib/agent/tools/compare-sites-tool";
 import { SAVE_SEO_TASKS_TOOL_NAME } from "@/lib/agent/tools/save-seo-tasks-tool";
 import { SEO_SCAN_TOOL_NAME } from "@/lib/agent/tools/seo-scan-tool";
+import type { Locale } from "@/lib/i18n/config";
+import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
 
 /** JSON MVP — keičiant struktūrą, didinkite ir migruokite skaitymą pagal šį lauką. */
 export const AGENT_MESSAGE_METADATA_SCHEMA_VERSION = 1 as const;
@@ -45,7 +47,12 @@ export type AgentMessageMetadata = {
  * Iš įrankio JSON stebėjimo ištraukia trumpą eilutę timeline (Lighthouse balai, palyginimas, užduotys).
  * Saugus netinkamai JSON — grąžina undefined.
  */
-export function extractToolInsightForMetadata(toolName: string, observation: string): string | undefined {
+export function extractToolInsightForMetadata(
+  toolName: string,
+  observation: string,
+  locale: Locale = "lt",
+): string | undefined {
+  const m = getDictionary(locale).agent.metadata;
   try {
     const j = JSON.parse(observation) as Record<string, unknown>;
     if (typeof j.error === "string" && j.error.length > 0) {
@@ -59,9 +66,9 @@ export function extractToolInsightForMetadata(toolName: string, observation: str
       const perf = scores.performance;
       const seo = scores.seo;
       const a11y = scores.accessibility;
-      if (typeof perf === "number") parts.push(`Našumas ${Math.round(perf)}`);
-      if (typeof seo === "number") parts.push(`SEO ${Math.round(seo)}`);
-      if (typeof a11y === "number") parts.push(`Prieinamumas ${Math.round(a11y)}`);
+      if (typeof perf === "number") parts.push(`${m.performance} ${Math.round(perf)}`);
+      if (typeof seo === "number") parts.push(`${m.seo} ${Math.round(seo)}`);
+      if (typeof a11y === "number") parts.push(`${m.accessibility} ${Math.round(a11y)}`);
       return parts.length ? parts.join(" · ") : undefined;
     }
 
@@ -76,21 +83,21 @@ export function extractToolInsightForMetadata(toolName: string, observation: str
         if (typeof perf === "number" && typeof seo === "number") {
           return `${side.toUpperCase()}: ${Math.round(perf)}/${Math.round(seo)}`;
         }
-        if (typeof perf === "number") return `${side.toUpperCase()}: našumas ${Math.round(perf)}`;
+        if (typeof perf === "number") return `${side.toUpperCase()}: ${m.perfShort} ${Math.round(perf)}`;
         return null;
       };
       const a = pick("a");
       const b = pick("b");
       if (a && b) return `${a} vs ${b}`;
-      if (j.compared === true) return "Du URL nuskaityti — žr. išsamų atsakymą";
+      if (j.compared === true) return m.comparedBoth;
       return undefined;
     }
 
     if (toolName === SAVE_SEO_TASKS_TOOL_NAME) {
       const tasks = j.tasks as unknown[] | undefined;
       const n = Array.isArray(tasks) ? tasks.length : 0;
-      if (n > 0) return `Įrašyta ${n} užduotis (-ys) į darbo vietą`;
-      return "Užduotys įrašytos";
+      if (n > 0) return m.tasksSaved.replace("{n}", String(n));
+      return m.tasksSavedGeneric;
     }
   } catch {
     return undefined;
@@ -98,14 +105,14 @@ export function extractToolInsightForMetadata(toolName: string, observation: str
   return undefined;
 }
 
-function toolTitleLt(name: string): string {
+function toolTitle(name: string, tools: Dictionary["agent"]["tools"]): string {
   switch (name) {
     case "scan_site_seo":
-      return "Skenuoju puslapį";
+      return tools.scan_site_seo;
     case "compare_sites_seo":
-      return "Lyginu dvi svetaines";
+      return tools.compare_sites_seo;
     case "save_seo_tasks":
-      return "Įrašau užduotis";
+      return tools.save_seo_tasks;
     default:
       return name;
   }
@@ -129,7 +136,9 @@ export function buildAgentMessageMetadata(
   events: AgentSseEvent[],
   summary: AgentRunMetadataSummary,
   toolInsights?: (string | undefined)[],
+  locale: Locale = "lt",
 ): AgentMessageMetadata {
+  const { agent } = getDictionary(locale);
   const steps: AgentRunStepRecord[] = [];
   let n = 0;
   const nextId = () => `step-${n++}`;
@@ -149,7 +158,7 @@ export function buildAgentMessageMetadata(
         });
         break;
       case "tool_start": {
-        const label = toolTitleLt(e.name);
+        const label = toolTitle(e.name, agent.tools);
         const sub =
           e.detail ??
           (e.url
@@ -191,8 +200,8 @@ export function buildAgentMessageMetadata(
           kind: "tool_result",
           at,
           phase: "tools",
-          title: toolTitleLt(e.name),
-          subtitle: e.ok ? "Baigta" : "Klaida ar dalinė nesėkmė",
+          title: toolTitle(e.name, agent.tools),
+          subtitle: e.ok ? agent.metadata.toolDone : agent.metadata.toolError,
           toolName: e.name,
           ok: e.ok,
           index: e.index,

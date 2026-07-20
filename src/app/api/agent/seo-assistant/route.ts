@@ -157,6 +157,7 @@ export async function POST(req: Request) {
               toolScansUsed: result.toolScansUsed,
             },
             result.toolInsights,
+            locale,
           );
 
           await prisma.$transaction([
