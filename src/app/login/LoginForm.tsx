@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useDict } from "@/components/i18n/LocaleProvider";
 
 type Props = {
   googleConfigured: boolean;
@@ -49,6 +50,7 @@ export function LoginForm({
   isProduction = false,
   contactEmail,
 }: Props) {
+  const dict = useDict();
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl")?.trim() || "/dashboard";
@@ -97,11 +99,11 @@ export function LoginForm({
     });
     if (res?.error) {
       setStatus("err");
-      setMessage("Nepavyko išsiųsti nuorodos. Patikrinkite SMTP nustatymus.");
+      setMessage(dict.login.sendErr);
       return;
     }
     setStatus("sent");
-    setMessage("Nuoroda išsiųsta — patikrinkite pašto dėžutę (ir spamą).");
+    setMessage(dict.login.sentMsg);
   }
 
   const hasAnyLogin = googleConfigured || emailConfigured || devLoginConfigured;
@@ -110,30 +112,28 @@ export function LoginForm({
     <div className="mt-8 space-y-6">
       {googleConfigured && emailConfigured ? (
         <div className="rounded-2xl border border-[color-mix(in_oklab,var(--color-electric)_22%,var(--color-border))] bg-[color-mix(in_oklab,black_28%,#0a1020)] p-6 shadow-[inset_0_1px_0_0_rgba(34,211,238,0.12),0_0_40px_-16px_rgba(34,211,238,0.25)] sm:p-8">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-electric)]">Prisijungimas</p>
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-electric)]">{dict.login.heading}</p>
           <button
             type="button"
             onClick={() => void onGoogle()}
             className="group mt-5 flex w-full min-h-11 items-center justify-center gap-3 rounded-xl border border-[color-mix(in_oklab,var(--color-electric)_45%,transparent)] bg-[color-mix(in_oklab,black_50%,transparent)] px-4 py-3.5 text-sm font-semibold text-zinc-100 shadow-[0_0_28px_-10px_rgba(34,211,238,0.4)] motion-safe:transition-[border-color,background-color,box-shadow] motion-safe:duration-200 hover:border-[var(--color-electric)] hover:bg-[color-mix(in_oklab,var(--color-electric)_14%,black)] hover:text-white hover:shadow-[0_0_36px_-8px_rgba(34,211,238,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]"
           >
             <GoogleIcon />
-            Prisijungti su Google
+            {dict.login.google}
           </button>
-          <p className="mt-3 text-xs leading-relaxed text-zinc-500">
-            Pirmą kartą — 3 dovanų kreditai. Jei turėjote anoniminę sesiją, jos kreditai taip pat bus perkelti.
-          </p>
+          <p className="mt-3 text-xs leading-relaxed text-zinc-500">{dict.login.googleHint}</p>
 
           <div className="relative my-8 flex items-center justify-center">
             <div className="absolute inset-x-0 top-1/2 h-px bg-[color-mix(in_oklab,var(--color-border)_90%,transparent)]" />
             <span className="relative bg-[color-mix(in_oklab,black_28%,#0a1020)] px-3 text-xs font-medium uppercase tracking-wide text-zinc-500">
-              arba el. paštu (prisijungimo nuoroda)
+              {dict.login.orEmail}
             </span>
           </div>
 
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
               <label htmlFor="login-email" className="text-sm font-medium text-zinc-300">
-                El. paštas
+                {dict.login.email}
               </label>
               <input
                 id="login-email"
@@ -143,7 +143,7 @@ export function LoginForm({
                 required
                 autoComplete="email"
                 className="site-input"
-                placeholder="jusu@pastas.lt"
+                placeholder="you@email.com"
               />
             </div>
             <button
@@ -151,7 +151,7 @@ export function LoginForm({
               disabled={status === "loading" || status === "sent"}
               className="site-btn-primary w-full min-h-11 rounded-xl px-4 py-2.5 text-sm disabled:opacity-50"
             >
-              {status === "loading" ? "Siunčiama…" : status === "sent" ? "Nuoroda išsiųsta" : "Gauti prisijungimo nuorodą"}
+              {status === "loading" ? dict.login.sending : status === "sent" ? dict.login.sent : dict.login.getLink}
             </button>
             {message ? <p className={`text-sm ${status === "err" ? "text-rose-400" : "text-[var(--color-lime)]"}`}>{message}</p> : null}
           </form>
@@ -160,18 +160,16 @@ export function LoginForm({
 
       {googleConfigured && !emailConfigured ? (
         <div className="rounded-2xl border border-[color-mix(in_oklab,var(--color-electric)_22%,var(--color-border))] bg-[color-mix(in_oklab,black_28%,#0a1020)] p-6 shadow-[inset_0_1px_0_0_rgba(34,211,238,0.12),0_0_40px_-16px_rgba(34,211,238,0.25)] sm:p-8">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-electric)]">Prisijungimas</p>
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-electric)]">{dict.login.heading}</p>
           <button
             type="button"
             onClick={() => void onGoogle()}
             className="group mt-5 flex w-full min-h-11 items-center justify-center gap-3 rounded-xl border border-[color-mix(in_oklab,var(--color-electric)_45%,transparent)] bg-[color-mix(in_oklab,black_50%,transparent)] px-4 py-3.5 text-sm font-semibold text-zinc-100 shadow-[0_0_28px_-10px_rgba(34,211,238,0.4)] motion-safe:transition-[border-color,background-color,box-shadow] motion-safe:duration-200 hover:border-[var(--color-electric)] hover:bg-[color-mix(in_oklab,var(--color-electric)_14%,black)] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]"
           >
             <GoogleIcon />
-            Prisijungti su Google
+            {dict.login.google}
           </button>
-          <p className="mt-3 text-xs leading-relaxed text-zinc-500">
-            Pirmą kartą — 3 dovanų kreditai. Jei turėjote anoniminę sesiją, jos kreditai taip pat bus perkelti.
-          </p>
+          <p className="mt-3 text-xs leading-relaxed text-zinc-500">{dict.login.googleHint}</p>
         </div>
       ) : null}
 
@@ -246,15 +244,15 @@ export function LoginForm({
       {!googleConfigured && !devLoginConfigured ? (
         isProduction ? (
           <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-zinc-300">
-            Prisijungimas laikinai nepasiekiamas. Rašykite{" "}
+            {dict.login.unavailable}{" "}
             {contactEmail ? (
               <a href={`mailto:${contactEmail}`} className="site-link-inline font-medium">
                 {contactEmail}
               </a>
             ) : (
-              "mums el. paštu"
+              "email"
             )}{" "}
-            — greitai atsakysime.
+            {dict.login.unavailableAfter}
           </div>
         ) : (
           <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
@@ -267,13 +265,10 @@ export function LoginForm({
       ) : null}
 
       {!googleConfigured && emailConfigured ? (
-        <form
-          onSubmit={onSubmit}
-          className="site-card space-y-4 p-6 sm:p-8"
-        >
+        <form onSubmit={onSubmit} className="site-card space-y-4 p-6 sm:p-8">
           <div>
             <label htmlFor="login-email-solo" className="text-sm font-medium text-zinc-300">
-              El. paštas (prisijungimo nuoroda)
+              {dict.login.email}
             </label>
             <input
               id="login-email-solo"
@@ -283,7 +278,7 @@ export function LoginForm({
               required
               autoComplete="email"
               className="mt-1 w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-sm text-white outline-none focus:border-[var(--color-electric)]"
-              placeholder="jusu@pastas.lt"
+              placeholder="you@email.com"
             />
           </div>
           <button
@@ -291,7 +286,7 @@ export function LoginForm({
             disabled={status === "loading" || status === "sent"}
             className="site-btn-primary w-full min-h-11 rounded-xl px-4 py-2.5 text-sm disabled:opacity-50"
           >
-            {status === "loading" ? "Siunčiama…" : status === "sent" ? "Nuoroda išsiųsta" : "Gauti prisijungimo nuorodą"}
+            {status === "loading" ? dict.login.sending : status === "sent" ? dict.login.sent : dict.login.getLink}
           </button>
           {message ? <p className={`text-sm ${status === "err" ? "text-rose-400" : "text-[var(--color-lime)]"}`}>{message}</p> : null}
         </form>
@@ -300,14 +295,12 @@ export function LoginForm({
       {!hasAnyLogin ? (
         isProduction ? (
           <p className="text-center text-sm text-zinc-400">
-            Jei problema kartojasi —{" "}
+            {dict.login.unavailable}{" "}
             {contactEmail ? (
               <a href={`mailto:${contactEmail}`} className="site-link-inline">
                 {contactEmail}
               </a>
-            ) : (
-              "susisiekite"
-            )}
+            ) : null}
             .
           </p>
         ) : (
@@ -320,7 +313,7 @@ export function LoginForm({
 
       <p className="text-center text-sm text-zinc-500">
         <Link href="/irankiai/seo-generatorius" className="site-link-inline">
-          ← Atgal į generatorių
+          {dict.login.backGen}
         </Link>
       </p>
     </div>

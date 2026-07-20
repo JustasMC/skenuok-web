@@ -4,30 +4,33 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AuthHeaderActions } from "@/components/AuthHeaderActions";
+import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
+import { useDict } from "@/components/i18n/LocaleProvider";
 import { siteConfig } from "@/lib/site-config";
 
-const primaryLinks = [
-  { href: "/svetainiu-kurimas", label: "Svetainių kūrimas" },
-  { href: "/pricing", label: "Kainos" },
-  { href: "/blog", label: "Blogas" },
-  { href: "/#kontaktai", label: "Kontaktai" },
-] as const;
-
-const toolLinks = [
-  { href: "/tools/scanner", label: "URL skaneris" },
-  { href: "/tools/course-scanner", label: "Kursų skaneris" },
-  { href: "/irankiai/seo-generatorius", label: "SEO generatorius" },
-] as const;
-
-const mobileExtraLinks = [
-  { href: "/#paslaugos", label: "Paslaugos" },
-  { href: "/#atvejai", label: "Atvejai" },
-  { href: "/#duk", label: "DUK" },
-  { href: "/#roi", label: "ROI skaičiuoklė" },
-] as const;
-
 export function SiteHeader() {
+  const dict = useDict();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const primaryLinks = [
+    { href: "/svetainiu-kurimas", label: dict.nav.webBuild },
+    { href: "/pricing", label: dict.nav.pricing },
+    { href: "/blog", label: dict.nav.blog },
+    { href: "/#kontaktai", label: dict.nav.contact },
+  ] as const;
+
+  const toolLinks = [
+    { href: "/tools/scanner", label: dict.nav.urlScanner },
+    { href: "/tools/course-scanner", label: dict.nav.courseScanner },
+    { href: "/irankiai/seo-generatorius", label: dict.nav.seoGenerator },
+  ] as const;
+
+  const mobileExtraLinks = [
+    { href: "/#paslaugos", label: dict.nav.services },
+    { href: "/#atvejai", label: dict.nav.cases },
+    { href: "/#duk", label: dict.nav.faq },
+    { href: "/#roi", label: dict.nav.roi },
+  ] as const;
 
   useEffect(() => {
     if (mobileOpen) {
@@ -67,16 +70,16 @@ export function SiteHeader() {
 
         <nav
           className="hidden items-center gap-x-1 text-sm xl:flex"
-          aria-label="Pagrindinė navigacija"
+          aria-label="Primary"
         >
           <div className="group relative">
             <button
               type="button"
               className="site-nav-link inline-flex items-center gap-1"
               aria-haspopup="true"
-              aria-label="Įrankiai meniu"
+              aria-label={dict.nav.tools}
             >
-              Įrankiai
+              {dict.nav.tools}
               <span aria-hidden className="text-xs text-zinc-400 group-hover:text-zinc-200">
                 ▾
               </span>
@@ -101,19 +104,20 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex min-w-0 shrink-0 items-center justify-end gap-1.5 sm:gap-2">
+          <LanguageSwitcher className="hidden sm:inline-flex" />
           <AuthHeaderActions />
           <Link
             href="/#kontaktai"
             className="hidden rounded-lg bg-[var(--color-electric)] px-3 py-1.5 text-sm font-semibold text-[#041014] motion-safe:transition-[filter,transform] motion-safe:duration-200 hover:brightness-110 lg:inline-flex"
           >
-            Užklausa
+            {dict.nav.inquiry}
           </Link>
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-zinc-200 motion-safe:transition-[border-color,transform] motion-safe:duration-200 hover:border-[var(--color-electric)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/60 active:scale-95 xl:hidden"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
-            aria-label={mobileOpen ? "Uždaryti meniu" : "Atidaryti meniu"}
+            aria-label={mobileOpen ? dict.nav.closeMenu : dict.nav.openMenu}
             onClick={() => setMobileOpen((o) => !o)}
           >
             {mobileOpen ? (
@@ -134,14 +138,17 @@ export function SiteHeader() {
           <button
             type="button"
             className="fixed inset-0 z-40 bg-zinc-950/70 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/45 xl:hidden"
-            aria-label="Uždaryti meniu"
+            aria-label={dict.nav.closeMenu}
             onClick={() => setMobileOpen(false)}
           />
           <div
             id="mobile-nav"
             className="relative z-50 max-h-[min(70vh,calc(100dvh-4rem))] overflow-y-auto overscroll-contain border-t border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-bg)_96%,#0a1620_4%)] shadow-lg shadow-black/40 xl:hidden"
           >
-            <nav className="site-shell-wide flex flex-col gap-0.5 py-4" aria-label="Mobilioji navigacija">
+            <nav className="site-shell-wide flex flex-col gap-0.5 py-4" aria-label="Mobile">
+              <div className="mb-2 px-3">
+                <LanguageSwitcher />
+              </div>
               {primaryLinks.map((l) => (
                 <Link
                   key={l.href}
@@ -153,7 +160,7 @@ export function SiteHeader() {
                 </Link>
               ))}
               <p className="mt-2 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Įrankiai
+                {dict.nav.tools}
               </p>
               {toolLinks.map((l) => (
                 <Link
@@ -166,7 +173,7 @@ export function SiteHeader() {
                 </Link>
               ))}
               <p className="mt-2 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Daugiau
+                {dict.nav.more}
               </p>
               {mobileExtraLinks.map((l) => (
                 <Link
@@ -183,7 +190,7 @@ export function SiteHeader() {
                 className="mt-3 rounded-xl bg-[var(--color-electric)] px-3 py-3 text-center text-sm font-semibold text-[#041014] lg:hidden"
                 onClick={() => setMobileOpen(false)}
               >
-                Užklausa
+                {dict.nav.inquiry}
               </Link>
             </nav>
           </div>

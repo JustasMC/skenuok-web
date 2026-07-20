@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { CookieConsent } from "@/components/CookieConsent";
+import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import { siteConfig } from "@/lib/site-config";
 import { getSoftwareServiceJsonLd } from "@/lib/jsonld";
+import { getRequestDictionary } from "@/lib/i18n/server";
 import { DEFAULT_OG_IMAGE_PATH, getDefaultOgImageUrl, getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
 import { Providers } from "@/app/providers";
 import "./globals.css";
@@ -29,8 +31,9 @@ export const viewport: Viewport = {
 
 export async function generateMetadata(): Promise<Metadata> {
   const siteUrl = getSiteOrigin();
-  const ogTitle = siteConfig.defaultTitle;
-  const ogDescription = siteConfig.defaultDescription;
+  const { locale, dict } = await getRequestDictionary();
+  const ogTitle = locale === "en" ? dict.meta.homeTitle : siteConfig.defaultTitle;
+  const ogDescription = locale === "en" ? dict.meta.homeDescription : siteConfig.defaultDescription;
   const ogKeywords = siteConfig.keywords;
   const ogImageUrl = getDefaultOgImageUrl();
   const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
@@ -47,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
     creator: siteConfig.name,
     openGraph: {
       type: "website",
-      locale: siteConfig.locale,
+      locale: locale === "en" ? "en_US" : siteConfig.locale,
       url: siteUrl,
       siteName: siteConfig.name,
       title: ogTitle,
@@ -85,28 +88,31 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { locale, dict } = await getRequestDictionary();
   const jsonLd = getSoftwareServiceJsonLd();
 
   return (
-    <html lang="lt" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-dvh font-sans">
         <a
           href="#main-content"
           className="pointer-events-none fixed left-4 top-0 z-[100] -translate-y-full rounded-lg bg-[var(--color-electric)] px-4 py-2 text-sm font-semibold text-[#041014] opacity-0 shadow-lg motion-safe:transition-[transform,opacity] motion-safe:duration-200 focus:pointer-events-auto focus:translate-y-4 focus:opacity-100 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#041014]"
         >
-          Peršokti prie turinio
+          {dict.skipToContent}
         </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Providers>{children}</Providers>
-        <CookieConsent />
+        <LocaleProvider locale={locale} dict={dict}>
+          <Providers>{children}</Providers>
+          <CookieConsent />
+        </LocaleProvider>
       </body>
     </html>
   );

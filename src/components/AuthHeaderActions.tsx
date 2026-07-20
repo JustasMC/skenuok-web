@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
+import { useLocale } from "@/components/i18n/LocaleProvider";
+import type { Dictionary } from "@/lib/i18n/get-dictionary";
 
 const btnOutline =
   "inline-flex min-h-9 items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-1.5 text-sm font-medium motion-safe:transition-[border-color,transform] motion-safe:duration-200";
@@ -10,7 +12,10 @@ const btnOutline =
 const creditPillBase =
   "inline-flex min-h-9 min-w-[5.5rem] max-w-[10.5rem] shrink-0 items-center justify-center truncate rounded-lg border px-2.5 py-1.5 text-center text-sm font-semibold motion-safe:transition-[border-color,box-shadow,color] motion-safe:duration-200";
 
-function formatLtCredits(n: number): string {
+function formatLtCredits(n: number, locale: "lt" | "en"): string {
+  if (locale === "en") {
+    return `${n} credit${n === 1 ? "" : "s"}`;
+  }
   const abs = Math.abs(n);
   const mod100 = abs % 100;
   const mod10 = abs % 10;
@@ -34,13 +39,14 @@ function CreditsSkeleton() {
   );
 }
 
-function modeTitle(mode: "user" | "session" | null): string {
-  if (mode === "user") return "Paskyros kreditų likutis";
-  if (mode === "session") return "Naršyklės sesijos kreditų likutis";
-  return "Kreditų likutis";
+function modeTitle(mode: "user" | "session" | null, dict: Dictionary): string {
+  if (mode === "user") return dict.auth.accountCredits;
+  if (mode === "session") return dict.auth.sessionCredits;
+  return dict.auth.creditsBalance;
 }
 
 export function AuthHeaderActions() {
+  const { locale, dict } = useLocale();
   const { data: session, status } = useSession();
   const [credits, setCredits] = useState<number | null>(null);
   const [mode, setMode] = useState<"user" | "session" | null>(null);
@@ -149,7 +155,7 @@ export function AuthHeaderActions() {
       return (
         <span
           className={`${creditPillBase} border-[var(--color-border)]/70 bg-zinc-900/40 text-zinc-300`}
-          title="Nepavyko užkrauti kreditų. Bandykite atnaujinti puslapį."
+          title={dict.auth.creditsFailed}
           role="status"
         >
           —
@@ -158,8 +164,8 @@ export function AuthHeaderActions() {
     }
 
     const isZero = credits <= 0;
-    const mt = modeTitle(mode);
-    const balanceLabel = formatLtCredits(credits);
+    const mt = modeTitle(mode, dict);
+    const balanceLabel = formatLtCredits(credits, locale);
     const href = "/pricing#prenumerata";
 
     if (isZero) {
@@ -167,10 +173,10 @@ export function AuthHeaderActions() {
         <Link
           href={href}
           className={`${creditPillBase} credit-zero-pulse border-rose-500/55 bg-rose-500/10 text-rose-100 hover:border-rose-400/80 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400/60`}
-          title={`${mt}. Kreditai baigėsi — pereikite į planus.`}
-          aria-label={`${mt}. Kreditai baigėsi. Atidaryti kainodarą.`}
+          title={`${mt}. ${dict.auth.creditsGone}`}
+          aria-label={`${mt}. ${dict.auth.creditsGone} ${dict.auth.openPricing}`}
         >
-          0 · Planai
+          {dict.auth.creditsGoneShort}
         </Link>
       );
     }
@@ -179,8 +185,8 @@ export function AuthHeaderActions() {
       <Link
         href={href}
         className={`${creditPillBase} border-[var(--color-border)] bg-[var(--color-surface)] text-zinc-100 hover:border-[var(--color-lime)]/50 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/55`}
-        title={`${mt}. Atidaryti kainodarą.`}
-        aria-label={`${mt}: ${balanceLabel}. Atidaryti planus.`}
+        title={`${mt}. ${dict.auth.openPricing}`}
+        aria-label={`${mt}: ${balanceLabel}. ${dict.auth.openPricing}`}
       >
         {balanceLabel}
       </Link>
@@ -204,7 +210,7 @@ export function AuthHeaderActions() {
           href="/dashboard"
           className={`${btnOutline} hidden shrink-0 text-zinc-200 hover:border-[var(--color-lime)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50 md:inline-flex`}
         >
-          Darbo vieta
+          {dict.auth.workspace}
         </Link>
         <div className="relative shrink-0" ref={menuRef}>
           <button
@@ -235,7 +241,7 @@ export function AuthHeaderActions() {
                 className="block px-3 py-2.5 text-sm text-zinc-200 hover:bg-white/5 hover:text-[var(--color-lime)] md:hidden"
                 onClick={() => setMenuOpen(false)}
               >
-                Darbo vieta
+                {dict.auth.workspace}
               </Link>
               <Link
                 href="/pricing#prenumerata"
@@ -243,7 +249,7 @@ export function AuthHeaderActions() {
                 className="block px-3 py-2.5 text-sm text-zinc-200 hover:bg-white/5 hover:text-[var(--color-lime)]"
                 onClick={() => setMenuOpen(false)}
               >
-                Planai ir kreditai
+                {dict.auth.plans}
               </Link>
               <button
                 type="button"
@@ -254,7 +260,7 @@ export function AuthHeaderActions() {
                   void signOut({ callbackUrl: "/" });
                 }}
               >
-                Atsijungti
+                {dict.auth.logout}
               </button>
             </div>
           ) : null}
@@ -270,7 +276,7 @@ export function AuthHeaderActions() {
         href="/login"
         className={`${btnOutline} shrink-0 text-zinc-100 hover:border-[var(--color-electric)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50 active:scale-[0.98]`}
       >
-        Prisijungti
+        {dict.auth.login}
       </Link>
     </div>
   );

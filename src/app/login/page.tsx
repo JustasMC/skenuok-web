@@ -4,38 +4,28 @@ import { isDevLoginConfigured } from "@/auth";
 import { PageIntro } from "@/components/PageIntro";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath, getSiteOrigin } from "@/lib/site-url";
 import { LoginForm } from "./LoginForm";
 
-/** Runtime env (AUTH_GOOGLE_*) — never bake at Docker build. */
 export const dynamic = "force-dynamic";
 
-const title = "Prisijungimas";
-const description =
-  "Prisijunkite su Google arba el. pašto nuoroda — 3 dovanų kreditai pirmą kartą, SEO generatorius ir darbo vieta.";
-
-function envSet(name: string): boolean {
-  return Boolean(process.env[name]?.trim());
-}
-
 export async function generateMetadata(): Promise<Metadata> {
+  const { dict, locale } = await getRequestDictionary();
+  const title = dict.login.title;
+  const description = dict.login.description;
   const canonical = getCanonicalPath("/login");
 
   return {
     title,
     description,
-    keywords: [
-      "prisijungimas",
-      "Google",
-      "prisijungimo nuoroda",
-      "saugus prisijungimas"
-    ],
+    keywords: ["login", "prisijungimas", "Google"],
     alternates: { canonical },
     robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
     openGraph: {
       type: "website",
-      locale: siteConfig.locale,
+      locale: locale === "en" ? "en_US" : siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
       title,
@@ -51,7 +41,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function LoginPage() {
+function envSet(name: string): boolean {
+  return Boolean(process.env[name]?.trim());
+}
+
+export default async function LoginPage() {
+  const { dict } = await getRequestDictionary();
   const googleConfigured = envSet("AUTH_GOOGLE_ID") && envSet("AUTH_GOOGLE_SECRET");
   const emailConfigured =
     envSet("EMAIL_SERVER_HOST") &&
@@ -68,17 +63,17 @@ export default function LoginPage() {
       <SiteHeader />
       <main id="main-content" className="site-shell-wide py-16 sm:py-24">
         <div className="mx-auto w-full max-w-lg">
-          <PageIntro variant="page" kicker="Paskyra" title={title}>
+          <PageIntro variant="page" kicker={dict.login.kicker} title={dict.login.title}>
             <p>
-              Naudokite Google paskyrą arba gaukite vienkartinę prisijungimo nuorodą el. paštu. Pirmą kartą —{" "}
-              <span className="font-medium text-zinc-200">3 dovanų kreditai</span> generatoriui.
+              {dict.login.leadBefore}{" "}
+              <span className="font-medium text-zinc-200">{dict.login.leadStrong}</span> {dict.login.leadAfter}
             </p>
           </PageIntro>
 
           <Suspense
             fallback={
               <div className="site-skeleton mt-8 min-h-[280px] rounded-2xl" role="status" aria-live="polite">
-                Kraunama…
+                …
               </div>
             }
           >

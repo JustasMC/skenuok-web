@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 import { cn } from "@/lib/cn";
 import { siteConfig } from "@/lib/site-config";
 
-const services = [
+const servicesLt = [
   "AI SEO auditas / Svetainių skaneris (bandomasis)",
   "Kursų kokybės skenavimas (PageSpeed + AI)",
   "SEO strategija ir turinio jungtis (nuo įrankio iki produkcijos)",
@@ -16,7 +17,21 @@ const services = [
   "Kita",
 ] as const;
 
+const servicesEn = [
+  "AI SEO audit / site scanner (trial)",
+  "Course quality scan (PageSpeed + AI)",
+  "SEO strategy & content bridge",
+  "Web development (Next.js / Rust)",
+  "Business logic & AI automation",
+  "Data analytics (SQL / Power BI / GA4)",
+  "Critical systems & real-time data",
+  "Other",
+] as const;
+
 export function ContactForm() {
+  const dict = useDict();
+  const { locale } = useLocale();
+  const services = locale === "en" ? servicesEn : servicesLt;
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "err">("idle");
   const [message, setMessage] = useState("");
 
@@ -52,27 +67,48 @@ export function ContactForm() {
         const sec = body.retryAfterSec;
         setMessage(
           body.error ??
-            (typeof sec === "number" ? `Per daug bandymų. Bandykite po ${sec} s.` : "Per daug bandymų. Bandykite vėliau."),
+            (typeof sec === "number"
+              ? locale === "en"
+                ? `Too many attempts. Try again in ${sec}s.`
+                : `Per daug bandymų. Bandykite po ${sec} s.`
+              : locale === "en"
+                ? "Too many attempts. Try later."
+                : "Per daug bandymų. Bandykite vėliau."),
         );
         return;
       }
       if (!res.ok) {
         setStatus("err");
-        setMessage(body.error ?? "Nepavyko išsiųsti. Patikrinkite laukus arba bandykite vėliau.");
+        setMessage(
+          body.error ??
+            (locale === "en"
+              ? "Could not send. Check the fields or try again later."
+              : "Nepavyko išsiųsti. Patikrinkite laukus arba bandykite vėliau."),
+        );
         return;
       }
       setStatus("ok");
       if (body.emailSent === false) {
         setMessage(
-          `Žinutė išsaugota, bet el. laiškas į ${body.emailTo ?? siteConfig.contactEmail} nenuėjo. ${body.emailDetail ?? "Patikrinkite Resend nustatymus."}`,
+          locale === "en"
+            ? `Message saved, but email to ${body.emailTo ?? siteConfig.contactEmail} failed. ${body.emailDetail ?? "Check Resend settings."}`
+            : `Žinutė išsaugota, bet el. laiškas į ${body.emailTo ?? siteConfig.contactEmail} nenuėjo. ${body.emailDetail ?? "Patikrinkite Resend nustatymus."}`,
         );
       } else {
-        setMessage(`Žinutė gauta. Pranešimas išsiųstas į ${body.emailTo ?? siteConfig.contactEmail}.`);
+        setMessage(
+          locale === "en"
+            ? `Message received. Notification sent to ${body.emailTo ?? siteConfig.contactEmail}.`
+            : `Žinutė gauta. Pranešimas išsiųstas į ${body.emailTo ?? siteConfig.contactEmail}.`,
+        );
       }
       form.reset();
     } catch {
       setStatus("err");
-      setMessage(`Nepavyko išsiųsti. Rašykite tiesiogiai: ${siteConfig.contactEmail}`);
+      setMessage(
+        locale === "en"
+          ? `Could not send. Email us directly: ${siteConfig.contactEmail}`
+          : `Nepavyko išsiųsti. Rašykite tiesiogiai: ${siteConfig.contactEmail}`,
+      );
     }
   }
 
@@ -82,22 +118,14 @@ export function ContactForm() {
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20">
           <div className="space-y-5 sm:space-y-6">
             <SectionHeader
-              eyebrow="Kontaktai"
-              title="Pradėkime nuo trumpo pokalbio"
-              description="Užpildykite formą — įrašas saugomas saugiai, pranešimą gaunu jums patogiu kanalu (pvz. Discord arba Telegram), kai tik peržiūriu užklausą."
+              eyebrow={dict.contact.title}
+              title={locale === "en" ? "Let's start with a short chat" : "Pradėkime nuo trumpo pokalbio"}
+              description={dict.contact.lead}
             />
             <ul className="space-y-3 text-sm leading-relaxed text-zinc-300">
               <li className="flex gap-3">
                 <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-electric)]" aria-hidden />
-                <span>Atsakysiu per 1–2 darbo dienas su aiškiu kitu žingsniu.</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-electric)]" aria-hidden />
-                <span>Galime pradėti nuo nemokamo URL skenerio arba trumpos konsultacijos.</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-electric)]" aria-hidden />
-                <span>Nerašykite slaptažodžių ar jautrių duomenų į žinutės lauką.</span>
+                <span>{dict.contact.hint}</span>
               </li>
             </ul>
           </div>
@@ -118,13 +146,17 @@ export function ContactForm() {
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Vardas" name="name" required autoComplete="name" />
-              <Field label="El. paštas" name="email" type="email" required autoComplete="email" />
+              <Field label={dict.contact.name} name="name" required autoComplete="name" />
+              <Field label={dict.contact.email} name="email" type="email" required autoComplete="email" />
             </div>
-            <Field label="Įmonė (nebūtina)" name="company" autoComplete="organization-name" />
+            <Field
+              label={locale === "en" ? "Company (optional)" : "Įmonė (nebūtina)"}
+              name="company"
+              autoComplete="organization-name"
+            />
             <div>
               <label className="block text-sm font-medium text-zinc-300" htmlFor="service">
-                Domina
+                {dict.contact.service}
               </label>
               <select
                 id="service"
@@ -142,7 +174,7 @@ export function ContactForm() {
             </div>
             <div>
               <label className="block text-sm font-medium text-zinc-300" htmlFor="message">
-                Žinutė
+                {dict.contact.message}
               </label>
               <textarea
                 id="message"
@@ -151,7 +183,9 @@ export function ContactForm() {
                 rows={5}
                 autoComplete="off"
                 className="site-input min-h-[8.5rem] resize-y"
-                placeholder="Trumpai apie projektą, terminus ir KPI..."
+                placeholder={
+                  locale === "en" ? "Briefly about the project, timeline and KPIs…" : "Trumpai apie projektą, terminus ir KPI..."
+                }
               />
             </div>
 
@@ -172,7 +206,7 @@ export function ContactForm() {
               disabled={status === "loading"}
               className="site-btn-lime min-h-11 transition duration-300 ease-in-out hover:brightness-110"
             >
-              {status === "loading" ? "Siunčiama…" : "Siųsti"}
+              {status === "loading" ? dict.contact.sending : dict.contact.submit}
             </button>
           </form>
         </div>

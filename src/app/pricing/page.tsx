@@ -6,30 +6,25 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { cn } from "@/lib/cn";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
-const title = "Kainodara — SEO įrankiai ir kreditų planai";
-const description =
-  "Skenuok.com kainodara: nemokamas URL skaneris, 3 dovanų kreditai po registracijos ir turinio planai verslui.";
-
 export async function generateMetadata(): Promise<Metadata> {
+  const { dict, locale } = await getRequestDictionary();
+  const title = dict.pricing.title;
+  const description = dict.pricing.description;
   const canonical = getCanonicalPath("/pricing");
 
   return {
     title,
     description,
-    keywords: [
-      "kainodara",
-      "SEO URL skaneris",
-      "turinio planai",
-      "web paslaugos"
-    ],
+    keywords: ["pricing", "kainodara", "SEO", "credits"],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
       type: "website",
-      locale: siteConfig.locale,
+      locale: locale === "en" ? "en_US" : siteConfig.locale,
       url: canonical,
       siteName: siteConfig.name,
       title,
@@ -45,51 +40,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const plans = [
-  {
-    slug: "free" as const,
-    name: "Nemokamas",
-    price: "0 €",
-    blurb: "URL skaneris be kreditų + 3 dovanų kreditai po registracijos.",
-    features: [
-      "URL skaneris (be kreditų limito)",
-      "Lighthouse balai ir bazinės įžvalgos",
-      "3 kreditai po registracijos",
-      "El. pašto kontaktas",
-    ],
-    cta: { href: "/tools/scanner", label: "Atidaryti skanerį" },
-    highlight: false,
-  },
-  {
-    slug: "starter" as const,
-    name: "Pradedantysis",
-    price: "5 € / mėn.",
-    blurb: "Pradinis planas smulkiam SEO turinio tempui.",
-    features: ["15 kreditų per mėnesį", "SEO HTML turinys pagal raktinį žodį", "Istorija ir eksportas", "El. pašto pagalba"],
-    cta: { href: "/irankiai/seo-generatorius", label: "Atidaryti generatorių" },
-    highlight: false,
-  },
-  {
-    slug: "pro" as const,
-    name: "Profesionalus",
-    price: "20 € / mėn.",
-    blurb: "Turinio generatorius su kreditais — mažoms komandoms.",
-    features: ["80 kreditų per mėnesį", "SEO HTML turinys pagal raktinį žodį", "Istorija ir eksportas", "Prioritetinis el. paštas"],
-    cta: { href: "/irankiai/seo-generatorius", label: "Atidaryti generatorių" },
-    highlight: true,
-    badge: "Populiariausias",
-  },
-  {
-    slug: "business" as const,
-    name: "Verslui",
-    price: "Pagal sutartį",
-    blurb: "API integracijos, auditas ir SLA.",
-    features: ["Dedikuotas onboarding", "Žodynas ir tonas pagal prekės ženklą", "Integracijos (CMS, Shopify)", "SLA ir stebėsena"],
-    cta: { href: "/#kontaktai", label: "Susisiekite" },
-    highlight: false,
-  },
-];
-
 const ctaPrimary =
   "site-btn-primary inline-flex w-full min-h-11 justify-center rounded-xl px-4 py-2.5 text-center text-sm font-semibold";
 
@@ -101,81 +51,119 @@ function hasConfiguredPrice5(): boolean {
   return id.startsWith("price_");
 }
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const { dict } = await getRequestDictionary();
   const showPack5 = hasConfiguredPrice5();
+  const p = dict.pricing;
+
+  const plans = [
+    {
+      slug: "free" as const,
+      name: p.freeName,
+      price: p.freePrice,
+      blurb: p.freeBlurb,
+      features: [p.freeF1, p.freeF2, p.freeF3, p.freeF4],
+      cta: { href: "/tools/scanner", label: p.freeCta },
+      highlight: false,
+    },
+    {
+      slug: "starter" as const,
+      name: p.starterName,
+      price: p.starterPrice,
+      blurb: p.starterBlurb,
+      features: [p.starterF1, p.starterF2, p.starterF3, p.starterF4],
+      cta: { href: "/irankiai/seo-generatorius", label: p.starterCta },
+      highlight: false,
+    },
+    {
+      slug: "pro" as const,
+      name: p.proName,
+      price: p.proPrice,
+      blurb: p.proBlurb,
+      features: [p.proF1, p.proF2, p.proF3, p.proF4],
+      cta: { href: "/irankiai/seo-generatorius", label: p.proCta },
+      highlight: true,
+      badge: p.proBadge,
+    },
+    {
+      slug: "business" as const,
+      name: p.bizName,
+      price: p.bizPrice,
+      blurb: p.bizBlurb,
+      features: [p.bizF1, p.bizF2, p.bizF3, p.bizF4],
+      cta: { href: "/#kontaktai", label: p.bizCta },
+      highlight: false,
+    },
+  ];
 
   return (
     <>
       <SiteHeader />
       <main id="main-content" className="site-shell py-16 sm:py-20">
-        <PageIntro variant="page" kicker="Planai" title={title} className="mb-12 sm:mb-14">
-          <p>
-            Skaneris jau veikia kaip nemokamas kabliukas. Mokamas generatorius kuria sutaupymą:{" "}
-            <span className="font-medium text-zinc-200">~20 valandų per mėnesį</span> su AI pagalba, o ne rankiniu kopiju
-            rašymu.
-          </p>
+        <PageIntro variant="page" kicker={p.kicker} title={p.title} className="mb-12 sm:mb-14">
+          <p>{p.intro}</p>
           <p className="mt-3 text-sm text-zinc-400">
-            <span className="font-medium text-zinc-300">Kaip veikia kreditai:</span> 1 kreditas = 1 SEO straipsnis;
-            kursų skenavimas — 1–2 kreditai; URL skaneris — visada 0 kreditų.
+            <span className="font-medium text-zinc-300">{p.creditsHow}</span>
           </p>
         </PageIntro>
 
         <div id="prenumerata" className="grid scroll-mt-24 gap-6 lg:grid-cols-4">
-          {plans.map((p) => (
+          {plans.map((plan) => (
             <Card
-              key={p.slug}
+              key={plan.slug}
               className={cn(
-                p.highlight && "border-[color-mix(in_oklab,var(--color-electric)_55%,var(--color-border))] shadow-[var(--shadow-glow)]",
+                plan.highlight &&
+                  "border-[color-mix(in_oklab,var(--color-electric)_55%,var(--color-border))] shadow-[var(--shadow-glow)]",
               )}
             >
               <CardHeader>
-                {"badge" in p ? (
-                  <span className="mb-2 inline-flex w-fit rounded-full border border-[var(--color-electric)]/45 bg-[color-mix(in_oklab,var(--color-electric)_12%,var(--color-surface))] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--color-electric)]">
-                    {p.badge}
+                {"badge" in plan && plan.badge ? (
+                  <span className="mb-2 inline-flex w-fit rounded-full border border-[var(--color-electric)]/45 bg-[color-mix(in_oklab,var(--color-electric)_12%,var(--color-surface))] px-2.5 py-0.5 text-xs font-semibold text-[var(--color-electric)]">
+                    {plan.badge}
                   </span>
                 ) : null}
-                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-electric)]">{p.name}</p>
-                <CardTitle className="text-2xl">{p.price}</CardTitle>
-                <CardDescription>{p.blurb}</CardDescription>
+                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-electric)]">{plan.name}</p>
+                <CardTitle className="text-2xl">{plan.price}</CardTitle>
+                <CardDescription>{plan.blurb}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <ul className="space-y-2.5 text-sm text-zinc-300">
-                  {p.features.map((f) => (
+                  {plan.features.map((f) => (
                     <li key={f} className="flex gap-2">
                       <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-lime)]" aria-hidden />
                       {f}
                     </li>
                   ))}
                 </ul>
-                {p.slug === "starter" ? (
+                {plan.slug === "starter" ? (
                   <div className="space-y-3">
                     <StripeCheckoutButton priceKey="5" className={ctaPrimary} disabled={!showPack5}>
-                      {showPack5 ? "Užsisakyti — 5 €" : "5 € planas neaktyvus"}
+                      {showPack5 ? p.buy5 : p.buy5Off}
                     </StripeCheckoutButton>
-                    <Link href={p.cta.href} className={ctaSecondary}>
-                      {p.cta.label}
+                    <Link href={plan.cta.href} className={ctaSecondary}>
+                      {plan.cta.label}
                     </Link>
                   </div>
-                ) : p.slug === "pro" ? (
+                ) : plan.slug === "pro" ? (
                   <div className="space-y-3">
                     <StripeCheckoutButton priceKey="20" className={ctaPrimary}>
-                      Užsisakyti — 20 €
+                      {p.buy20}
                     </StripeCheckoutButton>
-                    <Link href={p.cta.href} className={ctaSecondary}>
-                      {p.cta.label}
+                    <Link href={plan.cta.href} className={ctaSecondary}>
+                      {plan.cta.label}
                     </Link>
                   </div>
                 ) : (
                   <Link
-                    href={p.cta.href}
+                    href={plan.cta.href}
                     className={cn(
                       "inline-flex w-full min-h-11 items-center justify-center rounded-xl px-4 py-2.5 text-center text-sm font-semibold motion-safe:transition-colors motion-safe:duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50",
-                      p.highlight
+                      plan.highlight
                         ? "site-btn-primary"
                         : "border border-[var(--color-border)] bg-[var(--color-surface)] text-white hover:border-[var(--color-lime)]",
                     )}
                   >
-                    {p.cta.label}
+                    {plan.cta.label}
                   </Link>
                 )}
               </CardContent>

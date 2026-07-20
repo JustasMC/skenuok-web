@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { useDict } from "@/components/i18n/LocaleProvider";
 
 const STORAGE_KEY = "skenuok_cookie_consent";
 
@@ -16,6 +17,7 @@ function readConsent(): Consent {
 }
 
 export function CookieConsent() {
+  const dict = useDict();
   const [consent, setConsent] = useState<Consent>(null);
   const [visible, setVisible] = useState(false);
 
@@ -49,13 +51,12 @@ export function CookieConsent() {
           <div className="site-shell-wide flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl space-y-2">
               <p id="cookie-consent-title" className="text-sm font-semibold text-white">
-                Slapukai ir privatumas
+                {dict.cookies.title}
               </p>
               <p id="cookie-consent-desc" className="text-sm leading-relaxed text-zinc-400">
-                Naudojame būtinus slapukus svetainės veikimui. Analitikos slapukus (Google Analytics) įjungiame tik
-                gavę jūsų sutikimą. Daugiau —{" "}
+                {dict.cookies.body}{" "}
                 <Link href="/privacy" className="site-link-inline">
-                  privatumo politikoje
+                  {dict.cookies.privacyLink}
                 </Link>
                 .
               </p>
@@ -66,10 +67,10 @@ export function CookieConsent() {
                 onClick={() => save("essential")}
                 className="site-btn-secondary min-h-10 px-4 text-sm"
               >
-                Tik būtini
+                {dict.cookies.essential}
               </button>
               <button type="button" onClick={() => save("all")} className="site-btn-primary min-h-10 px-4 text-sm">
-                Sutinku su visais
+                {dict.cookies.acceptAll}
               </button>
             </div>
           </div>

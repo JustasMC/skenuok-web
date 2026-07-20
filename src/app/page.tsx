@@ -11,6 +11,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { TechStack } from "@/components/TechStack";
 import { WhyUs } from "@/components/WhyUs";
 import { homePageDescription, homePageKeywords, homePageTitle } from "@/lib/home-seo";
+import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
 import { DEFAULT_OG_IMAGE_PATH, getDefaultOgImageUrl, getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
 
@@ -42,10 +43,17 @@ const ogImageUrl = getDefaultOgImageUrl();
 export async function generateMetadata(): Promise<Metadata> {
   const siteUrl = getSiteOrigin();
   const base = getMetadataBaseUrl();
+  const { locale, dict } = await getRequestDictionary();
 
-  // Static constants for build-time reliability (Lighthouse crawlers)
-  const title = homePageTitle || "Svetainių kūrimas, URL skeneris ir AI SEO auditas | Svetainių analizė — Skenuok.com";
-  const description = homePageDescription || "Svetainių kūrimas ir SEO auditas su Next.js: greitos AI svetainės su techniškai tvarkingu kodu, skirtos matomumui bei konversijoms Lietuvoje.";
+  const title =
+    locale === "en"
+      ? dict.meta.homeTitle
+      : homePageTitle || "Svetainių kūrimas, URL skeneris ir AI SEO auditas | Svetainių analizė — Skenuok.com";
+  const description =
+    locale === "en"
+      ? dict.meta.homeDescription
+      : homePageDescription ||
+        "Svetainių kūrimas ir SEO auditas su Next.js: greitos AI svetainės su techniškai tvarkingu kodu, skirtos matomumui bei konversijoms Lietuvoje.";
   const keywords = Array.from(new Set([...siteConfig.keywords, ...homePageKeywords])).filter(Boolean);
 
   return {
@@ -61,7 +69,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: { canonical: siteUrl },
     openGraph: {
       type: "website",
-      locale: siteConfig.locale,
+      locale: locale === "en" ? "en_US" : siteConfig.locale,
       url: siteUrl,
       siteName: siteConfig.name,
       title,

@@ -1,40 +1,42 @@
+"use client";
+
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-
-const cards = [
-  {
-    title: "AI SEO auditas",
-    kicker: "Nemokamas · 0 kreditų",
-    body:
-      "Pradėkite nuo greitos Svetainių analizės: Lighthouse, techninė ir prieinamumo diagnostika, AI rekomendacijos lietuvių kalba. Tinka, kai reikia aiškios SEO strategijos techniniam sluoksniui.",
-    href: "/tools/scanner",
-    cta: "Atidaryti URL skanerį",
-  },
-  {
-    title: "Kursų kokybės skenavimas",
-    kicker: "Nuo 1 kredito",
-    body:
-      "Jei parduodate mokymus — ne tik metrikas: papildomai vertiname pasiūlos turinį ir atitikimą pažadams. Reikia prisijungimo; skenavimas kainuoja 1–2 kreditus.",
-    href: "/tools/course-scanner",
-    cta: "Bandyti kursų skanerį",
-  },
-  {
-    title: "Svetainių kūrimas",
-    kicker: "Nuo 390 €",
-    body: "Nuo idėjos iki pilnai SEO optimizuoto Next.js sprendimo su AI integracijomis. Orientacinės kainos — skaičiuoklėje.",
-    href: "/svetainiu-kurimas",
-    cta: "Peržiūrėti paslaugą",
-  },
-] as const;
+import { useDict } from "@/components/i18n/LocaleProvider";
 
 export function HomePrimaryServices() {
+  const dict = useDict();
+  const cards = [
+    {
+      title: dict.homeServices.card1Title,
+      kicker: dict.homeServices.card1Kicker,
+      body: dict.homeServices.card1Body,
+      href: "/tools/scanner",
+      cta: dict.homeServices.card1Cta,
+    },
+    {
+      title: dict.homeServices.card2Title,
+      kicker: dict.homeServices.card2Kicker,
+      body: dict.homeServices.card2Body,
+      href: "/tools/course-scanner",
+      cta: dict.homeServices.card2Cta,
+    },
+    {
+      title: dict.homeServices.card3Title,
+      kicker: dict.homeServices.card3Kicker,
+      body: dict.homeServices.card3Body,
+      href: "/svetainiu-kurimas",
+      cta: dict.homeServices.card3Cta,
+    },
+  ] as const;
+
   return (
     <section id="paslaugos" className="site-section">
       <div className="site-shell">
         <SectionHeader
-          eyebrow="Paslaugos"
-          title="Ką galite gauti pirmu žingsniu"
-          description="Du aiškūs įrankiai: AI SEO auditas (Svetainių analizė) ir Kursų kokybės skenavimas. Toliau — plėtra su SEO strategija, turinio generatoriumi ar individualiu projektu; žr. modulius ir kontaktus toliau puslapyje."
+          eyebrow={dict.homeServices.eyebrow}
+          title={dict.homeServices.title}
+          description={dict.homeServices.description}
         />
 
         <ul className="mt-10 grid list-none gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 min-h-[20rem]" role="list">
@@ -58,17 +60,17 @@ export function HomePrimaryServices() {
         </ul>
 
         <p className="mt-10 text-center text-sm text-zinc-300 sm:mt-12">
-          Priedas verslui: lietuviškas{" "}
+          {dict.homeServices.footerBefore}{" "}
           <Link className="site-link-inline font-medium" href="/irankiai/seo-generatorius">
-            SEO turinio generatorius
+            {dict.homeServices.footerGen}
           </Link>{" "}
-          ir visos{" "}
+          {dict.homeServices.footerAnd}{" "}
           <Link className="site-link-inline font-medium" href="/pricing">
-            kainodaros
+            {dict.homeServices.footerPricing}
           </Link>{" "}
-          plano parinktys. Individualiam projektui —{" "}
+          {dict.homeServices.footerPlans}{" "}
           <a className="site-link-inline font-medium" href="#kontaktai">
-            kontaktai
+            {dict.homeServices.footerContact}
           </a>
           .
         </p>
