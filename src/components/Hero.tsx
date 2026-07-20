@@ -18,7 +18,7 @@ export function Hero() {
       <div className="site-shell relative flex flex-col gap-10 pb-16 pt-14 sm:gap-12 sm:pb-24 sm:pt-20 md:pb-28 lg:flex-row lg:items-stretch lg:justify-between lg:gap-16 lg:pt-24">
         <div className="site-enter flex max-w-2xl flex-col justify-center space-y-7 sm:space-y-8">
           <div className="space-y-3 sm:space-y-4">
-            <p className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-surface)_92%,transparent)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-electric)] shadow-sm shadow-black/20 backdrop-blur-sm">
+            <p className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-surface)_92%,transparent)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)] shadow-sm shadow-black/20 backdrop-blur-sm">
               Skenuok.com · AI SEO platforma
             </p>
             <h1 className="text-balance text-[1.65rem] font-semibold leading-[1.12] tracking-tight text-white min-[400px]:text-4xl sm:text-5xl sm:leading-[1.08] lg:text-[3.25rem] lg:leading-[1.06]">
@@ -97,8 +97,8 @@ export function Hero() {
               key={item.k}
               className="site-card-interactive flex flex-col justify-between rounded-xl p-3.5 backdrop-blur-sm sm:p-4"
             >
-              <dt className="text-[10px] font-semibold uppercase tracking-wide text-zinc-300">{item.k}</dt>
-              <dd className="mt-2 text-xs font-medium leading-snug text-[var(--color-lime)] sm:text-sm">{item.v}</dd>
+              <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-400">{item.k}</dt>
+              <dd className="mt-2 text-sm font-medium leading-snug text-[var(--color-lime)]">{item.v}</dd>
             </div>
           ))}
         </dl>

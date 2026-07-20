@@ -24,7 +24,7 @@ const modules = [
 ] as const;
 
 const badgeClass =
-  "inline-block rounded-md border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_75%,var(--color-surface-2))] px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wide text-zinc-300";
+  "inline-block rounded-md border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_75%,var(--color-surface-2))] px-2 py-0.5 font-mono text-xs font-medium uppercase tracking-wide text-zinc-300";
 
 export function Services() {
   return (
@@ -45,7 +45,7 @@ export function Services() {
               <span className="pointer-events-none absolute -right-2 -top-4 select-none font-mono text-7xl font-bold text-[color-mix(in_oklab,var(--color-border)_65%,transparent)] sm:text-8xl">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span className="relative inline-flex rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-electric)]">
+              <span className="relative inline-flex rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-[var(--color-electric)]">
                 {m.tag}
               </span>
               <h3 className="relative mt-5 text-xl font-semibold leading-snug tracking-tight text-white sm:text-2xl">{m.title}</h3>

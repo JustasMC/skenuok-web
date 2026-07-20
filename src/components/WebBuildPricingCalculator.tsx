@@ -52,7 +52,7 @@ export function WebBuildPricingCalculator() {
   return (
     <section className="site-card-interactive overflow-hidden p-6 sm:p-8">
       <div className="space-y-2">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-electric)]">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">
           Greita apžvalga
         </p>
         <h3 className="text-2xl font-semibold tracking-tight text-white">Preliminari projekto apimtis</h3>

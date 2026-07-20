@@ -21,7 +21,7 @@ export function PageIntro({ kicker, title, children, variant = "tool", className
         className,
       )}
     >
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--color-electric)]">{kicker}</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">{kicker}</p>
       <h1 className="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">{title}</h1>
       <div
         className={cn(

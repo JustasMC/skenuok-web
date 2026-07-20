@@ -20,7 +20,7 @@ export function SectionHeader({ eyebrow, title, description, className = "", wid
   return (
     <div className={cn("space-y-3 sm:space-y-4", wide ? "max-w-3xl" : "max-w-2xl", className)}>
       {eyebrow ? (
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--color-electric)]">{eyebrow}</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">{eyebrow}</p>
       ) : null}
       <h2
         id={id}

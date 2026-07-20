@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 
 const btnOutline =
-  "rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium motion-safe:transition-[border-color,transform] motion-safe:duration-200 sm:text-sm";
+  "inline-flex min-h-9 items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-1.5 text-sm font-medium motion-safe:transition-[border-color,transform] motion-safe:duration-200";
 
 const creditPillBase =
-  "inline-flex min-h-8 min-w-[7.25rem] max-w-[14rem] shrink-0 items-center justify-center truncate rounded-lg border px-2.5 py-1.5 text-center text-xs font-semibold motion-safe:transition-[border-color,box-shadow,color] motion-safe:duration-200 sm:min-h-9 sm:px-3 sm:text-sm";
+  "inline-flex min-h-9 min-w-[5.5rem] max-w-[10.5rem] shrink-0 items-center justify-center truncate rounded-lg border px-2.5 py-1.5 text-center text-sm font-semibold motion-safe:transition-[border-color,box-shadow,color] motion-safe:duration-200";
 
 function formatLtCredits(n: number): string {
   const abs = Math.abs(n);
@@ -45,9 +45,11 @@ export function AuthHeaderActions() {
   const [credits, setCredits] = useState<number | null>(null);
   const [mode, setMode] = useState<"user" | "session" | null>(null);
   const [creditsReady, setCreditsReady] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuId = useId();
+  const menuRef = useRef<HTMLDivElement>(null);
   const userKeyRef = useRef<string>("");
   const pollRef = useRef<number | null>(null);
-  /** Browser timer id; avoid `ReturnType<typeof setTimeout>` (conflicts with NodeJS.Timeout under @types/node). */
   const focusTimerRef = useRef<number | null>(null);
 
   const loadCredits = useCallback(async (signal?: AbortSignal) => {
@@ -122,6 +124,24 @@ export function AuthHeaderActions() {
     };
   }, [status, session?.user?.id, loadCredits]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onDoc(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setMenuOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
   function renderCreditsPill() {
     if (!creditsReady) return <CreditsSkeleton />;
 
@@ -148,69 +168,103 @@ export function AuthHeaderActions() {
           href={href}
           className={`${creditPillBase} credit-zero-pulse border-rose-500/55 bg-rose-500/10 text-rose-100 hover:border-rose-400/80 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400/60`}
           title={`${mt}. Kreditai baigėsi — pereikite į planus.`}
-          aria-label={`${mt}. Kreditai baigėsi. Atidaryti kainodarą ir prenumeratos planus.`}
+          aria-label={`${mt}. Kreditai baigėsi. Atidaryti kainodarą.`}
         >
-          0 kreditų · Pildyti planą
+          0 · Planai
         </Link>
       );
     }
 
     return (
-      <div className="flex min-w-0 max-w-full items-center gap-1.5 sm:gap-2">
-        <span
-          className={`${creditPillBase} cursor-default border-[var(--color-border)] bg-[var(--color-surface)] text-zinc-100`}
-          title={`${mt}. Pakeisti planą galite per nuorodą „Planai“ dešinėje.`}
-          role="status"
-          aria-label={`${mt}: ${balanceLabel}`}
-        >
-          {balanceLabel}
-        </span>
-        <Link
-          href={href}
-          className="shrink-0 text-[11px] font-semibold text-zinc-300 underline decoration-zinc-400/55 underline-offset-[3px] motion-safe:transition-colors motion-safe:duration-200 hover:text-[var(--color-lime)] hover:decoration-[color-mix(in_oklab,var(--color-lime)_45%,transparent)] focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/55 sm:text-xs"
-          aria-label="Kainodara ir prenumeratos planai"
-        >
-          Planai
-        </Link>
-      </div>
+      <Link
+        href={href}
+        className={`${creditPillBase} border-[var(--color-border)] bg-[var(--color-surface)] text-zinc-100 hover:border-[var(--color-lime)]/50 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/55`}
+        title={`${mt}. Atidaryti kainodarą.`}
+        aria-label={`${mt}: ${balanceLabel}. Atidaryti planus.`}
+      >
+        {balanceLabel}
+      </Link>
     );
   }
 
   if (status === "loading") {
     return (
-      <div className="flex items-center gap-2 sm:gap-3" aria-busy="true">
+      <div className="flex items-center gap-2" aria-busy="true">
         <CreditsSkeleton />
-        <span className="text-xs text-zinc-300">…</span>
       </div>
     );
   }
 
   if (session?.user) {
+    const email = session.user.email ?? "Paskyra";
     return (
-      <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+      <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
         {renderCreditsPill()}
         <Link
           href="/dashboard"
-          className={`${btnOutline} shrink-0 text-zinc-300 hover:border-[var(--color-lime)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50`}
+          className={`${btnOutline} hidden shrink-0 text-zinc-200 hover:border-[var(--color-lime)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50 md:inline-flex`}
         >
           Darbo vieta
         </Link>
-        <span className="hidden max-w-[10rem] shrink truncate text-xs text-zinc-300 sm:inline" title={session.user.email ?? ""}>
-          {session.user.email}
-        </span>
-        <button
-          type="button"
-          onClick={() => void signOut({ callbackUrl: "/" })}
-          className={`${btnOutline} shrink-0 text-zinc-200 hover:border-rose-500/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500/50 active:scale-[0.98]`}
-        >
-          Atsijungti
-        </button>
+        <div className="relative shrink-0" ref={menuRef}>
+          <button
+            type="button"
+            className={`${btnOutline} max-w-[9.5rem] gap-1.5 truncate text-zinc-200 hover:border-[var(--color-electric)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/50`}
+            aria-expanded={menuOpen}
+            aria-controls={menuId}
+            aria-haspopup="menu"
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span className="truncate">{email.split("@")[0]}</span>
+            <span aria-hidden className="text-zinc-500">
+              ▾
+            </span>
+          </button>
+          {menuOpen ? (
+            <div
+              id={menuId}
+              role="menu"
+              className="absolute right-0 top-full z-50 mt-1.5 w-56 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] py-1 shadow-xl shadow-black/40"
+            >
+              <p className="truncate border-b border-[var(--color-border)]/80 px-3 py-2 text-xs text-zinc-400" title={email}>
+                {email}
+              </p>
+              <Link
+                href="/dashboard"
+                role="menuitem"
+                className="block px-3 py-2.5 text-sm text-zinc-200 hover:bg-white/5 hover:text-[var(--color-lime)] md:hidden"
+                onClick={() => setMenuOpen(false)}
+              >
+                Darbo vieta
+              </Link>
+              <Link
+                href="/pricing#prenumerata"
+                role="menuitem"
+                className="block px-3 py-2.5 text-sm text-zinc-200 hover:bg-white/5 hover:text-[var(--color-lime)]"
+                onClick={() => setMenuOpen(false)}
+              >
+                Planai ir kreditai
+              </Link>
+              <button
+                type="button"
+                role="menuitem"
+                className="block w-full px-3 py-2.5 text-left text-sm text-rose-300 hover:bg-rose-500/10"
+                onClick={() => {
+                  setMenuOpen(false);
+                  void signOut({ callbackUrl: "/" });
+                }}
+              >
+                Atsijungti
+              </button>
+            </div>
+          ) : null}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+    <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
       {renderCreditsPill()}
       <Link
         href="/login"

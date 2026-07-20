@@ -42,10 +42,10 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-bg)_88%,transparent)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_oklab,var(--color-bg)_78%,transparent)]">
-      <div className="site-shell-wide flex flex-wrap items-center justify-between gap-3 py-3">
+      <div className="site-shell-wide flex flex-nowrap items-center justify-between gap-2 py-2.5 sm:gap-3 sm:py-3">
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2.5 rounded-md font-semibold tracking-tight text-white motion-safe:transition-opacity motion-safe:duration-200 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/60"
+          className="flex min-w-0 shrink items-center gap-2 rounded-md font-semibold tracking-tight text-white motion-safe:transition-opacity motion-safe:duration-200 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/60 sm:gap-2.5"
           onClick={() => setMobileOpen(false)}
         >
           <Image
@@ -57,16 +57,16 @@ export function SiteHeader() {
             className="h-8 w-8 shrink-0"
             priority
           />
-          <span className="flex flex-col leading-tight">
-            <span className="text-sm font-semibold sm:text-base">{siteConfig.name}</span>
-            <span className="hidden text-[10px] font-normal tracking-wide text-zinc-500 sm:block">
+          <span className="flex min-w-0 flex-col leading-tight">
+            <span className="truncate text-sm font-semibold sm:text-base">{siteConfig.name}</span>
+            <span className="hidden text-xs font-normal tracking-wide text-zinc-500 xl:block">
               {siteConfig.tagline}
             </span>
           </span>
         </Link>
 
         <nav
-          className="hidden items-center gap-x-0.5 text-sm lg:flex"
+          className="hidden items-center gap-x-1 text-sm xl:flex"
           aria-label="Pagrindinė navigacija"
         >
           <div className="group relative">
@@ -77,7 +77,7 @@ export function SiteHeader() {
               aria-label="Įrankiai meniu"
             >
               Įrankiai
-              <span aria-hidden className="text-[10px] text-zinc-300 group-hover:text-zinc-200">
+              <span aria-hidden className="text-xs text-zinc-400 group-hover:text-zinc-200">
                 ▾
               </span>
             </button>
@@ -94,23 +94,23 @@ export function SiteHeader() {
             </div>
           </div>
           {primaryLinks.map((l) => (
-            <Link key={l.href} href={l.href} className="site-nav-link">
+            <Link key={l.href} href={l.href} className="site-nav-link whitespace-nowrap">
               {l.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex min-w-0 shrink-0 items-center gap-1.5 sm:gap-2">
+        <div className="flex min-w-0 shrink-0 items-center justify-end gap-1.5 sm:gap-2">
           <AuthHeaderActions />
           <Link
             href="/#kontaktai"
-            className="hidden rounded-lg bg-[var(--color-electric)] px-2.5 py-1.5 text-xs font-semibold text-[#041014] motion-safe:transition-[filter,transform] motion-safe:duration-200 hover:brightness-110 sm:inline-flex sm:px-3 sm:text-sm"
+            className="hidden rounded-lg bg-[var(--color-electric)] px-3 py-1.5 text-sm font-semibold text-[#041014] motion-safe:transition-[filter,transform] motion-safe:duration-200 hover:brightness-110 lg:inline-flex"
           >
             Užklausa
           </Link>
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-zinc-200 motion-safe:transition-[border-color,transform] motion-safe:duration-200 hover:border-[var(--color-electric)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/60 active:scale-95 lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-zinc-200 motion-safe:transition-[border-color,transform] motion-safe:duration-200 hover:border-[var(--color-electric)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/60 active:scale-95 xl:hidden"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
             aria-label={mobileOpen ? "Uždaryti meniu" : "Atidaryti meniu"}
@@ -133,13 +133,13 @@ export function SiteHeader() {
         <>
           <button
             type="button"
-            className="fixed inset-0 z-40 bg-zinc-950/70 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/45 lg:hidden"
+            className="fixed inset-0 z-40 bg-zinc-950/70 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/45 xl:hidden"
             aria-label="Uždaryti meniu"
             onClick={() => setMobileOpen(false)}
           />
           <div
             id="mobile-nav"
-            className="relative z-50 max-h-[min(70vh,calc(100dvh-4rem))] overflow-y-auto overscroll-contain border-t border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-bg)_96%,#0a1620_4%)] shadow-lg shadow-black/40 lg:hidden"
+            className="relative z-50 max-h-[min(70vh,calc(100dvh-4rem))] overflow-y-auto overscroll-contain border-t border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-bg)_96%,#0a1620_4%)] shadow-lg shadow-black/40 xl:hidden"
           >
             <nav className="site-shell-wide flex flex-col gap-0.5 py-4" aria-label="Mobilioji navigacija">
               {primaryLinks.map((l) => (
@@ -152,7 +152,7 @@ export function SiteHeader() {
                   {l.label}
                 </Link>
               ))}
-              <p className="mt-2 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+              <p className="mt-2 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-500">
                 Įrankiai
               </p>
               {toolLinks.map((l) => (
@@ -165,7 +165,7 @@ export function SiteHeader() {
                   {l.label}
                 </Link>
               ))}
-              <p className="mt-2 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+              <p className="mt-2 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-500">
                 Daugiau
               </p>
               {mobileExtraLinks.map((l) => (
@@ -178,6 +178,13 @@ export function SiteHeader() {
                   {l.label}
                 </Link>
               ))}
+              <Link
+                href="/#kontaktai"
+                className="mt-3 rounded-xl bg-[var(--color-electric)] px-3 py-3 text-center text-sm font-semibold text-[#041014] lg:hidden"
+                onClick={() => setMobileOpen(false)}
+              >
+                Užklausa
+              </Link>
             </nav>
           </div>
         </>

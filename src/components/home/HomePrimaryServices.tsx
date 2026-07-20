@@ -41,7 +41,7 @@ export function HomePrimaryServices() {
           {cards.map((c) => (
             <li key={c.title}>
               <article className="site-card-interactive flex h-full flex-col p-6 sm:p-8">
-                <span className="inline-flex w-fit rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-electric)]">
+                <span className="inline-flex w-fit rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-[var(--color-electric)]">
                   {c.kicker}
                 </span>
                 <h3 className="mt-4 text-xl font-semibold leading-snug tracking-tight text-white sm:text-2xl">{c.title}</h3>

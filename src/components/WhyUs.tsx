@@ -40,7 +40,7 @@ export function WhyUs() {
               key={p.title}
               className={`site-card-interactive group flex flex-col border-t-2 ${p.accent} p-6 sm:p-8 ${p.glow} min-h-[18rem]`}
             >
-              <span className="inline-flex w-fit rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--color-electric)]">
+              <span className="inline-flex w-fit rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-[var(--color-electric)]">
                 {p.tag}
               </span>
               <h3 className="mt-4 text-lg font-semibold tracking-tight text-white sm:text-xl">{p.title}</h3>
