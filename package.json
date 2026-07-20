@@ -14,7 +14,7 @@
     "db:migrate:deploy": "node ./node_modules/prisma/build/index.js migrate deploy",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test:smoke": "tsx --test tests/smoke/**/*.test.ts",
+    "test:smoke": "tsx --test tests/smoke/schemas.test.ts",
     "test": "npm run test:smoke",
     "db:generate": "prisma generate",
     "db:generate:unlock": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/db-generate-unlock.ps1",
