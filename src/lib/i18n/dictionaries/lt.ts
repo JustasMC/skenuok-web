@@ -10,6 +10,7 @@ export const lt = {
     courseScanner: "Kursų skaneris",
     seoGenerator: "SEO generatorius",
     services: "Paslaugos",
+    packages: "Paketai",
     cases: "Atvejai",
     faq: "DUK",
     roi: "ROI skaičiuoklė",
@@ -112,7 +113,7 @@ export const lt = {
     eyebrow: "Paslaugos",
     title: "Ką galite gauti pirmu žingsniu",
     description:
-      "Du aiškūs įrankiai: AI SEO auditas (Svetainių analizė) ir Kursų kokybės skenavimas. Toliau — plėtra su SEO strategija, turinio generatoriumi ar individualiu projektu.",
+      "Įrankiai greitam startui ir projektai ilgam augimui: SEO auditas, kursų skenavimas, turinio generatorius ir svetainių kūrimas.",
     card1Kicker: "Nemokamas · 0 kreditų",
     card1Title: "AI SEO auditas",
     card1Body:
@@ -123,17 +124,46 @@ export const lt = {
     card2Body:
       "Jei parduodate mokymus — ne tik metrikas: papildomai vertiname pasiūlos turinį. Reikia prisijungimo; skenavimas kainuoja 1–2 kreditus.",
     card2Cta: "Bandyti kursų skanerį",
-    card3Kicker: "Nuo 330 €",
-    card3Title: "Svetainių kūrimas",
+    card3Kicker: "Nuo 5 € / mėn.",
+    card3Title: "SEO turinio generatorius",
     card3Body:
+      "Lietuviškas SEO HTML pagal raktinį žodį — su istorija, eksportu ir kreditų modeliu. Kai reikia reguliaraus turinio tempo be agentūros biurokratijos.",
+    card3Cta: "Atidaryti generatorių",
+    card4Kicker: "Nuo 330 €",
+    card4Title: "Svetainių kūrimas",
+    card4Body:
       "Nuo idėjos iki SEO optimizuoto Next.js sprendimo su AI integracijomis. Orientacinės kainos — skaičiuoklėje.",
-    card3Cta: "Peržiūrėti paslaugą",
-    footerBefore: "Priedas verslui: lietuviškas",
-    footerGen: "SEO turinio generatorius",
-    footerAnd: "ir visos",
-    footerPricing: "kainodaros",
-    footerPlans: "plano parinktys. Individualiam projektui —",
+    card4Cta: "Peržiūrėti paslaugą",
+    footerBefore: "Kreditų planai —",
+    footerGen: "kainodaroje",
+    footerAnd: ".",
+    footerPricing: "Individualiam projektui",
+    footerPlans: "—",
     footerContact: "kontaktai",
+  },
+  consultingPackages: {
+    eyebrow: "Paslaugų paketai",
+    title: "Kai reikia ne tik įrankio — o rezultato už jus",
+    description:
+      "Fiksuotos orientacinės kainos. Dirbate su mumis projekto režimu — be jūsų serverių ar lokalios infrastruktūros.",
+    p1Kicker: "Vienkartinis",
+    p1Title: "Techninis SEO auditas + 90 d. planas",
+    p1Price: "Nuo 249 €",
+    p1Body:
+      "Giluminis auditas (CWV, indeksavimas, struktūra) ir prioritetizuotas 90 dienų veiksmų planas su aiškiais KPI.",
+    p1Cta: "Užklausti auditą",
+    p2Kicker: "Turinys",
+    p2Title: "SEO turinio startas",
+    p2Price: "Nuo 390 €",
+    p2Body:
+      "5 SEO straipsniai + vidinių nuorodų schema pagal jūsų nišą. Paruošta publikacijai ir matuojamam organiniam augimui.",
+    p2Cta: "Užklausti turinį",
+    p3Kicker: "Priežiūra",
+    p3Title: "Mėnesinė SEO / svetainės priežiūra",
+    p3Price: "Nuo 149 € / mėn.",
+    p3Body:
+      "Techniniai pataisymai, turinio ritmas, Search Console stebėsena ir trumpa mėnesio ataskaita — be „juodosios dėžės“.",
+    p3Cta: "Užklausti priežiūrą",
   },
   arsenal: {
     eyebrow: "Kompetencijos",

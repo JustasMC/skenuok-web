@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { CaseStudies } from "@/components/CaseStudies";
 import { Hero } from "@/components/Hero";
+import { HomeConsultingPackages } from "@/components/home/HomeConsultingPackages";
 import { HomeFaq } from "@/components/home/HomeFaq";
 import { HomePrimaryServices } from "@/components/home/HomePrimaryServices";
 import { HomeTestimonials } from "@/components/home/HomeTestimonials";
@@ -110,6 +111,7 @@ export default function HomePage() {
       <main id="main-content" className="overflow-x-hidden">
         <Hero />
         <HomePrimaryServices />
+        <HomeConsultingPackages />
         <SeoSpeedChallenge />
         <LighthousePulse />
         <HomeTestimonials />

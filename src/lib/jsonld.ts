@@ -79,7 +79,7 @@ export function getSoftwareServiceJsonLd() {
         inLanguage: "lt-LT",
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          name: "Paslaugų moduliai",
+          name: "Paslaugų katalogas",
           itemListElement: [
             {
               "@type": "Offer",
@@ -87,6 +87,36 @@ export function getSoftwareServiceJsonLd() {
                 "@type": "Service",
                 name: "Žiniatinklio sprendimai (Next.js / Rust)",
                 description: "Serveriniai komponentai, SEO, našumas ir patikimas diegimas.",
+              },
+            },
+            {
+              "@type": "Offer",
+              priceCurrency: "EUR",
+              price: "249",
+              itemOffered: {
+                "@type": "Service",
+                name: "Techninis SEO auditas + 90 d. planas",
+                description: "Giluminis auditas su prioritetizuotu 90 dienų veiksmų planu ir KPI.",
+              },
+            },
+            {
+              "@type": "Offer",
+              priceCurrency: "EUR",
+              price: "390",
+              itemOffered: {
+                "@type": "Service",
+                name: "SEO turinio startas",
+                description: "Penki SEO straipsniai ir vidinių nuorodų schema pagal nišą.",
+              },
+            },
+            {
+              "@type": "Offer",
+              priceCurrency: "EUR",
+              price: "149",
+              itemOffered: {
+                "@type": "Service",
+                name: "Mėnesinė SEO / svetainės priežiūra",
+                description: "Techniniai pataisymai, turinio ritmas ir mėnesio ataskaita.",
               },
             },
             {
@@ -103,14 +133,6 @@ export function getSoftwareServiceJsonLd() {
                 "@type": "Service",
                 name: "Duomenų analitika (SQL / Power BI / GA4)",
                 description: "KPI, ataskaitos ir vieningas duomenų modelis sprendimams.",
-              },
-            },
-            {
-              "@type": "Offer",
-              itemOffered: {
-                "@type": "Service",
-                name: "Kritinės sistemos ir realaus laiko duomenys",
-                description: "Našumas, stabilumas ir realaus laiko apdorojimas.",
               },
             },
           ],

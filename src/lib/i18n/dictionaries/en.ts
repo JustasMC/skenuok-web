@@ -12,6 +12,7 @@ export const en: Dictionary = {
     courseScanner: "Course scanner",
     seoGenerator: "SEO generator",
     services: "Services",
+    packages: "Packages",
     cases: "Case studies",
     faq: "FAQ",
     roi: "ROI calculator",
@@ -114,7 +115,7 @@ export const en: Dictionary = {
     eyebrow: "Services",
     title: "What you can get in the first step",
     description:
-      "Two clear tools: AI SEO audit (site analysis) and course quality scanning. Next — strategy, content generator, or a custom project.",
+      "Tools for a fast start and projects for lasting growth: SEO audit, course scanning, content generator, and web development.",
     card1Kicker: "Free · 0 credits",
     card1Title: "AI SEO audit",
     card1Body:
@@ -125,17 +126,46 @@ export const en: Dictionary = {
     card2Body:
       "If you sell training — not just metrics: we also evaluate offer content. Login required; scans cost 1–2 credits.",
     card2Cta: "Try course scanner",
-    card3Kicker: "From €330",
-    card3Title: "Web development",
+    card3Kicker: "From €5 / mo.",
+    card3Title: "SEO content generator",
     card3Body:
+      "SEO-ready HTML from a keyword — with history, export and a clear credit model. For steady content pace without agency overhead.",
+    card3Cta: "Open generator",
+    card4Kicker: "From €330",
+    card4Title: "Web development",
+    card4Body:
       "From idea to an SEO-ready Next.js solution with AI integrations. Indicative pricing in the calculator.",
-    card3Cta: "View service",
-    footerBefore: "Business add-on:",
-    footerGen: "SEO content generator",
-    footerAnd: "and all",
-    footerPricing: "pricing",
-    footerPlans: "plan options. For a custom project —",
+    card4Cta: "View service",
+    footerBefore: "Credit plans —",
+    footerGen: "in pricing",
+    footerAnd: ".",
+    footerPricing: "For a custom project",
+    footerPlans: "—",
     footerContact: "contact",
+  },
+  consultingPackages: {
+    eyebrow: "Service packages",
+    title: "When you need the outcome done for you",
+    description:
+      "Indicative fixed packages. Project-based delivery on our cloud stack — no local servers required on your side.",
+    p1Kicker: "One-off",
+    p1Title: "Technical SEO audit + 90-day plan",
+    p1Price: "From €249",
+    p1Body:
+      "Deep audit (CWV, indexing, structure) plus a prioritised 90-day action plan with clear KPIs.",
+    p1Cta: "Request audit",
+    p2Kicker: "Content",
+    p2Title: "SEO content starter",
+    p2Price: "From €390",
+    p2Body:
+      "5 SEO articles + internal linking map for your niche. Ready to publish and measure organic growth.",
+    p2Cta: "Request content",
+    p3Kicker: "Retainer",
+    p3Title: "Monthly SEO / site care",
+    p3Price: "From €149 / mo.",
+    p3Body:
+      "Technical fixes, content cadence, Search Console monitoring and a short monthly report — no black box.",
+    p3Cta: "Request retainer",
   },
   arsenal: {
     eyebrow: "Capabilities",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 import { cn } from "@/lib/cn";
@@ -8,6 +8,9 @@ import { siteConfig } from "@/lib/site-config";
 
 const servicesLt = [
   "AI SEO auditas / Svetainių skaneris (bandomasis)",
+  "Techninis SEO auditas + 90 d. planas",
+  "SEO turinio startas (5 straipsniai)",
+  "Mėnesinė SEO / svetainės priežiūra",
   "Kursų kokybės skenavimas (PageSpeed + AI)",
   "SEO strategija ir turinio jungtis (nuo įrankio iki produkcijos)",
   "Žiniatinklio kūrimas (Next.js / Rust)",
@@ -19,6 +22,9 @@ const servicesLt = [
 
 const servicesEn = [
   "AI SEO audit / site scanner (trial)",
+  "Technical SEO audit + 90-day plan",
+  "SEO content starter (5 articles)",
+  "Monthly SEO / site care",
   "Course quality scan (PageSpeed + AI)",
   "SEO strategy & content bridge",
   "Web development (Next.js / Rust)",
@@ -34,6 +40,19 @@ export function ContactForm() {
   const services = locale === "en" ? servicesEn : servicesLt;
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "err">("idle");
   const [message, setMessage] = useState("");
+  const [preferredService, setPreferredService] = useState<string>(services[0]);
+
+  useEffect(() => {
+    try {
+      const hint = sessionStorage.getItem("sk_preferred_service")?.trim();
+      if (!hint) return;
+      const match = services.find((s) => s === hint || s.startsWith(hint) || hint.startsWith(s));
+      if (match) setPreferredService(match);
+      sessionStorage.removeItem("sk_preferred_service");
+    } catch {
+      /* ignore */
+    }
+  }, [services]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -102,6 +121,7 @@ export function ContactForm() {
         );
       }
       form.reset();
+      setPreferredService(services[0]);
     } catch {
       setStatus("err");
       setMessage(
@@ -163,7 +183,8 @@ export function ContactForm() {
                 name="service"
                 autoComplete="off"
                 className="site-input min-h-11 py-2.5"
-                defaultValue={services[0]}
+                value={preferredService}
+                onChange={(e) => setPreferredService(e.target.value)}
               >
                 {services.map((s) => (
                   <option key={s} value={s}>

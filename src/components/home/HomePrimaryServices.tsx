@@ -25,8 +25,15 @@ export function HomePrimaryServices() {
       title: dict.homeServices.card3Title,
       kicker: dict.homeServices.card3Kicker,
       body: dict.homeServices.card3Body,
-      href: "/svetainiu-kurimas",
+      href: "/irankiai/seo-generatorius",
       cta: dict.homeServices.card3Cta,
+    },
+    {
+      title: dict.homeServices.card4Title,
+      kicker: dict.homeServices.card4Kicker,
+      body: dict.homeServices.card4Body,
+      href: "/svetainiu-kurimas",
+      cta: dict.homeServices.card4Cta,
     },
   ] as const;
 
@@ -39,7 +46,7 @@ export function HomePrimaryServices() {
           description={dict.homeServices.description}
         />
 
-        <ul className="mt-10 grid list-none gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 min-h-[20rem]" role="list">
+        <ul className="mt-10 grid list-none gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-2 xl:grid-cols-4" role="list">
           {cards.map((c) => (
             <li key={c.title}>
               <article className="site-card-interactive flex h-full flex-col p-6 sm:p-8">
@@ -61,14 +68,10 @@ export function HomePrimaryServices() {
 
         <p className="mt-10 text-center text-sm text-zinc-300 sm:mt-12">
           {dict.homeServices.footerBefore}{" "}
-          <Link className="site-link-inline font-medium" href="/irankiai/seo-generatorius">
-            {dict.homeServices.footerGen}
-          </Link>{" "}
-          {dict.homeServices.footerAnd}{" "}
           <Link className="site-link-inline font-medium" href="/pricing">
-            {dict.homeServices.footerPricing}
-          </Link>{" "}
-          {dict.homeServices.footerPlans}{" "}
+            {dict.homeServices.footerGen}
+          </Link>
+          {dict.homeServices.footerAnd} {dict.homeServices.footerPricing} {dict.homeServices.footerPlans}{" "}
           <a className="site-link-inline font-medium" href="#kontaktai">
             {dict.homeServices.footerContact}
           </a>

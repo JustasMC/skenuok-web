@@ -28,6 +28,20 @@ const addons: ReadonlyArray<{
       "Techninis SEO ir našumas: meta, schema markup, Core Web Vitals, Search Console ir sitemap. Tikslas — aukšti Lighthouse balai ir tvarkinga indeksavimo bazė.",
   },
   {
+    id: "seo-audit-90",
+    label: "Techninis SEO auditas + 90 d. planas",
+    price: 249,
+    tooltip:
+      "Giluminis esamos (ar naujos) svetainės auditas su prioritetizuotu 90 dienų veiksmų planu, KPI ir aiškiais next steps — tinka prieš didesnį remodelį.",
+  },
+  {
+    id: "content-starter",
+    label: "SEO turinio startas (5 straipsniai)",
+    price: 390,
+    tooltip:
+      "Penki SEO straipsniai su vidinių nuorodų schema pagal nišą. Galima derinti su generatoriumi ir jūsų redakcija.",
+  },
+  {
     id: "ai-features",
     label: "AI funkcijos (individualios integracijos)",
     price: 239,

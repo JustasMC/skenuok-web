@@ -171,6 +171,42 @@ export default function SvetainiuKurimasPage() {
             </ol>
           </section>
 
+          <section className="site-card-interactive p-6 sm:p-8">
+            <h2 className="text-2xl font-semibold tracking-tight text-white">Papildomos SEO paslaugos</h2>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
+              Be svetainės kūrimo — aiškūs paketai esamai svetainei: auditas, turinys ar mėnesinė priežiūra. Orientacinės
+              kainos; galutinis pasiūlymas po trumpo pokalbio.
+            </p>
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
+              <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-electric)]">
+                  Nuo 249 €
+                </p>
+                <p className="mt-2 font-medium text-white">Techninis SEO auditas + 90 d. planas</p>
+                <p className="mt-2 text-sm text-zinc-300">CWV, indeksavimas, prioritetai ir KPI.</p>
+              </div>
+              <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-electric)]">
+                  Nuo 390 €
+                </p>
+                <p className="mt-2 font-medium text-white">SEO turinio startas</p>
+                <p className="mt-2 text-sm text-zinc-300">5 straipsniai + vidinių nuorodų schema.</p>
+              </div>
+              <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-electric)]">
+                  Nuo 149 € / mėn.
+                </p>
+                <p className="mt-2 font-medium text-white">Mėnesinė priežiūra</p>
+                <p className="mt-2 text-sm text-zinc-300">Pataisymai, ritmas, Search Console ataskaita.</p>
+              </div>
+            </div>
+            <div className="mt-5">
+              <Link href="#kontaktai" className="site-btn-secondary">
+                Užklausti paketą
+              </Link>
+            </div>
+          </section>
+
           <div className="space-y-8">
             <WebPriceCalculator />
             <div>

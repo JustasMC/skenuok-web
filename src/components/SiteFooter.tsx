@@ -15,6 +15,7 @@ export function SiteFooter() {
       links: [
         { href: "/svetainiu-kurimas", label: dict.footer.webBuild },
         { href: "/#paslaugos", label: dict.footer.modules },
+        { href: "/#paketai", label: dict.nav.packages },
         { href: "/#atvejai", label: dict.footer.cases },
         { href: "/pricing", label: dict.footer.pricing },
         { href: "/#kontaktai", label: dict.footer.contact },
