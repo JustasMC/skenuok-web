@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { useDict } from "@/components/i18n/LocaleProvider";
+import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 import type { FreeAlternativesBundle } from "@/lib/verify-free-alternatives";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LegalDisclaimer } from "@/components/LegalDisclaimer";
@@ -71,6 +71,7 @@ function getPriceAiInsight(input: {
 
 export function CourseQualityScanner() {
   const t = useDict().tools.course;
+  const { locale } = useLocale();
   const [url, setUrl] = useState("");
   const [strategy, setStrategy] = useState<"mobile" | "desktop">("mobile");
   const [loading, setLoading] = useState(false);
@@ -169,7 +170,7 @@ export function CourseQualityScanner() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ url, strategy }),
+        body: JSON.stringify({ url, strategy, locale }),
       });
       const body = (await res.json()) as {
         ok?: boolean;
@@ -560,8 +561,20 @@ export function CourseQualityScanner() {
                   <p className="font-mono text-[10px] text-zinc-600">Lighthouse {meta.lighthouseVersion}</p>
                 ) : null}
                 {assessmentSource ? (
-                  <p className="text-xs text-zinc-500">
-                    Vertinimas: {assessmentSource === "openai" ? "AI (OpenAI)" : "heuristika be AI (pridėkite OPENAI_API_KEY)"}
+                  <p
+                    className={`text-xs ${
+                      assessmentSource === "fallback"
+                        ? "rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-amber-200"
+                        : "text-zinc-500"
+                    }`}
+                  >
+                    {assessmentSource === "openai"
+                      ? locale === "en"
+                        ? "Assessment: full AI audit (curriculum, pricing, instructor, red flags)"
+                        : "Vertinimas: pilnas AI auditas (programa, kaina, lektorius, raudonos vėliavos)"
+                      : locale === "en"
+                        ? "Limited mode: AI assessment unavailable — Lighthouse/meta only. Retry when OpenAI is configured."
+                        : "Ribotas režimas: AI nepasiekiamas — tik Lighthouse/meta. Pakartokite su veikiančiu OPENAI_API_KEY."}
                   </p>
                 ) : null}
                 {pageScrape ? (

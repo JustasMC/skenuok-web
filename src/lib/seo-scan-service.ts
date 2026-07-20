@@ -1,10 +1,12 @@
 import { extractPageMeta } from "@/lib/lighthouse-meta";
 import { getPageSpeedApiKey } from "@/lib/env";
-import { fetchPageHtmlSignals } from "@/lib/page-html-signals";
+import type { Locale } from "@/lib/i18n/config";
+import { fetchPageHtmlSignals, type PageHtmlSignals } from "@/lib/page-html-signals";
 import {
   buildAiScanAnalysis,
   buildFallbackInsights,
   buildFallbackSiteIdentity,
+  extractCoreWebVitals,
   type ScanPageContext,
 } from "@/lib/scan-insights";
 import type { CategoryKey } from "@/lib/pagespeed";
@@ -12,7 +14,10 @@ import { normalizeUrlInput, runPageSpeedInsights } from "@/lib/pagespeed";
 import { isAbortError } from "@/lib/route-abort";
 import type { ScanRequest } from "@/lib/scan-schema";
 
-export type SeoScanPageMeta = ReturnType<typeof extractPageMeta> & { h1: string | null };
+export type SeoScanPageMeta = ReturnType<typeof extractPageMeta> & {
+  h1: string | null;
+  signals?: PageHtmlSignals;
+};
 
 export type SeoScanApiPayload = {
   ok: true;
@@ -21,7 +26,6 @@ export type SeoScanApiPayload = {
   scores: Record<CategoryKey, number | null>;
   insights: string[];
   insightsSource: "openai" | "fallback";
-  /** Trumpa veiklos etiketė ir 1–2 sakinių santrauka (OpenAI arba heuristika). */
   siteTopic: string;
   siteDescription: string;
   page: SeoScanPageMeta;
@@ -34,22 +38,32 @@ export type SeoScanApiPayload = {
 export type SeoScanFailure = {
   ok: false;
   error: string;
-  /** Suggested HTTP status for API routes */
   status: number;
 };
 
+export type RunSeoScanOptions = {
+  signal?: AbortSignal;
+  locale?: Locale;
+  /** Skip OpenAI insights (PSI + HTML signals + heuristic tips only). Used by course scan to avoid double LLM. */
+  skipAiInsights?: boolean;
+};
+
 /**
- * Bendras PageSpeed + įžvalgų pipeline (naudoja /api/scan ir agento įrankis).
+ * Shared PageSpeed + insights pipeline (URL scanner API and agent tool).
  */
 export async function runSeoScan(
   validated: ScanRequest,
-  opts?: { signal?: AbortSignal },
+  opts?: RunSeoScanOptions,
 ): Promise<SeoScanApiPayload | SeoScanFailure> {
+  const locale = opts?.locale ?? "lt";
   const apiKey = getPageSpeedApiKey();
   if (!apiKey) {
     return {
       ok: false,
-      error: "Serveris neturi PageSpeed API rakto. Pridėkite PSI_API_KEY į .env.",
+      error:
+        locale === "en"
+          ? "Server is missing the PageSpeed API key. Add PSI_API_KEY to the environment."
+          : "Serveris neturi PageSpeed API rakto. Pridėkite PSI_API_KEY į .env.",
       status: 503,
     };
   }
@@ -58,7 +72,11 @@ export async function runSeoScan(
   try {
     normalizedUrl = normalizeUrlInput(validated.url);
   } catch {
-    return { ok: false, error: "Neteisingas URL formatas", status: 422 };
+    return {
+      ok: false,
+      error: locale === "en" ? "Invalid URL format" : "Neteisingas URL formatas",
+      status: 422,
+    };
   }
 
   let psi;
@@ -71,50 +89,69 @@ export async function runSeoScan(
     });
   } catch (e) {
     if (isAbortError(e)) {
-      return { ok: false, error: "PageSpeed užklausa nutraukta.", status: 502 };
+      return {
+        ok: false,
+        error: locale === "en" ? "PageSpeed request aborted." : "PageSpeed užklausa nutraukta.",
+        status: 502,
+      };
     }
-    const message = e instanceof Error ? e.message : "PageSpeed užklausa nepavyko";
+    const message = e instanceof Error ? e.message : locale === "en" ? "PageSpeed request failed" : "PageSpeed užklausa nepavyko";
     return { ok: false, error: message, status: 502 };
   }
 
   const meta = extractPageMeta(psi.raw);
   const scanUrl = psi.finalUrl ?? normalizedUrl;
-  const head = await fetchPageHtmlSignals(scanUrl, { signal: opts?.signal, timeoutMs: 12_000 });
+  const htmlSignals = await fetchPageHtmlSignals(scanUrl, {
+    signal: opts?.signal,
+    timeoutMs: 12_000,
+    acceptLanguage: locale === "en" ? "en,lt;q=0.5" : "lt,en;q=0.8",
+  });
+  const vitals = extractCoreWebVitals(psi.raw);
 
   const pageContext: ScanPageContext = {
     title: meta.title,
     description: meta.description,
-    h1: head.h1,
+    h1: htmlSignals.h1,
     keywords: meta.keywords,
+    html: htmlSignals,
+    vitals,
   };
 
-  const page: SeoScanPageMeta = { ...meta, h1: head.h1 };
+  const page: SeoScanPageMeta = { ...meta, h1: htmlSignals.h1, signals: htmlSignals };
 
   let insights: string[];
   let insightsSource: "openai" | "fallback";
   let siteTopic: string;
   let siteDescription: string;
 
-  try {
-    const ai = await buildAiScanAnalysis(psi.raw, psi.scores, pageContext);
-    if (ai) {
-      insights = ai.insights;
-      insightsSource = "openai";
-      siteTopic = ai.siteTopic;
-      siteDescription = ai.siteDescription;
-    } else {
-      insights = buildFallbackInsights(psi.raw, psi.scores);
+  if (opts?.skipAiInsights) {
+    insights = buildFallbackInsights(psi.raw, psi.scores, locale, pageContext);
+    insightsSource = "fallback";
+    const fb = buildFallbackSiteIdentity(pageContext, locale);
+    siteTopic = fb.siteTopic;
+    siteDescription = fb.siteDescription;
+  } else {
+    try {
+      const ai = await buildAiScanAnalysis(psi.raw, psi.scores, pageContext, locale);
+      if (ai) {
+        insights = ai.insights;
+        insightsSource = "openai";
+        siteTopic = ai.siteTopic;
+        siteDescription = ai.siteDescription;
+      } else {
+        insights = buildFallbackInsights(psi.raw, psi.scores, locale, pageContext);
+        insightsSource = "fallback";
+        const fb = buildFallbackSiteIdentity(pageContext, locale);
+        siteTopic = fb.siteTopic;
+        siteDescription = fb.siteDescription;
+      }
+    } catch {
+      insights = buildFallbackInsights(psi.raw, psi.scores, locale, pageContext);
       insightsSource = "fallback";
-      const fb = buildFallbackSiteIdentity(pageContext);
+      const fb = buildFallbackSiteIdentity(pageContext, locale);
       siteTopic = fb.siteTopic;
       siteDescription = fb.siteDescription;
     }
-  } catch {
-    insights = buildFallbackInsights(psi.raw, psi.scores);
-    insightsSource = "fallback";
-    const fb = buildFallbackSiteIdentity(pageContext);
-    siteTopic = fb.siteTopic;
-    siteDescription = fb.siteDescription;
   }
 
   return {

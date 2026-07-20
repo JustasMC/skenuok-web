@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { jsonApiError, publicApiErrorMessage } from "@/lib/api-errors";
 import { generateSeoArticleHtml } from "@/lib/article-openai";
+import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale";
 import { prisma } from "@/lib/prisma";
 import { getRateLimitClientKey } from "@/lib/rate-limit";
 import { assertScanRateLimit } from "@/lib/scan-rate-limit";
@@ -18,6 +19,7 @@ const bodySchema = z.object({
   context: z.string().trim().max(400).optional(),
   /** URL skanerio siteDescription – tonas / veikla */
   tone: z.string().trim().max(650).optional(),
+  locale: z.enum(["lt", "en"]).optional(),
 });
 
 export async function POST(req: Request) {
@@ -43,9 +45,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: msg }, { status: 422 });
   }
 
+  const locale = await resolveAnalysisLocaleFromCookies(parsed.data.locale);
   const genCtx = {
     siteNiche: parsed.data.context ?? null,
     brandVoice: parsed.data.tone ?? null,
+    locale,
   };
 
   const authSession = await auth();
@@ -77,7 +81,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: msg }, { status: 502 });
       }
 
-      const seo = scoreSeoHtml(html, parsed.data.topic);
+      const seo = scoreSeoHtml(html, parsed.data.topic, locale);
 
       try {
         const [, u] = await prisma.$transaction([
@@ -153,7 +157,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: msg }, { status: 502 });
     }
 
-    const seo = scoreSeoHtml(html, parsed.data.topic);
+    const seo = scoreSeoHtml(html, parsed.data.topic, locale);
 
     try {
       const [, row] = await prisma.$transaction([

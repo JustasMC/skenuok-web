@@ -5,6 +5,7 @@ import {
   computeCourseScanCreditsCharged,
   getCourseScanCreditsRequired,
 } from "@/lib/course-scan-credits";
+import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale";
 import { getRateLimitClientKey } from "@/lib/rate-limit";
 import { prisma } from "@/lib/prisma";
 import { assertScanRateLimit } from "@/lib/scan-rate-limit";
@@ -86,7 +87,8 @@ export async function POST(req: Request) {
 
   let result;
   try {
-    result = await runCourseQualityScan(parsed.data);
+    const locale = await resolveAnalysisLocaleFromCookies(parsed.data.locale);
+    result = await runCourseQualityScan(parsed.data, { locale });
   } catch (e) {
     await prisma.user.update({
       where: { id: userId },

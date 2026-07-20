@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, useMemo, useState } from "react";
 import Link from "next/link";
-import { useDict } from "@/components/i18n/LocaleProvider";
+import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buildGeneratorUrl, defaultGeneratorTopicFromScan } from "@/lib/generator-deeplink";
 import type { ScanPayload } from "@/components/tools/TopicSuggestions";
@@ -24,6 +24,7 @@ type PageMeta = {
 
 export function UrlScanner() {
   const t = useDict().tools.scanner;
+  const { locale } = useLocale();
   const [url, setUrl] = useState("");
   const [strategy, setStrategy] = useState<"mobile" | "desktop">("mobile");
   const [loading, setLoading] = useState(false);
@@ -54,7 +55,7 @@ export function UrlScanner() {
       const res = await fetch("/api/scan/heavy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, strategy }),
+        body: JSON.stringify({ url, strategy, locale }),
       });
       const body = (await res.json()) as {
         ok?: boolean;

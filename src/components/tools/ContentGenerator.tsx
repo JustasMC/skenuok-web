@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { StripeCheckoutButton } from "@/components/StripeCheckoutButton";
 import { ArticleGenerationSkeleton } from "@/components/tools/ArticleGenerationSkeleton";
@@ -15,6 +16,7 @@ import type { SeoScoreBreakdown } from "@/lib/seo-score";
 type HistoryRow = { id: string; topic: string; seoScore: number | null; createdAt: string };
 
 export function ContentGenerator() {
+  const { locale } = useLocale();
   const sp = useSearchParams();
   const topicFromUrl = useMemo(() => {
     const raw = sp.get("topic");
@@ -196,6 +198,7 @@ export function ContentGenerator() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topic,
+          locale,
           ...(scannerNiche ? { context: scannerNiche } : {}),
           ...(scannerTone ? { tone: scannerTone } : {}),
         }),

@@ -1,4 +1,6 @@
 import { z } from "zod";
+import type { Locale } from "@/lib/i18n/config";
+import { analysisLanguageInstruction } from "@/lib/i18n/analysis-locale";
 
 const responseSchema = z.object({
   topics: z.array(
@@ -19,7 +21,9 @@ export async function suggestTopicsWithOpenAI(input: {
   keywords: string[];
   scores: { performance: number | null; seo: number | null; accessibility: number | null };
   insights: string[];
+  locale?: Locale;
 }): Promise<TopicIdea[]> {
+  const locale = input.locale ?? "lt";
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return fallbackTopics(input);
@@ -37,6 +41,7 @@ export async function suggestTopicsWithOpenAI(input: {
   const controller = new AbortController();
   const timeoutMs = 55_000;
   const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const lang = analysisLanguageInstruction(locale);
 
   let res: Response;
   try {
@@ -49,17 +54,21 @@ export async function suggestTopicsWithOpenAI(input: {
       signal: controller.signal,
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
-        temperature: 0.55,
+        temperature: 0.5,
         response_format: { type: "json_object" },
         messages: [
           {
             role: "system",
-            content:
-              'Tu esi SEO strategas. Atsakyk TIK galiojančiu JSON: {"topics":[{"title":"...","description":"...","seoKampas":"..."}, ...]}. Būtinai 5 temos. Lietuvių kalba.\n\nSVARBU — laukas "title": tai turi būti konkreti straipsnio antraštė H1 lygyje (hook), ne bendras raginimas. Blogai: "Rašykite apie fasadų valymą". Gerai: "5 didžiausios klaidos plaunant fasadą aukštu slėgiu: kaip nesugadinti apdailos?". Kiekviena antraštė 8–120 simbolių, su skaičiais, klausimu ar aiškiu pažadu, kad generatorius galėtų iškart rašyti straipsnį.\n\n"description": 2–4 sakiniai — ką tiksliai aptars straipsnis ir kam jis naudingas.\n\n"seoKampas": 2–4 sakiniai — kodėl ši tema DABAR aktuali šiai svetainei (title/description/raktažodžiai, Lighthouse signalai).',
+            content: `You are a senior SEO content strategist (professor-level). ${lang}
+Return ONLY valid JSON: {"topics":[{"title":"...","description":"...","seoKampas":"..."}, ...]}. Exactly 5 topics.
+
+"title": concrete H1-ready article headline (hook) — not a vague prompt. Prefer numbers, questions, or a clear promise (8–120 chars).
+"description": 2–4 sentences on what the article covers and who benefits.
+"seoKampas": 2–4 sentences on why this topic fits THIS site NOW (title/meta/keywords + Lighthouse signals).`,
           },
           {
             role: "user",
-            content: `Pagal skenavimo santrauką sugeneruok 5 turinio temas su pavadinimu, aprašymu ir SEO kampo logika.\n\n${JSON.stringify(payload)}`,
+            content: `From this scan summary, produce 5 content topics:\n\n${JSON.stringify(payload)}`,
           },
         ],
       }),

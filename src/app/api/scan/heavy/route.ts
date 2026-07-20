@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { jsonApiError } from "@/lib/api-errors";
+import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale";
 import { getRateLimitClientKey, isSyntheticCrawler } from "@/lib/rate-limit";
 import { getCombinedRouteAbortSignal, isAbortError } from "@/lib/route-abort";
 import { assertScanRateLimit } from "@/lib/scan-rate-limit";
@@ -35,9 +36,10 @@ export async function POST(req: Request) {
     }
   }
 
+  const locale = await resolveAnalysisLocaleFromCookies(parsed.data.locale);
   const signal = getCombinedRouteAbortSignal(req, 58_000);
   try {
-    const result = await runSeoScan(parsed.data, { signal });
+    const result = await runSeoScan(parsed.data, { signal, locale });
     if (!result.ok) {
       if (result.status >= 500) {
         console.error("[scan/heavy] upstream scan failure", {

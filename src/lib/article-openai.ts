@@ -1,48 +1,52 @@
+import type { Locale } from "@/lib/i18n/config";
+import { analysisLanguageInstruction } from "@/lib/i18n/analysis-locale";
 import { scoreSeoHtml, SEO_SCORE_MIN_WORDS } from "@/lib/seo-score";
 
 export type ArticleGenerationContext = {
-  /** Svetainės niša / veikla (iš URL skanerio, pvz. siteTopic) */
   siteNiche?: string | null;
-  /** Tonas, auditorija, veiklos santrauka (iš skanerio siteDescription) */
   brandVoice?: string | null;
+  locale?: Locale;
 };
 
-/** Tikslas virš slenksčio — palieka maržą, kad po redagavimo vis tiek būtų ≥ SEO_SCORE_MIN_WORDS. */
-const SEO_WORD_TARGET = Math.max(SEO_SCORE_MIN_WORDS + 40, 640);
+const SEO_WORD_TARGET = Math.max(SEO_SCORE_MIN_WORDS + 60, 760);
 
 function getArticleMaxTokens(): number {
   const n = Number.parseInt(process.env.OPENAI_ARTICLE_MAX_TOKENS ?? "", 10);
   if (Number.isFinite(n) && n >= 2000 && n <= 16_000) return n;
-  return 7000;
+  return 8000;
 }
 
-function buildSystemPrompt(): string {
-  return `Tu esi profesionalus SEO turinio rašytojas. Tavo HTML bus automatiškai vertinamas balais (0–100): H1 su raktažodžiu, frazės pasikartojimai, vidinės nuorodos, žodžių skaičius.
-Grąžink TIK HTML fragmentą lietuvių kalba — be markdown, be \`\`\`, be paaiškinimų.
+function buildSystemPrompt(locale: Locale): string {
+  const lang = analysisLanguageInstruction(locale);
+  return `You are a senior SEO content professor and editor. You write original, useful long-form articles that rank AND help readers — not keyword spam.
+${lang}
+Return ONLY an HTML fragment — no markdown fences, no preamble.
 
-GRIEŽTI REIKALAVIMAI (kad balas būtų 100):
-1) Vienas <h1> — tekstas turi aiškiai turėti vartotojo nurodytą pagrindinę frazę (tą pačią arba labai artimą formuluotę).
-2) Bent 6 skirtingi <h2> skyriai; kur tinka — po H2 naudok <h3>.
-3) Ilgis: bent ${SEO_WORD_TARGET} žodžių (įskaitant lietuviškas raides). Skaičiuojami atskiri žodžiai; trumpi fragmentai neprideda balo. Jei abejoji — rašyk ilgiau: pavyzdžiai, žingsniai, rizikos, santrauka.
-4) Raktažodis: vartotojo TIKSLIĄ frazę panaudok pilname tekste (be HTML žymų) bent 4 kartus natūraliai: įžangoje, keliose vidurinėse dalyse, išvadoje.
-5) Vidinės nuorodos: PRIVALO būti bent dvi iš šių: <a href="/tools/scanner">…</a>, <a href="/pricing">…</a>, <a href="/svetainiu-kurimas">…</a> (ankoras lietuviškai).
-6) Formatavimas: dažnai <strong>; bent du <ul> sąrašai su po 3–5 <li>.
-7) Kiekviena pastraipa <p>; logiškas srautas.
-8) Draudžiama: <html>, <body>, <head>, <script>, <style>.
-9) Tonas / niša iš vartotojo — derink žodyną.`;
+Quality bar (think like a university lecturer + SEO lead):
+1) One <h1> that naturally includes the user's topic phrase.
+2) At least 5 distinct <h2> sections; use <h3> where it clarifies structure.
+3) Length: at least ${SEO_WORD_TARGET} words of substantive content (definitions, steps, pitfalls, examples, decision criteria, FAQ-style Q&A).
+4) Topic phrase: use the user's exact phrase naturally 4–8 times across intro, body and conclusion — never stuff.
+5) E-E-A-T: show expertise — cite mechanisms, trade-offs, and when NOT to apply advice. Be accurate; do not invent statistics with fake precision.
+6) Structure: short <p> paragraphs; at least two practical <ul> or <ol> lists (3–6 items each); use <strong> sparingly for key terms.
+7) Internal links: include at least two contextual relative links that help the reader next, choosing from:
+   <a href="/tools/scanner">…</a>, <a href="/tools/course-scanner">…</a>, <a href="/irankiai/seo-generatorius">…</a>, <a href="/pricing">…</a>, <a href="/svetainiu-kurimas">…</a>, <a href="/#kontaktai">…</a>
+   Anchors must be descriptive (not “click here”).
+8) Forbidden: <html>, <body>, <head>, <script>, <style>, fluff filler, repeated identical paragraphs.
+9) Match niche/tone from the user message when provided.`;
 }
 
 function buildUserContent(topic: string, ctx?: ArticleGenerationContext): string {
   const niche = ctx?.siteNiche?.trim();
   const voice = ctx?.brandVoice?.trim();
   const lines = [
-    `Pagrindinė frazė / tema (PRIVALAI pakartoti pilname tekste bent 4 kartus, įskaitant H1): "${topic}"`,
+    `Primary topic / phrase (must appear naturally in H1 and body): "${topic}"`,
     "",
-    `PRIORITETAS: bent ${SEO_WORD_TARGET} žodžių — tai būtina 100 balų vertinime (žemiau ${SEO_SCORE_MIN_WORDS} = nepraeina).`,
-    "Straipsnio H1 turi atitikti šią temą.",
+    `Target length: ≥ ${SEO_WORD_TARGET} words of real analysis — not padded filler.`,
+    "Write as if advising a serious business owner: clear, precise, prioritised.",
   ];
-  if (niche) lines.push("", `Svetainės niša (iš skenavimo): ${niche}`);
-  if (voice) lines.push("", `Tonas ir auditorija — laikykis nuosekliai: ${voice}`);
+  if (niche) lines.push("", `Site niche (from scan): ${niche}`);
+  if (voice) lines.push("", `Tone / audience — stay consistent: ${voice}`);
   return lines.join("\n");
 }
 
@@ -61,7 +65,7 @@ async function openaiChatHtml(
 ): Promise<string> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    throw new Error("Trūksta OPENAI_API_KEY straipsniui generuoti.");
+    throw new Error("Missing OPENAI_API_KEY for article generation.");
   }
 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -72,7 +76,7 @@ async function openaiChatHtml(
     },
     body: JSON.stringify({
       model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
-      temperature: 0.38,
+      temperature: 0.42,
       max_tokens: maxTokens,
       messages,
     }),
@@ -93,34 +97,36 @@ async function runSingleExpandPass(
   ctx: ArticleGenerationContext | undefined,
   maxTokens: number,
   breakdown: ReturnType<typeof scoreSeoHtml>,
+  locale: Locale,
 ): Promise<string> {
   const failed = breakdown.checks.filter((c) => !c.pass).map((c) => `${c.label} (${c.fixHint})`);
   const niche = ctx?.siteNiche?.trim();
   const voice = ctx?.brandVoice?.trim();
-  const ctxBlock = [niche ? `Niša: ${niche}` : "", voice ? `Tonas: ${voice}` : ""].filter(Boolean).join("\n");
+  const ctxBlock = [niche ? `Niche: ${niche}` : "", voice ? `Tone: ${voice}` : ""].filter(Boolean).join("\n");
+  const lang = analysisLanguageInstruction(locale);
 
-  const wordsNeeded = Math.max(280, SEO_WORD_TARGET - breakdown.wordCount);
-  const lenHint = breakdown.wordCount < SEO_SCORE_MIN_WORDS
-    ? [
-        "",
-        `KRITIŠKA: Dabar ~${breakdown.wordCount} žodžių. AUTOMATINIS vertinimas reikalauja bent ${SEO_SCORE_MIN_WORDS}.`,
-        `PRIVALAI pridėti mažiausiai ${wordsNeeded} naujų žodžių (naujos <p> pastraipos ir/ar nauji H2/H3 skyriai su turiniu).`,
-        "Nekeisk esamų nuorodų ir H1 prasmės; plėsk turinį: praktiniai patarimai, klaidos, checklist, FAQ stiliaus pastraipos.",
-      ].join("\n")
-    : "";
+  const wordsNeeded = Math.max(220, SEO_WORD_TARGET - breakdown.wordCount);
+  const lenHint =
+    breakdown.wordCount < SEO_SCORE_MIN_WORDS
+      ? [
+          "",
+          `CRITICAL: ~${breakdown.wordCount} words now. Need ≥ ${SEO_SCORE_MIN_WORDS}.`,
+          `Add at least ~${wordsNeeded} new words: new <p> paragraphs and/or H2/H3 sections with real guidance.`,
+          "Do not dilute meaning; deepen analysis (examples, edge cases, checklist).",
+        ].join("\n")
+      : "";
 
   const userExpand = [
-    `Tema / frazė (lieka ta pati, min. 4 pasikartojimai tekste): "${topic}"`,
+    `Topic phrase: "${topic}"`,
     "",
-    `Dabar: ~${breakdown.wordCount} žodžių; frazė ${breakdown.keywordOccurrences}×; vidinės nuorodos su href="/..." — ${breakdown.internalLinks}.`,
-    `Taisyklės: ≥${SEO_SCORE_MIN_WORDS} žodžių, frazė ≥3×, ≥2 vidinės nuorodos (/...), H1 su frazė.`,
+    `Now: ~${breakdown.wordCount} words; phrase ×${breakdown.keywordOccurrences}; internal /links: ${breakdown.internalLinks}; H2: ${breakdown.h2Count}.`,
     lenHint,
     "",
-    "Grąžink VISĄ pataisytą HTML (ne santrauką). Markdown draudžiamas.",
-    failed.length ? `\nNeįvykdyta:\n- ${failed.join("\n- ")}` : "",
+    "Return the FULL revised HTML fragment (not a summary). No markdown.",
+    failed.length ? `\nFailed checks:\n- ${failed.join("\n- ")}` : "",
     ctxBlock ? `\n${ctxBlock}` : "",
     "",
-    "Dabartinis HTML:",
+    "Current HTML:",
     html,
   ].join("\n");
 
@@ -128,7 +134,7 @@ async function runSingleExpandPass(
     [
       {
         role: "system",
-        content: `Tu SEO redaktorius. Grąžink tik pilną HTML fragmentą lietuviškai. Privalai išlaikyti / įterpti nuorodas į /tools/scanner, /pricing arba /svetainiu-kurimas. Pirmiausia užtikrink bent ${SEO_SCORE_MIN_WORDS} žodžių.`,
+        content: `You are a senior SEO editor. ${lang} Return only a complete HTML fragment. Preserve accuracy; expand weak sections; keep natural keyword use; ensure ≥2 relative internal links and ≥4 H2 if missing. First priority: reach ≥ ${SEO_SCORE_MIN_WORDS} words of useful content.`,
       },
       { role: "user", content: userExpand },
     ],
@@ -136,23 +142,21 @@ async function runSingleExpandPass(
   );
 }
 
-/**
- * Kelios plėtimo iteracijos, kol balas ≥100 arba nebėra progreso (žodžių skaičius / bendras balas).
- */
 async function expandSeoArticleIfWeak(
   html: string,
   topic: string,
   ctx: ArticleGenerationContext | undefined,
   maxTokens: number,
+  locale: Locale,
 ): Promise<string> {
   let current = html;
-  let b = scoreSeoHtml(current, topic);
+  let b = scoreSeoHtml(current, topic, locale);
 
-  for (let pass = 0; pass < 3 && b.score < 100; pass++) {
+  for (let pass = 0; pass < 3 && b.score < 92; pass++) {
     try {
-      const raw = await runSingleExpandPass(current, topic, ctx, maxTokens, b);
+      const raw = await runSingleExpandPass(current, topic, ctx, maxTokens, b, locale);
       const next = normalizeModelHtml(topic, raw);
-      const nb = scoreSeoHtml(next, topic);
+      const nb = scoreSeoHtml(next, topic, locale);
       const betterScore = nb.score > b.score;
       const sameOrBetterScore = nb.score >= b.score;
       const muchLonger = nb.wordCount >= b.wordCount + 80;
@@ -174,20 +178,19 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-/**
- * Generates SEO-oriented HTML article in Lithuanian. Returns raw HTML string.
- */
+/** Generates a professional SEO-oriented HTML article. */
 export async function generateSeoArticleHtml(topic: string, ctx?: ArticleGenerationContext): Promise<string> {
+  const locale = ctx?.locale ?? "lt";
   const maxTokens = getArticleMaxTokens();
   const raw = await openaiChatHtml(
     [
-      { role: "system", content: buildSystemPrompt() },
+      { role: "system", content: buildSystemPrompt(locale) },
       { role: "user", content: buildUserContent(topic, ctx) },
     ],
     maxTokens,
   );
 
   let html = normalizeModelHtml(topic, raw);
-  html = await expandSeoArticleIfWeak(html, topic, ctx, maxTokens);
+  html = await expandSeoArticleIfWeak(html, topic, ctx, maxTokens, locale);
   return html;
 }

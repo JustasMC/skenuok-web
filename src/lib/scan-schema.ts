@@ -37,6 +37,7 @@ export const scanRequestSchema = z.object({
     .min(1, "Įveskite URL")
     .refine((value) => validatePublicHttpUrl(value), "Įveskite viešą HTTP(S) URL"),
   strategy: z.enum(["mobile", "desktop"]).optional().default("mobile"),
+  locale: z.enum(["lt", "en"]).optional(),
 });
 
 export type ScanRequest = z.infer<typeof scanRequestSchema>;

@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { extractCoursePagePlainText } from "@/lib/course-page-extract";
+import type { Locale } from "@/lib/i18n/config";
+import { analysisLanguageInstruction } from "@/lib/i18n/analysis-locale";
 import type { ScanRequest } from "@/lib/scan-schema";
 import { runSeoScan } from "@/lib/seo-scan-service";
 import type { FreeAlternativesBundle } from "@/lib/verify-free-alternatives";
@@ -294,59 +296,71 @@ async function analyzeWithOpenAI(ctx: {
   pageText: string;
   pageTextTruncated: boolean;
   priceCandidates: string[];
+  locale: Locale;
 }): Promise<z.infer<typeof aiCourseSchema> | null> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
 
-  const system = `Tu esi aukščiausio lygio skaitmeninių produktų ir e-mokymų auditorius („Skeptikas“ + rinkos ekspertas). Tavo užduotis – išanalizuoti puslapio tekstą ir nustatyti, ar kursas vertas pinigų, ar tai žemos kokybės „cash-grab“, ar tikėtina apgaulė (scam). Nebūk pardavėjas – saugok vartotojo piniginę.
+  const lang = analysisLanguageInstruction(ctx.locale);
 
-FILTRAI:
-0) PUSLAPIO TIPAS (pirmiausia): Nustatyk, ar tai tikrai **mokymų / kurso pardavimo** puslapis (programa, moduliai, registracija į mokymus, kaina už kursą, „įsigykite kursą“ ir pan.). Jei puslapis aiškiai yra **paslaugų**, agentūros, portfelio, įmonės ar informacinis ir **nėra** konkretaus parduodamo kurso pasiūlymo — **neanalizuok kaip mokamo kurso investicijos**. Tokiu atveju privalai aiškiai parašyti lietuviškai bent **summary** ir **marketVerdict.body**, kad vartotojui: **tai ne kursų pardavimo puslapis**, o paslaugų / verslo svetainė, todėl **šio įrankio „kurso skeptiko“ logika čia netinka**; trumpai aprašyk, ką puslapis iš tiesų siūlo. **skepticFinalRecommendation** turi informuoti (ne parduoti): pvz. naudoti kitą vertinimą arba skenuoti tikrą kurso URL. **extractedOffer.syllabusSummary**: jei nėra programos — parašyk aiškiai, kad mokymų programos nėra (paslaugų / įmonės puslapis); **outcomesSummary** — ką puslapis žada klientui vietoj „po kurso“. **searchTopics** nenaudok kursų frazių, kurių nėra tekste; gali pasiūlyti 1–3 neutralias frazes apie realią temą arba palikti tik prasmingas. Balus (overallScore, valueIndex ir pan.) pritaikyk prie realybės: paslaugų landingui nepriskirk aukštų „kurso vertės“ balų lyg tai būtų mokymų produktas.
+  const system = `You are a world-class digital education auditor and consumer-protection analyst (professor of instructional design + marketplace pricing). Your job: decide whether a course is worth the money, low-value cash-grab, or likely scam. Protect the buyer's wallet — never sell.
 
-1) Kainos ir vertės santykis (benchmark): palygink su tipiniais intervalais (pvz., masiniai kursai ~15–80 €, Coursera tipo ~30–100 €, intensyvūs bootcampai su mentoryste dažnai 1500–5000 €). Įvertink trukmę, mentorystę, gyvus skambučius, bendruomenę, sertifikatą.
-2) Raudonos vėliavos: >10% mėnesinė investicijų/kripto grąža be rizikos; absurdiški ROI (pvz., 25 000 %); „darbas po 2 savaičių“ pradedančiajam be sąlygų; pasyvios pajamos be pastangų; dirbtinis FOMO (skaitliukai, „liko 2 vietos“, „kaina kils po valandos“); tik skrinšotai be audito; anonimiškumas be LinkedIn/GitHub/licencijų kur reikia.
-3) Niša: kripto/forex – pelno pažadai ir rizikos atskleidimas; programavimas – ar detalus stackas ir projektai, ar tik teorija kurią rasite YouTube; verslas/AI – ar konkretūs įrankiai ir case study, ar „greitas praturtėjimas“.
+${lang}
 
-4) Lektoriaus tapatybė (iš pageText): ieškok vardo ir pavardės, viešo profilio užuominų („Apie mus“, nuotrauka), ar tik slapyvardžio (pvz. „CryptoKing“). Jei konkretaus asmens nėra – instructorIdentity = "Anonymous", instructorPresence = "anonymous". Jei tik slapyvardis – "pseudonym". Jei aiškus realus vardas – "named_real". Jei neaišku – "unclear". instructorCredentialsHint: viena eilutė apie sertifikatus, licencijas, darbo vietas tekste (arba tuščia).
-5) instructorAnalysis: 2–5 sakiniai lietuviškai – ar tekste minimas LinkedIn/GitHub, patirtis žinomose įmonėse, sertifikatai; ar priešingai – pilnas anonimiškumas ar tik „guru“ marketingas be pėdsakų. Tai ne teisinė išvada, o informacinis vertinimas pagal matomą tekstą.
+ANALYSIS FRAMEWORK (apply rigorously):
+0) PAGE TYPE FIRST: Decide if this is truly a course/training sales page (curriculum, modules, enrolment, course price). If it is clearly a services/agency/portfolio/company page WITHOUT a sellable course — do NOT evaluate it as a paid-course investment. Explicitly state that in summary + marketVerdict.body + skepticFinalRecommendation. Set syllabusSummary to say no curriculum exists. Do not invent high "course value" scores for a services landing page.
 
-Techninį kontekstą (Lighthouse įžvalgos user žinutėje) naudok kaip papildomą signalą, bet PIRMIAUSIA – vertė už pinigus ir pažadų tikroviškumas.
+1) Price vs value benchmark: compare to typical bands (mass courses ~€15–80, Coursera-like ~€30–100, mentored bootcamps often €1500–5000). Weigh duration, mentorship, live calls, community, certificate.
+2) Red flags: >10%/mo investment/crypto returns without risk; absurd ROI; "job in 2 weeks" for beginners; passive income with no effort; fake FOMO (timers, "2 seats left"); screenshots without audits; anonymity without LinkedIn/GitHub/licences where expected.
+3) Niche heuristics: crypto/forex — profit promises + risk disclosure; programming — concrete stack/projects vs YouTube-level theory; business/AI — concrete tools/case studies vs get-rich-quick.
+4) Instructor identity from pageText: real name, public profile hints, or only a handle. anonymous → instructorIdentity "Anonymous". Pseudonym → "pseudonym". Clear real name → "named_real".
+5) instructorAnalysis: 2–5 sentences on authority signals (LinkedIn, known employers, certificates) vs guru marketing with no footprint. Informational, not legal advice.
+6) Content quality: syllabus specificity, outcome measurability, prerequisites, refund policy signals, sample lesson depth.
+7) Use Lighthouse insights only as secondary technical context — money/value and claim realism come first.
 
-Jei kaina tekste neaiški, vis tiek vertink pažadus ir turinį; marketVerdict.recommendation gali būti "unclear".
+If price is unclear, still evaluate claims; marketVerdict.recommendation may be "unclear".
 
-Atsakyk TIK galiojančiu JSON (be markdown), visi tekstai lietuviškai, schemoje TURI būti visi laukai:
+Return ONLY valid JSON (no markdown). All human-readable strings in the required language. Schema MUST include:
 {
   "overallScore": 0-100,
   "valueIndex": 0-100,
   "valueMetrics": { "uniqueKnowledge": 0-100, "structureValue": 0-100, "priceQuality": 0-100 },
   "marketVerdict": {
-    "headline": "trumpas rinkos verdiktas",
+    "headline": "short market verdict",
     "recommendation": "search_free" | "consider" | "likely_fair" | "unclear",
-    "body": "2–6 sakiniai, konkretūs"
+    "body": "2–6 concrete sentences"
   },
   "extractedOffer": {
-    "priceText": "kaina kaip tekste arba null",
-    "syllabusSummary": "moduliai / temos / trukmė",
-    "outcomesSummary": "pažadai po kurso"
+    "priceText": "price as on page or null",
+    "syllabusSummary": "modules / topics / duration",
+    "outcomesSummary": "promised outcomes"
   },
-  "pillars": [ { "key", "label", "score", "comment" } ] — 4–6 stulpeliai (tech, access, seo, trust, content ir pan., label lietuviškai),
-  "checklist": 6–10 punktų { "ok": boolean, "text": string },
+  "pillars": [ { "key", "label", "score", "comment" } ] — 4–6 pillars (tech, access, seo, trust, content…),
+  "checklist": 6–10 items { "ok": boolean, "text": string },
   "skepticVerdict": "SAUGU" | "ATSARGIAI" | "RIZIKA" | "SCAM",
-  "redFlags": ["aiškūs pažeidimai arba tuščias masyvas jei nėra"],
-  "priceBenchmarkAnalysis": "bent 20 simbolių – kaina vs rinka",
-  "contentQualityAssessment": "bent 20 simbolių – programa, autoritetas, praktika",
-  "skepticFinalRecommendation": "bent 30 simbolių – pirkti / laukti nuolaidos / ieškoti nemokamai / bėgti",
-  "instructorIdentity": "vardas pavardė, slapyvardis arba Anonymous",
+  "redFlags": ["clear issues or empty array"],
+  "priceBenchmarkAnalysis": "≥20 chars — price vs market",
+  "contentQualityAssessment": "≥20 chars — curriculum, authority, practice",
+  "skepticFinalRecommendation": "≥30 chars — buy / wait / seek free / avoid",
+  "instructorIdentity": "name, handle, or Anonymous",
   "instructorPresence": "named_real" | "pseudonym" | "anonymous" | "unclear",
-  "instructorCredentialsHint": "trumpai arba tuščia eilutė",
-  "instructorAnalysis": "bent 40 simbolių – lektoriaus autoritetas pagal tekstą (LinkedIn, sertifikatai, anonimiškumas)",
-  "summary": "2–4 sakiniai apibendrinant",
-  "searchTopics": [ "1–5 konkrečių paieškos frazių nemokamai medžiagai" ]
+  "instructorCredentialsHint": "short or empty",
+  "instructorAnalysis": "≥40 chars",
+  "summary": "2–4 sentence wrap-up",
+  "searchTopics": [ "1–5 concrete free-learning search phrases" ]
 }`;
 
   const userPayload = {
-    ...ctx,
-    note: "pageText – HTML tekstas. priceCandidates – heuristinė kaina. Jei įmanoma, užpildyk searchTopics (1–5 konkrečių temų frazių) – jomis bus ieškoma nemokamų tutorialų (Serper), jei įjungta SERPER_API_KEY.",
+    url: ctx.url,
+    title: ctx.title,
+    description: ctx.description,
+    keywords: ctx.keywords,
+    scores: ctx.scores,
+    insights: ctx.insights,
+    pageText: ctx.pageText,
+    pageTextTruncated: ctx.pageTextTruncated,
+    priceCandidates: ctx.priceCandidates,
+    note: "pageText is extracted HTML text. priceCandidates are heuristic price hints. Fill searchTopics (1–5) for free tutorials if possible.",
   };
 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -357,8 +371,8 @@ Atsakyk TIK galiojančiu JSON (be markdown), visi tekstai lietuviškai, schemoje
     },
     body: JSON.stringify({
       model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
-      temperature: 0.35,
-      max_tokens: 4000,
+      temperature: 0.28,
+      max_tokens: 4500,
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: system },
@@ -382,10 +396,14 @@ Atsakyk TIK galiojančiu JSON (be markdown), visi tekstai lietuviškai, schemoje
 }
 
 /**
- * Mokymų puslapis: Lighthouse + HTML tekstas + AI „rinkos“ verdiktas.
+ * Course page: Lighthouse + HTML text + AI market/skeptic verdict.
  */
-export async function runCourseQualityScan(validated: ScanRequest): Promise<CourseQualityPayload | CourseQualityFailure> {
-  const base = await runSeoScan(validated);
+export async function runCourseQualityScan(
+  validated: ScanRequest,
+  opts?: { locale?: Locale },
+): Promise<CourseQualityPayload | CourseQualityFailure> {
+  const locale = opts?.locale ?? validated.locale ?? "lt";
+  const base = await runSeoScan(validated, { locale, skipAiInsights: true });
   if (!base.ok) {
     return { ok: false, error: base.error, status: base.status };
   }
@@ -412,6 +430,7 @@ export async function runCourseQualityScan(validated: ScanRequest): Promise<Cour
     pageText: scrape.ok ? scrape.text : "",
     pageTextTruncated: scrape.ok ? scrape.truncated : false,
     priceCandidates: scrape.ok ? scrape.priceCandidates : [],
+    locale,
   });
 
   const pageBlock = {
