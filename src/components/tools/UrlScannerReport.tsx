@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useDict } from "@/components/i18n/LocaleProvider";
 import { ScoreRing } from "@/components/tools/ScoreRing";
 import { SeoTaskPanel } from "@/components/tools/SeoTaskPanel";
 import { TopicSuggestions, type ScanPayload } from "@/components/tools/TopicSuggestions";
@@ -33,15 +34,17 @@ type Props = {
 };
 
 export function UrlScannerReport(props: Props) {
-  const { scores, scannedUrl, insights, source, meta, page, siteTopic, siteDescription, generatorFromThemeHref, topicPayload } = props;
+  const t = useDict().tools.scanReport;
+  const { scores, scannedUrl, insights, source, meta, page, siteTopic, siteDescription, generatorFromThemeHref, topicPayload } =
+    props;
   const issueCount = [scores.performance, scores.seo, scores.accessibility].filter((s) => s != null && s < 90).length;
 
   return (
-    <section aria-label="Skenavimo ataskaita" className="space-y-6 sm:space-y-8">
+    <section aria-label={t.aria} className="space-y-6 sm:space-y-8">
       <div className="flex flex-col gap-2 border-b border-[var(--color-border)]/70 pb-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-[var(--color-electric)]">Ataskaita</h2>
-          <p className="mt-1 text-xs text-zinc-500 sm:text-sm">Lighthouse · Svetainių analizė · rekomendacijos</p>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-[var(--color-electric)]">{t.heading}</h2>
+          <p className="mt-1 text-xs text-zinc-500 sm:text-sm">{t.sub}</p>
         </div>
         {scannedUrl ? (
           <p className="max-w-full break-all font-mono text-xs text-zinc-500 sm:max-w-md sm:text-left sm:text-right">{scannedUrl}</p>
@@ -50,16 +53,16 @@ export function UrlScannerReport(props: Props) {
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-1">
           <CardHeader>
-            <CardTitle>Balai</CardTitle>
+            <CardTitle>{t.scores}</CardTitle>
             <CardDescription>
-              {scannedUrl ? <span className="break-all text-zinc-400">{scannedUrl}</span> : "Lighthouse kategorijos (0–100)."}
+              {scannedUrl ? <span className="break-all text-zinc-400">{scannedUrl}</span> : t.scoresHint}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-3 gap-4">
-              <ScoreRing label="Našumas" value={scores.performance} />
-              <ScoreRing label="SEO" value={scores.seo} />
-              <ScoreRing label="Prieiga" value={scores.accessibility} />
+              <ScoreRing label={t.perf} value={scores.performance} />
+              <ScoreRing label={t.seo} value={scores.seo} />
+              <ScoreRing label={t.a11y} value={scores.accessibility} />
             </div>
             {meta?.lighthouseVersion ? <p className="mt-4 font-mono text-[10px] text-zinc-600">Lighthouse {meta.lighthouseVersion}</p> : null}
           </CardContent>
@@ -67,13 +70,11 @@ export function UrlScannerReport(props: Props) {
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Analizė ir meta</CardTitle>
+            <CardTitle>{t.analysis}</CardTitle>
             <CardDescription>
-              {source === "openai" ? "AI įžvalgos (OpenAI)" : "Automatinės įžvalgos iš auditų"}
+              {source === "openai" ? t.aiOpenAi : t.aiFallback}
               <span className="mt-2 block text-[var(--color-lime)]">
-                {issueCount > 0
-                  ? `Rasta ${issueCount} kategorijų žemiau 90 balų — verta optimizuoti.`
-                  : "Kategorijos atrodo stipriai — vis tiek verta peržiūrėti smulkmenas."}
+                {issueCount > 0 ? t.issuesFound.replace("{n}", String(issueCount)) : t.issuesNone}
               </span>
             </CardDescription>
           </CardHeader>
@@ -84,12 +85,12 @@ export function UrlScannerReport(props: Props) {
                   <div className="min-w-0 flex-1 space-y-3">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="inline-flex items-center rounded-full border border-[color-mix(in_oklab,var(--color-electric)_40%,var(--color-border))] bg-[color-mix(in_oklab,var(--color-electric)_10%,transparent)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-electric)]">
-                        Svetainės esmė
+                        {t.essence}
                       </span>
                     </div>
 
                     <div>
-                      <p className="text-[13px] font-semibold leading-tight text-white">Apie ką ši svetainė?</p>
+                      <p className="text-[13px] font-semibold leading-tight text-white">{t.aboutSite}</p>
                       {siteTopic ? (
                         <p className="mt-2 border-l-2 border-[color-mix(in_oklab,var(--color-electric)_70%,transparent)] pl-3 text-base font-semibold leading-snug text-[var(--color-lime)]">
                           {siteTopic}
@@ -104,7 +105,7 @@ export function UrlScannerReport(props: Props) {
 
             {page?.title || page?.description || page?.h1 ? (
               <div className="rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-4 text-sm">
-                <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Title / description / H1</p>
+                <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t.metaBlock}</p>
                 {page.title ? <p className="mt-2 font-medium text-white">{page.title}</p> : null}
                 {page.description ? <p className="mt-2 text-zinc-400">{page.description}</p> : null}
                 {page.h1 ? (
@@ -115,14 +116,14 @@ export function UrlScannerReport(props: Props) {
                 ) : null}
                 {page.keywords.length > 0 ? (
                   <p className="mt-3 text-xs text-zinc-500">
-                    Raktažodžių kandidatai: <span className="text-[var(--color-electric)]">{page.keywords.join(", ")}</span>
+                    {t.keywords} <span className="text-[var(--color-electric)]">{page.keywords.join(", ")}</span>
                   </p>
                 ) : null}
               </div>
             ) : null}
 
             <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Rekomendacijos</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">{t.recommendations}</p>
               <ul className="mt-3 space-y-3 text-sm leading-relaxed text-zinc-300">
                 {insights.map((line, i) => (
                   <li key={`${i}-${line.slice(0, 24)}`} className="flex gap-3">
@@ -134,20 +135,27 @@ export function UrlScannerReport(props: Props) {
             </div>
 
             <div className="rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_60%,transparent)] p-4 sm:p-5 text-sm text-zinc-400">
-              <p className="font-medium text-zinc-200">Kitas žingsnis</p>
+              <p className="font-medium text-zinc-200">{t.nextStep}</p>
               <p className="mt-2 leading-relaxed">
-                Žemiau — greitas kelias į{" "}
+                {t.nextBefore}{" "}
                 {generatorFromThemeHref ? (
                   <Link href={generatorFromThemeHref} className="font-semibold text-[var(--color-electric)] hover:underline">
-                    SEO generatorių su parinkta tema
+                    {t.genWithTheme}
                   </Link>
                 ) : (
                   <Link href="/irankiai/seo-generatorius" className="font-semibold text-[var(--color-electric)] hover:underline">
-                    SEO generatorių
+                    {t.genDefault}
                   </Link>
                 )}
-                . Taip pat peržiūrėkite <Link href="/#paslaugos" className="font-semibold text-[var(--color-electric)] hover:underline">Paslaugas</Link> arba{" "}
-                <Link href="/#kontaktai" className="font-semibold text-[var(--color-electric)] hover:underline">Kontaktus</Link>.
+                {t.nextMid}{" "}
+                <Link href="/#paslaugos" className="font-semibold text-[var(--color-electric)] hover:underline">
+                  {t.services}
+                </Link>{" "}
+                {t.nextOr}{" "}
+                <Link href="/#kontaktai" className="font-semibold text-[var(--color-electric)] hover:underline">
+                  {t.contacts}
+                </Link>
+                .
               </p>
             </div>
           </CardContent>
@@ -158,13 +166,14 @@ export function UrlScannerReport(props: Props) {
         <Card className="border-[color-mix(in_oklab,var(--color-electric)_38%,var(--color-border))] bg-[linear-gradient(135deg,color-mix(in_oklab,var(--color-electric)_12%,var(--color-surface))_0%,var(--color-surface)_55%,color-mix(in_oklab,var(--color-lime)_8%,var(--color-surface))_100%)]">
           <CardHeader className="sm:flex sm:flex-row sm:items-start sm:justify-between sm:gap-6">
             <div className="space-y-1">
-              <CardTitle className="text-lg sm:text-xl">SEO turinio generatorius pagal šią svetainę</CardTitle>
-              <CardDescription className="max-w-2xl text-base leading-relaxed text-zinc-400">
-                Tema parinkta pagal skenavimo kontekstą — generatoriuje galėsite ją pakoreguoti ir iškart generuoti.
-              </CardDescription>
+              <CardTitle className="text-lg sm:text-xl">{t.genCardTitle}</CardTitle>
+              <CardDescription className="max-w-2xl text-base leading-relaxed text-zinc-400">{t.genCardBody}</CardDescription>
             </div>
-            <Link href={generatorFromThemeHref} className="mt-4 inline-flex shrink-0 items-center justify-center rounded-xl bg-[var(--color-electric)] px-5 py-3 text-sm font-semibold text-[#041014] sm:mt-0">
-              Atidaryti generatorių su tema
+            <Link
+              href={generatorFromThemeHref}
+              className="mt-4 inline-flex shrink-0 items-center justify-center rounded-xl bg-[var(--color-electric)] px-5 py-3 text-sm font-semibold text-[#041014] sm:mt-0"
+            >
+              {t.genCardCta}
             </Link>
           </CardHeader>
         </Card>

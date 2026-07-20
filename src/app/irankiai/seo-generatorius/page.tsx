@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
-import { DEFAULT_OG_IMAGE_PATH, getCanonicalPath } from "@/lib/site-url";
+import { getCanonicalPath } from "@/lib/site-url";
 
 const ContentGenerator = dynamic(() => import("@/components/tools/ContentGenerator").then((m) => m.ContentGenerator), {
   loading: () => (
@@ -34,13 +34,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: siteConfig.name,
       title: t.title,
       description: t.description,
-      images: [{ url: DEFAULT_OG_IMAGE_PATH, width: 1200, height: 630, alt: t.title }],
+      images: [{ url: "/irankiai/seo-generatorius/opengraph-image", width: 1200, height: 630, alt: t.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: t.title,
       description: t.description,
-      images: [DEFAULT_OG_IMAGE_PATH],
+      images: ["/irankiai/seo-generatorius/opengraph-image"],
     },
   };
 }

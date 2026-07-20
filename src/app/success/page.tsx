@@ -3,19 +3,21 @@
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useDict } from "@/components/i18n/LocaleProvider";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
 function SuccessSync() {
+  const t = useDict().successPage;
   const sp = useSearchParams();
   const router = useRouter();
   const sessionId = sp.get("session_id");
   const genHint = sp.get("gen_session_hint");
-  const [message, setMessage] = useState("Tvirtinamas mokėjimas…");
+  const [message, setMessage] = useState(t.confirming);
 
   useEffect(() => {
     if (!sessionId || !sessionId.startsWith("cs_")) {
-      setMessage("Trūksta galiojančios Stripe sesijos.");
+      setMessage(t.missingSession);
       return;
     }
 
@@ -42,7 +44,7 @@ function SuccessSync() {
         router.refresh();
         router.replace(`/irankiai/seo-generatorius?${q.toString()}`);
       } catch {
-        if (!cancelled) setMessage("Nepavyko susisiekti su serveriu. Bandykite atidaryti generatorių rankiniu būdu.");
+        if (!cancelled) setMessage(t.network);
       }
     }
 
@@ -50,19 +52,22 @@ function SuccessSync() {
     return () => {
       cancelled = true;
     };
-  }, [sessionId, genHint, router]);
+  }, [sessionId, genHint, router, t.missingSession, t.network]);
 
   return (
     <div className="site-card mx-auto max-w-md space-y-4 p-8 text-center">
+      <h1 className="text-lg font-semibold text-white">{t.title}</h1>
       <p className="text-sm text-zinc-400">{message}</p>
       <Link href="/irankiai/seo-generatorius" className="site-link-inline text-sm font-medium">
-        Eiti į SEO generatorių →
+        {t.goGenerator}
       </Link>
     </div>
   );
 }
 
 export default function CheckoutSuccessPage() {
+  const t = useDict().successPage;
+
   return (
     <>
       <SiteHeader />
@@ -70,7 +75,7 @@ export default function CheckoutSuccessPage() {
         <Suspense
           fallback={
             <div className="site-skeleton h-32 w-full max-w-md rounded-xl" role="status" aria-live="polite">
-              Kraunama…
+              {t.loading}
             </div>
           }
         >

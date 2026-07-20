@@ -59,6 +59,10 @@ export default async function TermsPage() {
           description={dict.legal.termsDescription}
           toc={isEn ? termsTocEn : termsToc}
           backLabel={dict.legal.backHome}
+          tocLabel={dict.legal.tocLabel}
+          tocAria={dict.legal.tocAria}
+          helpTitle={dict.legal.helpTitle}
+          helpBody={dict.legal.helpBody}
         >
           {isEn ? <TermsOfServiceContentEn /> : <TermsOfServiceContent />}
         </LegalPageShell>

@@ -171,6 +171,20 @@ export default async function PricingPage() {
           ))}
         </div>
       </main>
+      <section className="site-shell border-t border-[var(--color-border)]/60 py-12 sm:py-14">
+        <div className="site-card mx-auto max-w-3xl space-y-4 p-6 text-center sm:p-8">
+          <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">{dict.pricingFooter.title}</h2>
+          <p className="text-sm leading-relaxed text-zinc-300">{dict.pricingFooter.body}</p>
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
+            <Link href="/#kontaktai" className="site-btn-primary min-h-11 justify-center">
+              {dict.pricingFooter.contact}
+            </Link>
+            <Link href="/tools/scanner" className="site-btn-secondary min-h-11 justify-center">
+              {dict.pricingFooter.scanner}
+            </Link>
+          </div>
+        </div>
+      </section>
       <SiteFooter />
     </>
   );

@@ -1,44 +1,61 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
-import { CaseStudies } from "@/components/CaseStudies";
 import { Hero } from "@/components/Hero";
-import { HomeConsultingPackages } from "@/components/home/HomeConsultingPackages";
-import { HomeFaq } from "@/components/home/HomeFaq";
 import { HomePrimaryServices } from "@/components/home/HomePrimaryServices";
-import { HomeTestimonials } from "@/components/home/HomeTestimonials";
-import { LighthousePulse } from "@/components/home/LighthousePulse";
-import { SeoSpeedChallenge } from "@/components/home/SeoSpeedChallenge";
-import { Services } from "@/components/Services";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { TechStack } from "@/components/TechStack";
-import { WhyUs } from "@/components/WhyUs";
 import { homePageDescription, homePageKeywords, homePageTitle } from "@/lib/home-seo";
 import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
 import { DEFAULT_OG_IMAGE_PATH, getDefaultOgImageUrl, getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
 
-const ROICalculator = dynamic(() => import("@/components/ROICalculator").then((m) => m.ROICalculator), {
-  loading: () => (
-    <div
-      className="min-h-[min(420px,50vh)] animate-pulse rounded-2xl border border-[var(--color-border)]/50 bg-[var(--color-surface)]/30"
-      aria-hidden
-    />
-  ),
-});
+const sectionSkeleton = (minH: string) => (
+  <div
+    className={`animate-pulse rounded-2xl border border-[var(--color-border)]/40 bg-[var(--color-surface)]/25 ${minH}`}
+    aria-hidden
+  />
+);
 
-const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) => m.ContactForm), {
-  loading: () => (
-    <div
-      className="min-h-[min(380px,45vh)] animate-pulse rounded-2xl border border-[var(--color-border)]/50 bg-[var(--color-surface)]/30"
-      aria-hidden
-    />
-  ),
+const HomeConsultingPackages = dynamic(
+  () => import("@/components/home/HomeConsultingPackages").then((m) => m.HomeConsultingPackages),
+  { loading: () => sectionSkeleton("min-h-[22rem]") },
+);
+const SeoSpeedChallenge = dynamic(
+  () => import("@/components/home/SeoSpeedChallenge").then((m) => m.SeoSpeedChallenge),
+  { loading: () => sectionSkeleton("min-h-[18rem]") },
+);
+const LighthousePulse = dynamic(
+  () => import("@/components/home/LighthousePulse").then((m) => m.LighthousePulse),
+  { loading: () => sectionSkeleton("min-h-[18rem]") },
+);
+const HomeTestimonials = dynamic(
+  () => import("@/components/home/HomeTestimonials").then((m) => m.HomeTestimonials),
+  { loading: () => sectionSkeleton("min-h-[16rem]") },
+);
+const CaseStudies = dynamic(() => import("@/components/CaseStudies").then((m) => m.CaseStudies), {
+  loading: () => sectionSkeleton("min-h-[20rem]"),
 });
-
+const Services = dynamic(() => import("@/components/Services").then((m) => m.Services), {
+  loading: () => sectionSkeleton("min-h-[20rem]"),
+});
+const WhyUs = dynamic(() => import("@/components/WhyUs").then((m) => m.WhyUs), {
+  loading: () => sectionSkeleton("min-h-[16rem]"),
+});
 const TechArsenal = dynamic(() => import("@/components/TechArsenal").then((m) => m.TechArsenal), {
   ssr: true,
   loading: () => <div className="min-h-[600px]" aria-hidden />,
+});
+const TechStack = dynamic(() => import("@/components/TechStack").then((m) => m.TechStack), {
+  loading: () => sectionSkeleton("min-h-[14rem]"),
+});
+const ROICalculator = dynamic(() => import("@/components/ROICalculator").then((m) => m.ROICalculator), {
+  loading: () => sectionSkeleton("min-h-[min(420px,50vh)]"),
+});
+const HomeFaq = dynamic(() => import("@/components/home/HomeFaq").then((m) => m.HomeFaq), {
+  loading: () => sectionSkeleton("min-h-[18rem]"),
+});
+const ContactForm = dynamic(() => import("@/components/ContactForm").then((m) => m.ContactForm), {
+  loading: () => sectionSkeleton("min-h-[min(380px,45vh)]"),
 });
 
 const ogImageUrl = getDefaultOgImageUrl();

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useLocale } from "@/components/i18n/LocaleProvider";
+import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { StripeCheckoutButton } from "@/components/StripeCheckoutButton";
 import { ArticleGenerationSkeleton } from "@/components/tools/ArticleGenerationSkeleton";
@@ -17,6 +17,7 @@ type HistoryRow = { id: string; topic: string; seoScore: number | null; createdA
 
 export function ContentGenerator() {
   const { locale } = useLocale();
+  const dict = useDict();
   const sp = useSearchParams();
   const topicFromUrl = useMemo(() => {
     const raw = sp.get("topic");
@@ -259,7 +260,7 @@ export function ContentGenerator() {
             type="button"
             onClick={() => setSuccessToast(null)}
             className="shrink-0 rounded-md px-1.5 text-zinc-500 transition hover:bg-white/5 hover:text-white"
-            aria-label="Uždaryti pranešimą"
+            aria-label={dict.tools.generator.closeToast}
           >
             ×
           </button>

@@ -1,69 +1,57 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
-const plans = [
-  {
-    name: "Landing page",
-    priceFrom: 330,
-    duration: "5–9 darbo dienos",
-    includes: [
-      "Vieno puslapio struktūra ir aiškus CTA",
-      "Techninis SEO pagrindas (meta, greitis)",
-      "Kontaktų forma ir bazinė analitika",
-    ],
-  },
-  {
-    name: "Verslo svetainė",
-    priceFrom: 590,
-    duration: "2–4 savaitės",
-    includes: [
-      "Iki 5 puslapių (apie, paslaugos, kontaktai)",
-      "Next.js, SEO ir Core Web Vitals bazė",
-      "Kontaktų forma ir matuojami CTA",
-    ],
-  },
-  {
-    name: "El. parduotuvė",
-    priceFrom: 990,
-    duration: "3–6 savaitės",
-    includes: [
-      "Katalogas, produktų puslapiai, atsiskaitymai",
-      "Pirkimo kelio ir konversijų matavimas",
-      "Techninis SEO ir našumo optimizacija",
-    ],
-  },
-  {
-    name: "AI aplikacija",
-    priceFrom: 1690,
-    duration: "4–8 savaitės",
-    includes: [
-      "AI ir API integracijos pagal verslo procesą",
-      "Automatizacija ir agentų darbo srautai",
-      "Stebėsena, testavimas ir plėtros planas",
-    ],
-  },
-] as const;
+import { useDict } from "@/components/i18n/LocaleProvider";
 
 export function WebBuildPricingCalculator() {
+  const dict = useDict();
+  const t = dict.webBuildSimple;
   const [index, setIndex] = useState(1);
-  const selected = useMemo(() => plans[index] ?? plans[1], [index]);
+
+  const plans = useMemo(
+    () =>
+      [
+        {
+          name: t.landingName,
+          priceFrom: 330,
+          duration: t.landingDuration,
+          includes: [t.landing1, t.landing2, t.landing3],
+        },
+        {
+          name: t.businessName,
+          priceFrom: 590,
+          duration: t.businessDuration,
+          includes: [t.business1, t.business2, t.business3],
+        },
+        {
+          name: t.shopName,
+          priceFrom: 990,
+          duration: t.shopDuration,
+          includes: [t.shop1, t.shop2, t.shop3],
+        },
+        {
+          name: t.aiName,
+          priceFrom: 1690,
+          duration: t.aiDuration,
+          includes: [t.ai1, t.ai2, t.ai3],
+        },
+      ] as const,
+    [t],
+  );
+
+  const selected = plans[index] ?? plans[1];
 
   return (
     <section className="site-card-interactive overflow-hidden p-6 sm:p-8">
       <div className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">
-          Greita apžvalga
-        </p>
-        <h3 className="text-2xl font-semibold tracking-tight text-white">Preliminari projekto apimtis</h3>
-        <p className="text-sm leading-relaxed text-zinc-300 sm:text-base">
-          Pasirinkite tipą ir pamatykite orientacinę kainą bei trukmę. Tikslus pasiūlymas — po trumpos konsultacijos.
-        </p>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">{t.kicker}</p>
+        <h3 className="text-2xl font-semibold tracking-tight text-white">{t.title}</h3>
+        <p className="text-sm leading-relaxed text-zinc-300 sm:text-base">{t.lead}</p>
       </div>
 
       <div className="mt-6">
         <label htmlFor="project-type" className="mb-3 block text-xs font-semibold uppercase tracking-[0.14em] text-zinc-400">
-          Projekto tipas
+          {t.projectType}
         </label>
         <input
           id="project-type"
@@ -95,13 +83,15 @@ export function WebBuildPricingCalculator() {
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_90%,transparent)] p-4">
-          <p className="text-sm text-zinc-400">Preliminari kaina</p>
-          <p className="mt-1 text-2xl font-semibold text-white">nuo {selected.priceFrom} €</p>
-          <p className="mt-3 text-sm text-zinc-400">Kūrimo trukmė</p>
+          <p className="text-sm text-zinc-400">{t.priceLabel}</p>
+          <p className="mt-1 text-2xl font-semibold text-white">
+            {t.from} {selected.priceFrom} €
+          </p>
+          <p className="mt-3 text-sm text-zinc-400">{t.durationLabel}</p>
           <p className="mt-1 text-lg font-medium text-[var(--color-lime)]">{selected.duration}</p>
         </div>
         <div className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_84%,transparent)] p-4">
-          <p className="text-sm font-medium text-zinc-200">Kas įeina</p>
+          <p className="text-sm font-medium text-zinc-200">{t.includesLabel}</p>
           <ul className="mt-3 space-y-2 text-sm leading-relaxed text-zinc-300">
             {selected.includes.map((item) => (
               <li key={item} className="flex gap-2">

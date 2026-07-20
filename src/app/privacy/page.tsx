@@ -59,6 +59,10 @@ export default async function PrivacyPage() {
           description={dict.legal.privacyDescription}
           toc={isEn ? privacyTocEn : privacyToc}
           backLabel={dict.legal.backHome}
+          tocLabel={dict.legal.tocLabel}
+          tocAria={dict.legal.tocAria}
+          helpTitle={dict.legal.helpTitle}
+          helpBody={dict.legal.helpBody}
         >
           {isEn ? <PrivacyPolicyContentEn /> : <PrivacyPolicyContent />}
         </LegalPageShell>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useLocale } from "@/components/i18n/LocaleProvider";
+import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 import { buildGeneratorUrl } from "@/lib/generator-deeplink";
 import type { TopicIdea } from "@/lib/topics-openai";
 
@@ -22,12 +22,11 @@ export function TopicSuggestions({
   siteDescription,
 }: {
   payload: ScanPayload | null;
-  /** Iš skenavimo – perduodama į generatorių kaip „niša“ (query: context) */
   siteTopic?: string | null;
-  /** Iš skenavimo – tonas / veikla (query: tone) */
   siteDescription?: string | null;
 }) {
   const { locale } = useLocale();
+  const t = useDict().tools.topics;
   const [loading, setLoading] = useState(false);
   const [topics, setTopics] = useState<TopicIdea[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -71,9 +70,7 @@ export function TopicSuggestions({
                 await new Promise((r) => setTimeout(r, 500));
                 continue;
               }
-              if (!cancelled) {
-                setError("Serveris grąžino neteisingą atsakymą. Patikrinkite, ar veikia dev serveris.");
-              }
+              if (!cancelled) setError(t.badJson);
               return;
             }
             if (!res.ok) {
@@ -81,7 +78,7 @@ export function TopicSuggestions({
                 await new Promise((r) => setTimeout(r, 500));
                 continue;
               }
-              if (!cancelled) setError(body.error ?? "Temų nepavyko gauti");
+              if (!cancelled) setError(body.error ?? t.fail);
               return;
             }
             if (body.topics && !cancelled) setTopics(body.topics);
@@ -91,11 +88,7 @@ export function TopicSuggestions({
               await new Promise((r) => setTimeout(r, 600));
               continue;
             }
-            if (!cancelled) {
-              setError(
-                "Nepavyko pasiekti serverio. Įsitikinkite, kad veikia „npm run dev“, ir bandykite perkrauti puslapį.",
-              );
-            }
+            if (!cancelled) setError(t.network);
             return;
           }
         }
@@ -108,16 +101,16 @@ export function TopicSuggestions({
     return () => {
       cancelled = true;
     };
-  }, [payload, locale]);
+  }, [payload, locale, t.badJson, t.fail, t.network]);
 
   if (!payload) return null;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Naujos turinio idėjos</CardTitle>
+        <CardTitle>{t.title}</CardTitle>
         <CardDescription>
-          AI pasiūlymai pagal jūsų skenavimą: <span className="text-zinc-300">{payload.url}</span>
+          {t.description} <span className="text-zinc-300">{payload.url}</span>
           {payload.title ? (
             <>
               {" "}
@@ -132,7 +125,7 @@ export function TopicSuggestions({
             <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--color-border)]">
               <div className="h-full w-1/2 animate-pulse rounded-full bg-gradient-to-r from-[var(--color-electric)] to-[var(--color-lime)]" />
             </div>
-            <p className="text-sm text-zinc-500">Generuojamos temos… (kelios sekundės)</p>
+            <p className="text-sm text-zinc-500">{t.loading}</p>
           </div>
         ) : null}
 
@@ -140,31 +133,31 @@ export function TopicSuggestions({
 
         {!loading && topics.length > 0 ? (
           <ul className="grid gap-4 md:grid-cols-2">
-            {topics.map((t, idx) => (
-                <li key={`${idx}-${t.title}`}>
-                  <div className="flex h-full flex-col rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-4">
-                    <h4 className="font-semibold text-white">{t.title}</h4>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-400">{t.description}</p>
-                    {t.seoKampas ? (
-                      <div className="mt-3 rounded-lg border border-[color-mix(in_oklab,var(--color-lime)_25%,var(--color-border))] bg-[color-mix(in_oklab,var(--color-lime)_6%,transparent)] px-3 py-2 text-xs leading-relaxed text-zinc-300">
-                        <span className="font-semibold text-[var(--color-lime)]">SEO kampas: </span>
-                        {t.seoKampas}
-                      </div>
-                    ) : null}
-                    <Link
-                      href={buildGeneratorUrl(t.title, siteTopic, siteDescription)}
-                      className="mt-4 inline-flex justify-center rounded-lg bg-[var(--color-electric)] px-3 py-2 text-xs font-semibold text-[#041014] transition hover:bg-[var(--color-electric-dim)]"
-                    >
-                      Generuoti straipsnį
-                    </Link>
-                  </div>
-                </li>
-              ))}
+            {topics.map((topic, idx) => (
+              <li key={`${idx}-${topic.title}`}>
+                <div className="flex h-full flex-col rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-4">
+                  <h4 className="font-semibold text-white">{topic.title}</h4>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-400">{topic.description}</p>
+                  {topic.seoKampas ? (
+                    <div className="mt-3 rounded-lg border border-[color-mix(in_oklab,var(--color-lime)_25%,var(--color-border))] bg-[color-mix(in_oklab,var(--color-lime)_6%,transparent)] px-3 py-2 text-xs leading-relaxed text-zinc-300">
+                      <span className="font-semibold text-[var(--color-lime)]">{t.seoAngle} </span>
+                      {topic.seoKampas}
+                    </div>
+                  ) : null}
+                  <Link
+                    href={buildGeneratorUrl(topic.title, siteTopic, siteDescription)}
+                    className="mt-4 inline-flex justify-center rounded-lg bg-[var(--color-electric)] px-3 py-2 text-xs font-semibold text-[#041014] transition hover:bg-[var(--color-electric-dim)]"
+                  >
+                    {t.generate}
+                  </Link>
+                </div>
+              </li>
+            ))}
           </ul>
         ) : null}
 
         {!loading && !error && topics.length === 0 ? (
-          <p className="text-sm text-zinc-500">Temų sąrašas tuščias — pabandykite pakartoti skenavimą.</p>
+          <p className="text-sm text-zinc-500">{t.empty}</p>
         ) : null}
       </CardContent>
     </Card>
