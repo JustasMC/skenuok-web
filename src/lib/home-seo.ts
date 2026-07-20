@@ -46,7 +46,11 @@ export const homeFaqContent: readonly { q: string; a: string }[] = [
   },
   {
     q: "Kuo skiriasi URL skaneris ir kursų kokybės skenavimas?",
-    a: "URL skaneris orientuojasi į domeno ir puslapio techninę santrauką. Kursų skenavimas papildo turinio ir pasiūlos prasme — tinka, kai parduodate mokymus, ne tik „svetainės greitį“.",
+    a: "URL skaneris yra nemokamas (0 kreditų) ir orientuojasi į domeno / puslapio techninę santrauką (Lighthouse, SEO, prieinamumas). Kursų skenavimas papildo turinio ir pasiūlos prasme — reikia prisijungimo ir 1–2 kreditų; tinka, kai parduodate mokymus.",
+  },
+  {
+    q: "Kaip veikia kreditai ir ar yra nemokamų?",
+    a: "URL skaneris kreditų nenaudoja. SEO straipsnio generatorius: 3 nemokami kreditai be paskyros ir +3 dovanų po registracijos. 1 kreditas = 1 straipsnis. Mokami planai — 15 kreditų už 5 €/mėn. arba 80 už 20 €/mėn. Detaliau — kainodaros puslapyje.",
   },
   {
     q: "Kiek laiko trunka skenavimas? Ar mano duomenys saugūs?",

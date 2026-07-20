@@ -123,7 +123,12 @@ export function UrlScanner() {
         <CardHeader>
           <CardTitle>Įveskite svetainės adresą</CardTitle>
           <CardDescription>
-            SEO URL skenavimas per Google PageSpeed (Lighthouse). Rezultatas — Svetainių analizė su balais, meta, H1 ir rekomendacijomis; toliau galite eiti į SEO strategiją, generatorių ar <Link href="/#kontaktai" className="text-[var(--color-electric)] hover:underline">Kontaktus</Link> dėl įgyvendinimo.
+            Nemokamas SEO URL skenavimas (0 kreditų) per Google PageSpeed (Lighthouse). Rezultatas — Svetainių analizė su
+            balais, meta, H1 ir rekomendacijomis; toliau galite eiti į SEO strategiją, generatorių ar{" "}
+            <Link href="/#kontaktai" className="text-[var(--color-electric)] hover:underline">
+              Kontaktus
+            </Link>{" "}
+            dėl įgyvendinimo.
           </CardDescription>
         </CardHeader>
         <CardContent>

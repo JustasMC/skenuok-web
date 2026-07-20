@@ -7,7 +7,7 @@ export const contentType = "image/png";
 export default function Image() {
   return toolOpenGraphImage({
     title: "Kainodara",
-    subtitle: "Nemokamas · profesionalus · verslo planai — SEO įrankiai ir turinio generatorius",
+    subtitle: "0 € skaneris · 3 dovanų kreditai · 15 / 80 kreditų planai",
     accent: "lime",
   });
 }

@@ -405,11 +405,10 @@ export function ContentGenerator() {
             >
               Prisijungti — +3 dovanų kreditai
             </Link>
-          ) : (
-            <StripeCheckoutButton className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium text-zinc-200 transition hover:border-[var(--color-electric)] hover:text-white">
-              Pirkti kreditų paketą
-            </StripeCheckoutButton>
-          )}
+          ) : null}
+          <StripeCheckoutButton className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium text-zinc-200 transition hover:border-[var(--color-electric)] hover:text-white">
+            Pirkti kreditų paketą
+          </StripeCheckoutButton>
         </div>
       </div>
 
