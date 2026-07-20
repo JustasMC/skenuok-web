@@ -1,22 +1,24 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { cn } from "@/lib/cn";
 
-function formatEur(value: number) {
-  return new Intl.NumberFormat("lt-LT", {
-    style: "currency",
-    currency: "EUR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
 export function ROICalculator() {
+  const t = useDict().roiCalc;
+  const { locale } = useLocale();
   const [hoursPerWeek, setHoursPerWeek] = useState(12);
   const [hourlyCost, setHourlyCost] = useState(35);
   const [automationShare, setAutomationShare] = useState(55);
   const [implementationCost, setImplementationCost] = useState(8500);
+
+  const formatEur = (value: number) =>
+    new Intl.NumberFormat(locale === "en" ? "en-US" : "lt-LT", {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0,
+    }).format(value);
 
   const { annualManualCost, annualSavings, paybackMonths, netYearOne } = useMemo(() => {
     const weeks = 52;
@@ -35,17 +37,12 @@ export function ROICalculator() {
   return (
     <section id="roi" className="site-section">
       <div className="site-shell">
-        <SectionHeader
-          eyebrow="ROI"
-          title="Automatizacijos grąžos skaičiuoklis"
-          description="Įvertinkite metinį potencialą, kai pasikartojantys procesai perkeliami į AI agentus ar vidines sistemas. Modelis konservatyvus: tik tiesioginės darbo valandų sąnaudos, be klaidų ar vėlavimų piniginės vertės."
-          wide
-        />
+        <SectionHeader eyebrow={t.eyebrow} title={t.title} description={t.description} wide />
 
         <div className="mt-12 grid gap-8 sm:mt-14 lg:grid-cols-2 lg:gap-10">
           <div className="site-card space-y-7 p-6 sm:space-y-8 sm:p-8">
             <Slider
-              label="Rankinio darbo valandos per savaitę"
+              label={t.hoursWeek}
               min={1}
               max={60}
               step={1}
@@ -54,7 +51,7 @@ export function ROICalculator() {
               suffix="h"
             />
             <Slider
-              label="Valandos savikaina (įskaitant overhead)"
+              label={t.hourlyCost}
               min={10}
               max={120}
               step={1}
@@ -63,7 +60,7 @@ export function ROICalculator() {
               suffix="€"
             />
             <Slider
-              label="Proceso dalis, kurią realiai galima automatizuoti"
+              label={t.automationShare}
               min={10}
               max={90}
               step={5}
@@ -72,7 +69,7 @@ export function ROICalculator() {
               suffix="%"
             />
             <Slider
-              label="Įgyvendinimo biudžetas (vienkartinė investicija)"
+              label={t.budget}
               min={2000}
               max={50000}
               step={500}
@@ -84,31 +81,28 @@ export function ROICalculator() {
 
           <div className="site-card flex flex-col justify-between gap-6 bg-gradient-to-br from-[var(--color-surface-2)] to-[var(--color-surface)] p-6 sm:p-8">
             <div className="space-y-6">
-              <Metric label="Metinė rankinio darbo sąnauda" value={formatEur(annualManualCost)} hint="be automatizacijos" />
+              <Metric label={t.annualManual} value={formatEur(annualManualCost)} hint={t.annualManualHint} />
               <Metric
-                label="Prognozuojamas metinis sutaupymas"
+                label={t.annualSavings}
                 value={formatEur(annualSavings)}
                 accent
-                hint={`${automationShare}% laiko atlaisvinimas`}
+                hint={`${automationShare}${t.savingsHint}`}
               />
               <div className="grid gap-4 sm:grid-cols-2">
                 <Metric
-                  label="Atsipirkimas"
-                  value={Number.isFinite(paybackMonths) ? `${paybackMonths.toFixed(1)} mėn.` : "—"}
-                  hint="pagal mėnesio sutaupymą"
+                  label={t.payback}
+                  value={Number.isFinite(paybackMonths) ? `${paybackMonths.toFixed(1)} ${t.months}` : "—"}
+                  hint={t.paybackHint}
                 />
                 <Metric
-                  label="Grynasis I metų pabaigoje"
+                  label={t.netYear}
                   value={formatEur(netYearOne)}
-                  hint="sutaupymas minus investicija"
+                  hint={t.netHint}
                   positive={netYearOne >= 0}
                 />
               </div>
             </div>
-            <p className="text-xs leading-relaxed text-zinc-500">
-              Tai supaprastintas modelis. Realybėje pridedame SLA, stebėseną, verslo logikos testus ir integracijas — kad
-              sutaupymas būtų matuojamas ne „PowerPointe“, o jūsų apskaitoje.
-            </p>
+            <p className="text-xs leading-relaxed text-zinc-500">{t.footer}</p>
           </div>
         </div>
       </div>

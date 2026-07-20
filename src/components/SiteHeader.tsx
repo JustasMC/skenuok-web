@@ -63,7 +63,7 @@ export function SiteHeader() {
           <span className="flex min-w-0 flex-col leading-tight">
             <span className="truncate text-sm font-semibold sm:text-base">{siteConfig.name}</span>
             <span className="hidden text-xs font-normal tracking-wide text-zinc-500 xl:block">
-              {siteConfig.tagline}
+              {dict.common.tagline}
             </span>
           </span>
         </Link>

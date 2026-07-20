@@ -1,38 +1,38 @@
+"use client";
+
+import { useDict } from "@/components/i18n/LocaleProvider";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
-const pillars = [
-  {
-    title: "Aukšto našumo žiniatinklis",
-    body: "Kuriame svetaines, kurios ne tik atrodo moderniai, bet ir veikia greitai. Next.js, Tailwind ir serveriniai komponentai — SEO, prieinamumas ir Core Web Vitals kaip standartas, ne papildomas darbas.",
-    accent: "border-[var(--color-electric)]/40",
-    glow: "group-hover:shadow-[0_0_36px_-12px_rgba(0,212,255,0.35)]",
-    tag: "Žiniatinklis",
-  },
-  {
-    title: "AI ir procesų automatizacija",
-    body: "Integruojame AI agentus ir automatizaciją ten, kur tai sumažina rankinį darbą: turinys, SEO užduotys, duomenų apdorojimas. Visada su aiškia verslo logika ir žmogaus kontrole kritinėse vietose.",
-    accent: "border-[var(--color-lime)]/40",
-    glow: "group-hover:shadow-[0_0_36px_-12px_rgba(200,255,0,0.3)]",
-    tag: "AI",
-  },
-  {
-    title: "Sprendimai pagal duomenis",
-    body: "Kiekvienas prioritetas turi pagrindimą: SQL, GA4, Power BI ir techniniai auditai. SEO strategija remiasi faktais — ne spėjimais ar „gražiais“ ataskaitų skaičiais be konteksto.",
-    accent: "border-sky-400/40",
-    glow: "group-hover:shadow-[0_0_36px_-12px_rgba(56,189,248,0.35)]",
-    tag: "Duomenys",
-  },
-] as const;
-
 export function WhyUs() {
+  const t = useDict().whyUs;
+  const pillars = [
+    {
+      title: t.p1Title,
+      body: t.p1Body,
+      accent: "border-[var(--color-electric)]/40",
+      glow: "group-hover:shadow-[0_0_36px_-12px_rgba(0,212,255,0.35)]",
+      tag: t.p1Tag,
+    },
+    {
+      title: t.p2Title,
+      body: t.p2Body,
+      accent: "border-[var(--color-lime)]/40",
+      glow: "group-hover:shadow-[0_0_36px_-12px_rgba(200,255,0,0.3)]",
+      tag: t.p2Tag,
+    },
+    {
+      title: t.p3Title,
+      body: t.p3Body,
+      accent: "border-sky-400/40",
+      glow: "group-hover:shadow-[0_0_36px_-12px_rgba(56,189,248,0.35)]",
+      tag: t.p3Tag,
+    },
+  ] as const;
+
   return (
     <section id="kodel-mes" className="site-section border-t border-[var(--color-border)]/60">
       <div className="site-shell">
-        <SectionHeader
-          eyebrow="Kodėl mes"
-          title="Rezultatai, kuriuos matuojame skaičiais"
-          description="Ne spėliojame — matuojame. Platforma sukurta pagal tuos pačius SEO ir našumo principus, kuriuos taikome klientų projektuose."
-        />
+        <SectionHeader eyebrow={t.eyebrow} title={t.title} description={t.description} />
 
         <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-3">
           {pillars.map((p) => (

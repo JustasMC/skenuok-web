@@ -48,7 +48,7 @@ export function SiteFooter() {
           <div className="max-w-sm">
             <p className="text-lg font-semibold tracking-tight text-white">{siteConfig.name}</p>
             <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-zinc-500">
-              {siteConfig.tagline}
+              {dict.common.tagline}
             </p>
             <p className="mt-3 text-sm leading-relaxed text-zinc-400">{dict.footer.blurb}</p>
             <p className="mt-4">
