@@ -8,7 +8,8 @@ RUN apt-get update -y \
   && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json ./
-RUN npm ci
+# Skip postinstall here — scripts/ and prisma/ are not copied yet.
+RUN npm ci --ignore-scripts
 
 COPY . .
 
@@ -24,6 +25,9 @@ ENV NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
 ENV RAILWAY_PUBLIC_DOMAIN=${RAILWAY_PUBLIC_DOMAIN}
 ENV NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID}
 ENV NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=${NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION}
+
+# Generate Prisma client after full source is present (replaces skipped postinstall).
+RUN npx prisma generate
 
 RUN npm run build
 
