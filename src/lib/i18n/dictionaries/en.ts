@@ -39,6 +39,10 @@ export const en: Dictionary = {
     lt: "LT",
     en: "EN",
   },
+  theme: {
+    toLight: "Light theme",
+    toDark: "Dark theme",
+  },
   footer: {
     blurb:
       "SEO audits, AI tools and Next.js solutions for growing businesses. Measurable results, clear communication.",

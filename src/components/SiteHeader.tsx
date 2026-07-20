@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AuthHeaderActions } from "@/components/AuthHeaderActions";
 import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { useDict } from "@/components/i18n/LocaleProvider";
 import { siteConfig } from "@/lib/site-config";
 
@@ -105,6 +106,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex min-w-0 shrink-0 items-center justify-end gap-1.5 sm:gap-2">
+          <ThemeToggle />
           <LanguageSwitcher className="hidden sm:inline-flex" />
           <AuthHeaderActions />
           <Link

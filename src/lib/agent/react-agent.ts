@@ -16,6 +16,8 @@ import {
   SEO_SCAN_TOOL_NAME,
   seoScanOpenAiTool,
 } from "@/lib/agent/tools/seo-scan-tool";
+import type { Locale } from "@/lib/i18n/config";
+import { analysisLanguageInstruction } from "@/lib/i18n/analysis-locale";
 
 const AGENT_OPENAI_TOOLS = [seoScanOpenAiTool, compareSitesOpenAiTool, saveSeoTasksOpenAiTool];
 
@@ -44,7 +46,23 @@ function approximateDialogTokens(messages: ChatMessage[]): number {
   return estimateTextTokens(String(raw));
 }
 
-const DEFAULT_SYSTEM = `Tu esi oficialus Skenuok.com SEO asistentas. Kalbėk lietuviškai.
+function defaultSystemPrompt(locale: Locale): string {
+  const lang = analysisLanguageInstruction(locale);
+  if (locale === "en") {
+    return `${lang}
+
+You are the official Skenuok.com SEO assistant. Reply in English.
+Rules:
+- Use scan_site_seo for one URL; compare_sites_seo when comparing two URLs (two scans).
+- Use save_seo_tasks when the user clearly asks to save tasks/checklist to the workspace.
+- Never invent Lighthouse scores — always rely on tool output.
+- Do not suggest DNS/server changes without a clear “recommendation only” warning.
+- Be concise; tools first (when data is needed), then conclusions.
+- If a tool errors, explain and suggest checking the URL or trying later.`;
+  }
+  return `${lang}
+
+Tu esi oficialus Skenuok.com SEO asistentas. Kalbėk lietuviškai.
 Taisyklės:
 - Naudok scan_site_seo vienam URL; compare_sites_seo — kai reikia palyginti du URL (du skenavimai).
 - Naudok save_seo_tasks, kai vartotojas aiškiai prašo užsirašyti užduotis ar checklistę į darbo vietą.
@@ -52,12 +70,14 @@ Taisyklės:
 - Nesiūlyk keisti DNS/serverio be aiškaus „tik rekomendacija“ įspėjimo.
 - Būk glaustas; pirmiausia įrankiai (jei reikia duomenų), tada išvados.
 - Jei įrankis grąžina klaidą, paaiškink ir pasiūlyk patikrinti URL ar bandyti vėliau.`;
+}
 
 export type AgentToolRuntimeContext = {
   userId: string;
   allowExternalScan: () => boolean;
   scanSlots: ScanSlotTracker;
   abortSignal?: AbortSignal;
+  locale?: Locale;
 };
 
 function allowScanFactory(ctx: AgentToolRuntimeContext) {
@@ -122,11 +142,16 @@ async function dispatchAgentTool(
   const allowScan = allowScanFactory(ctx);
   switch (name) {
     case SEO_SCAN_TOOL_NAME:
-      return executeSeoScanTool(args, { allowScan, abortSignal: ctx.abortSignal });
+      return executeSeoScanTool(args, {
+        allowScan,
+        abortSignal: ctx.abortSignal,
+        locale: ctx.locale,
+      });
     case COMPARE_SITES_TOOL_NAME:
       return executeCompareSitesTool(args, {
         allowScan,
         abortSignal: ctx.abortSignal,
+        locale: ctx.locale,
         onScanProgress: (p) => {
           emitSse?.({
             type: "tool_progress",
@@ -153,6 +178,8 @@ export type ReactAgentOptions = {
   allowExternalScan: () => boolean;
   userId: string;
   systemPrompt?: string;
+  /** UI locale — agent replies + scan AI insights language. */
+  locale?: Locale;
   /** Pasirinktinai: SSE įvykiai (statusas, įrankiai, teksto fragmentai). */
   sse?: {
     onEvent: (e: AgentSseEvent) => void;
@@ -172,13 +199,15 @@ export async function runReactSeoAgent(opts: ReactAgentOptions): Promise<ReactAg
   }
 
   const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
-  const system = opts.systemPrompt ?? DEFAULT_SYSTEM;
+  const locale = opts.locale ?? "lt";
+  const system = opts.systemPrompt ?? defaultSystemPrompt(locale);
   const scanSlots = createScanSlotTracker(opts.limits.maxToolScans);
   const toolCtx: AgentToolRuntimeContext = {
     userId: opts.userId,
     allowExternalScan: opts.allowExternalScan,
     scanSlots,
     abortSignal: opts.abortSignal,
+    locale,
   };
 
   const messages: ChatMessage[] = [

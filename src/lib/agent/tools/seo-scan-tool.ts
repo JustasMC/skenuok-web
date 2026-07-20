@@ -42,7 +42,7 @@ export type ToolExecutionContext = {
  */
 export async function executeSeoScanTool(
   rawArgs: unknown,
-  ctx: ToolExecutionContext,
+  ctx: ToolExecutionContext & { locale?: "lt" | "en" },
 ): Promise<string> {
   const parsed = argsSchema.safeParse(rawArgs);
   if (!parsed.success) {
@@ -58,7 +58,10 @@ export async function executeSeoScanTool(
     });
   }
 
-  const result = await runSeoScan(parsed.data, { signal: ctx.abortSignal });
+  const result = await runSeoScan(parsed.data, {
+    signal: ctx.abortSignal,
+    locale: ctx.locale ?? parsed.data.locale ?? "lt",
+  });
   if (!result.ok) {
     return JSON.stringify({ error: result.error });
   }

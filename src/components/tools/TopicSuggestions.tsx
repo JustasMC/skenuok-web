@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { buildGeneratorUrl } from "@/lib/generator-deeplink";
 import type { TopicIdea } from "@/lib/topics-openai";
 
@@ -26,6 +27,7 @@ export function TopicSuggestions({
   /** Iš skenavimo – tonas / veikla (query: tone) */
   siteDescription?: string | null;
 }) {
+  const { locale } = useLocale();
   const [loading, setLoading] = useState(false);
   const [topics, setTopics] = useState<TopicIdea[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -50,6 +52,7 @@ export function TopicSuggestions({
         keywords: snapshot.keywords,
         scores: snapshot.scores,
         insights: snapshot.insights,
+        locale,
       });
 
       try {
@@ -105,7 +108,7 @@ export function TopicSuggestions({
     return () => {
       cancelled = true;
     };
-  }, [payload]);
+  }, [payload, locale]);
 
   if (!payload) return null;
 

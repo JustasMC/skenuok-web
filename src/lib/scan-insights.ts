@@ -227,6 +227,38 @@ export async function buildAiScanAnalysis(
   };
 
   const lang = analysisLanguageInstruction(locale);
+  const outputLanguage = locale === "en" ? "en" : "lt";
+  const payloadWithLang = { ...payload, outputLanguage };
+
+  const systemLt = `${lang}
+
+Tu esi vyresnysis SEO ir web našumo profesorius / konsultantas (15+ m. patirtis). Galvok kaip techninis auditorius, kuris paaiškina ir verslo poveikį.
+
+Grąžink VIENĄ JSON objektą:
+- "insights": 6–8 eilutės (string). Kiekviena — konkreti, prioritetizuota, su veiksmu (ką taisyti, kodėl, koks kitas žingsnis). Susiek Lighthouse problemas IR on-page signalus (H1/H2, žodžių skaičius, JSON-LD, CWV) su svetainės veikla (title/meta/H1). Be tuščios frazeologijos. Prioritetas: indeksavimas/intent → CWV → turinio gylis → prieinamumas.
+- "siteTopic": trumpa frazė (3–10 žodžių) — kokia svetainė / veikla.
+- "siteDescription": 1–2 sakiniai — ką daro, kam skirta, koks tonas.
+
+Taisyklės:
+- Neišgalvok metrikų, kurių nėra payload'e.
+- Jei signalai silpni (SPA shell / mažai žodžių) — pasakyk ir rekomenduok patikrinti Search Console.
+- Be markdown JSON reikšmėse.
+- Dar kartą: VISOS tekstinės reikšmės — LIETUVIŲ kalba.`;
+
+  const systemEn = `${lang}
+
+You are a senior SEO + web performance professor and consultant (15+ years). Think like a technical auditor who also teaches business impact.
+
+Return ONE JSON object:
+- "insights": 6–8 strings. Each must be specific, prioritised, actionable. Tie Lighthouse failures AND on-page signals to the site's business. Prefer: indexing/intent → CWV → content depth → a11y.
+- "siteTopic": short phrase (3–10 words).
+- "siteDescription": 1–2 sentences — what the site does, audience, tone.
+
+Rules:
+- Do not invent metrics missing from the payload.
+- If signals are thin, say so.
+- No markdown in JSON string values.
+- Again: ALL user-facing strings in English only.`;
 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -236,27 +268,19 @@ export async function buildAiScanAnalysis(
     },
     body: JSON.stringify({
       model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
-      temperature: 0.28,
+      temperature: 0.25,
       response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
-          content: `You are a senior SEO + web performance professor and consultant (15+ years). Think like a technical auditor who also teaches clients business impact.
-${lang}
-
-Return ONE JSON object with:
-- "insights": array of 6–8 strings. Each insight MUST be specific, prioritised, and actionable (what to fix first, why it matters for rankings/conversions, and a concrete next step). Tie Lighthouse failures AND on-page signals (H1/H2, word count, JSON-LD, CWV) to the site's apparent business (title/meta/H1). Avoid generic filler. Prefer impact order: indexing/intent → CWV → content depth → a11y.
-- "siteTopic": short phrase (3–10 words) naming the business/site type.
-- "siteDescription": 1–2 sentences: what the site does, who it serves, and communication tone — usable later as brand context for a content writer.
-
-Rules:
-- Do not invent metrics that are not in the payload.
-- If signals are thin (SPA shell / low word count), say so and recommend verification with rendered HTML / Search Console.
-- No markdown inside JSON string values.`,
+          content: locale === "en" ? systemEn : systemLt,
         },
         {
           role: "user",
-          content: `Analyse this scan payload and fill the JSON:\n${JSON.stringify(payload)}`,
+          content:
+            locale === "en"
+              ? `outputLanguage=en. Analyse this scan payload and fill the JSON (English only):\n${JSON.stringify(payloadWithLang)}`
+              : `outputLanguage=lt. Išanalizuok šį skenavimo payload ir užpildyk JSON TIK lietuvių kalba:\n${JSON.stringify(payloadWithLang)}`,
         },
       ],
     }),

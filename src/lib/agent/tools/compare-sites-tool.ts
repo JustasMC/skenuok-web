@@ -4,6 +4,7 @@ import { executeSeoScanTool, type ToolExecutionContext } from "@/lib/agent/tools
 export type CompareToolContext = ToolExecutionContext & {
   /** Prieš kiekvieną PageSpeed kvietimą (1/2 ir 2/2 palyginime). */
   onScanProgress?: (p: { index: number; total: number; url: string }) => void;
+  locale?: "lt" | "en";
 };
 
 export const COMPARE_SITES_TOOL_NAME = "compare_sites_seo" as const;
@@ -66,7 +67,10 @@ export async function executeCompareSitesTool(rawArgs: unknown, ctx: CompareTool
       ctx.onScanProgress?.({ index: i + 1, total: urls.length, url });
     }
     const allowScan = () => ctx.allowScan();
-    const observation = await executeSeoScanTool({ url, strategy }, { allowScan, abortSignal: ctx.abortSignal });
+    const observation = await executeSeoScanTool(
+      { url, strategy },
+      { allowScan, abortSignal: ctx.abortSignal, locale: ctx.locale },
+    );
     try {
       out[label] = JSON.parse(observation) as unknown;
     } catch {

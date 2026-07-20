@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { jsonApiError, publicApiErrorMessage } from "@/lib/api-errors";
+import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale-server";
 import { suggestTopicsWithOpenAI } from "@/lib/topics-openai";
 import { topicsRequestSchema } from "@/lib/topics-schema";
 import { getRateLimitClientKey } from "@/lib/rate-limit";
@@ -31,6 +32,8 @@ export async function POST(req: Request) {
       );
     }
 
+    const locale = await resolveAnalysisLocaleFromCookies(parsed.data.locale);
+
     try {
       const topics = await suggestTopicsWithOpenAI({
         url: parsed.data.url,
@@ -39,6 +42,7 @@ export async function POST(req: Request) {
         keywords: parsed.data.keywords ?? [],
         scores: parsed.data.scores,
         insights: parsed.data.insights ?? [],
+        locale,
       });
       return NextResponse.json({ ok: true as const, topics });
     } catch (e) {

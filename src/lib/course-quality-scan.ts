@@ -302,10 +302,13 @@ async function analyzeWithOpenAI(ctx: {
   if (!apiKey) return null;
 
   const lang = analysisLanguageInstruction(ctx.locale);
+  const outputLanguage = ctx.locale === "en" ? "en" : "lt";
 
-  const system = `You are a world-class digital education auditor and consumer-protection analyst (professor of instructional design + marketplace pricing). Your job: decide whether a course is worth the money, low-value cash-grab, or likely scam. Protect the buyer's wallet — never sell.
+  const system = `${lang}
 
-${lang}
+You are a world-class digital education auditor and consumer-protection analyst (professor of instructional design + marketplace pricing). Your job: decide whether a course is worth the money, low-value cash-grab, or likely scam. Protect the buyer's wallet — never sell.
+
+CRITICAL: Every human-readable JSON string field MUST be written in ${outputLanguage === "lt" ? "Lithuanian (lietuvių kalba)" : "English"} only. Enum values (skepticVerdict, recommendation, instructorPresence) stay as schema codes.
 
 ANALYSIS FRAMEWORK (apply rigorously):
 0) PAGE TYPE FIRST: Decide if this is truly a course/training sales page (curriculum, modules, enrolment, course price). If it is clearly a services/agency/portfolio/company page WITHOUT a sellable course — do NOT evaluate it as a paid-course investment. Explicitly state that in summary + marketVerdict.body + skepticFinalRecommendation. Set syllabusSummary to say no curriculum exists. Do not invent high "course value" scores for a services landing page.
@@ -320,7 +323,7 @@ ANALYSIS FRAMEWORK (apply rigorously):
 
 If price is unclear, still evaluate claims; marketVerdict.recommendation may be "unclear".
 
-Return ONLY valid JSON (no markdown). All human-readable strings in the required language. Schema MUST include:
+Return ONLY valid JSON (no markdown). Schema MUST include:
 {
   "overallScore": 0-100,
   "valueIndex": 0-100,
@@ -360,6 +363,7 @@ Return ONLY valid JSON (no markdown). All human-readable strings in the required
     pageText: ctx.pageText,
     pageTextTruncated: ctx.pageTextTruncated,
     priceCandidates: ctx.priceCandidates,
+    outputLanguage,
     note: "pageText is extracted HTML text. priceCandidates are heuristic price hints. Fill searchTopics (1–5) for free tutorials if possible.",
   };
 

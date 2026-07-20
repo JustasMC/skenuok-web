@@ -11,6 +11,7 @@ export const topicsRequestSchema = z.object({
     accessibility: z.number().nullable(),
   }),
   insights: z.array(z.string()).default([]),
+  locale: z.enum(["lt", "en"]).optional(),
 });
 
 export type TopicsRequest = z.infer<typeof topicsRequestSchema>;

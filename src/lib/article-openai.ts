@@ -18,8 +18,14 @@ function getArticleMaxTokens(): number {
 
 function buildSystemPrompt(locale: Locale): string {
   const lang = analysisLanguageInstruction(locale);
-  return `You are a senior SEO content professor and editor. You write original, useful long-form articles that rank AND help readers — not keyword spam.
-${lang}
+  const langLine =
+    locale === "en"
+      ? "Write the entire article body in professional English."
+      : "Visą straipsnio tekstą (H1, H2, pastraipos, sąrašai, ankeriai) rašyk TIK lietuvių kalba.";
+  return `${lang}
+
+You are a senior SEO content professor and editor. You write original, useful long-form articles that rank AND help readers — not keyword spam.
+${langLine}
 Return ONLY an HTML fragment — no markdown fences, no preamble.
 
 Quality bar (think like a university lecturer + SEO lead):
@@ -37,9 +43,15 @@ Quality bar (think like a university lecturer + SEO lead):
 }
 
 function buildUserContent(topic: string, ctx?: ArticleGenerationContext): string {
+  const locale = ctx?.locale ?? "lt";
   const niche = ctx?.siteNiche?.trim();
   const voice = ctx?.brandVoice?.trim();
   const lines = [
+    `outputLanguage=${locale === "en" ? "en" : "lt"}`,
+    locale === "en"
+      ? "Write the full HTML article in English only."
+      : "Visą HTML straipsnį rašyk TIK lietuvių kalba.",
+    "",
     `Primary topic / phrase (must appear naturally in H1 and body): "${topic}"`,
     "",
     `Target length: ≥ ${SEO_WORD_TARGET} words of real analysis — not padded filler.`,

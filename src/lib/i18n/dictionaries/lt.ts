@@ -37,6 +37,10 @@ export const lt = {
     lt: "LT",
     en: "EN",
   },
+  theme: {
+    toLight: "Šviesi tema",
+    toDark: "Tamsi tema",
+  },
   footer: {
     blurb: "SEO auditas, AI įrankiai ir Next.js sprendimai verslui Lietuvoje. Matuojami rezultatai, aiški komunikacija.",
     services: "Paslaugos",

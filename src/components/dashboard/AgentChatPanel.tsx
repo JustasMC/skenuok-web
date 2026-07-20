@@ -10,6 +10,7 @@ import {
 } from "@/components/dashboard/AgentProgressPipeline";
 import { AgentRunTimeline } from "@/components/dashboard/AgentRunTimeline";
 import { AgentToolsSkeleton } from "@/components/dashboard/AgentToolsSkeleton";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { parseAgentMessageMetadata } from "@/lib/agent/agent-message-metadata";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -32,6 +33,7 @@ type ConversationListItem = {
 const STORAGE_KEY = "fsai-agent-conversation-id";
 
 export function AgentChatPanel() {
+  const { locale } = useLocale();
   const [conversations, setConversations] = useState<ConversationListItem[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -284,7 +286,7 @@ export function AgentChatPanel() {
       const res = await fetch("/api/agent/seo-assistant", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
-        body: JSON.stringify({ message: text, conversationId: cid, stream: true }),
+        body: JSON.stringify({ message: text, conversationId: cid, stream: true, locale }),
       });
 
       if (!res.ok) {

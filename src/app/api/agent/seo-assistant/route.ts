@@ -14,6 +14,7 @@ import {
   buildAgentMessageMetadataMinimal,
 } from "@/lib/agent/agent-message-metadata";
 import { jsonApiError, publicApiErrorMessage } from "@/lib/api-errors";
+import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale-server";
 import { prisma } from "@/lib/prisma";
 import { getCombinedRouteAbortSignal } from "@/lib/route-abort";
 
@@ -32,6 +33,7 @@ const bodySchema = z.object({
   ),
   /** `true` — atsakas kaip SSE (text/event-stream). */
   stream: z.boolean().optional(),
+  locale: z.enum(["lt", "en"]).optional(),
 });
 
 export async function POST(req: Request) {
@@ -96,6 +98,7 @@ export async function POST(req: Request) {
   const limits = getAgentLimitsFromEnv();
   const scanBucketKey = `user-scan:${userId}`;
   const abortSignal = getCombinedRouteAbortSignal(req);
+  const locale = await resolveAnalysisLocaleFromCookies(parsed.data.locale);
 
   const agentOpts = {
     userMessage: parsed.data.message,
@@ -104,6 +107,7 @@ export async function POST(req: Request) {
     allowExternalScan: () => assertScanRateLimit(scanBucketKey).ok,
     userId,
     abortSignal,
+    locale,
   };
 
   if (parsed.data.stream === true) {

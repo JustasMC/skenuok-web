@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { CookieConsent } from "@/components/CookieConsent";
 import { LocaleProvider } from "@/components/i18n/LocaleProvider";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { siteConfig } from "@/lib/site-config";
 import { getSoftwareServiceJsonLd } from "@/lib/jsonld";
 import { getRequestDictionary } from "@/lib/i18n/server";
+import { THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme";
 import { DEFAULT_OG_IMAGE_PATH, getDefaultOgImageUrl, getMetadataBaseUrl, getSiteOrigin } from "@/lib/site-url";
 import { Providers } from "@/app/providers";
 import "./globals.css";
@@ -97,8 +100,11 @@ export default async function RootLayout({
   const jsonLd = getSoftwareServiceJsonLd();
 
   return (
-    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body className="min-h-dvh font-sans">
+        <Script id="theme-bootstrap" strategy="beforeInteractive">
+          {THEME_BOOTSTRAP_SCRIPT}
+        </Script>
         <a
           href="#main-content"
           className="pointer-events-none fixed left-4 top-0 z-[100] -translate-y-full rounded-lg bg-[var(--color-electric)] px-4 py-2 text-sm font-semibold text-[#041014] opacity-0 shadow-lg motion-safe:transition-[transform,opacity] motion-safe:duration-200 focus:pointer-events-auto focus:translate-y-4 focus:opacity-100 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#041014]"
@@ -110,8 +116,10 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <LocaleProvider locale={locale} dict={dict}>
-          <Providers>{children}</Providers>
-          <CookieConsent />
+          <ThemeProvider>
+            <Providers>{children}</Providers>
+            <CookieConsent />
+          </ThemeProvider>
         </LocaleProvider>
       </body>
     </html>
