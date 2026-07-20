@@ -5,7 +5,7 @@ import {
   computeCourseScanCreditsCharged,
   getCourseScanCreditsRequired,
 } from "@/lib/course-scan-credits";
-import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale";
+import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale-server";
 import { getRateLimitClientKey } from "@/lib/rate-limit";
 import { prisma } from "@/lib/prisma";
 import { assertScanRateLimit } from "@/lib/scan-rate-limit";

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { jsonApiError } from "@/lib/api-errors";
-import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale";
+import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale-server";
 import { getRateLimitClientKey, isSyntheticCrawler } from "@/lib/rate-limit";
 import { getCombinedRouteAbortSignal, isAbortError } from "@/lib/route-abort";
 import { assertScanRateLimit } from "@/lib/scan-rate-limit";

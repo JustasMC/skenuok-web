@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { jsonApiError, publicApiErrorMessage } from "@/lib/api-errors";
 import { generateSeoArticleHtml } from "@/lib/article-openai";
-import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale";
+import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale-server";
 import { prisma } from "@/lib/prisma";
 import { getRateLimitClientKey } from "@/lib/rate-limit";
 import { assertScanRateLimit } from "@/lib/scan-rate-limit";
