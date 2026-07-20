@@ -5,31 +5,31 @@ import { useMemo, useState } from "react";
 const plans = [
   {
     name: "Landing page",
-    priceFrom: 690,
-    duration: "5-9 darbo dienos",
+    priceFrom: 490,
+    duration: "5–9 darbo dienos",
     includes: [
-      "Greitas vieno puslapio dizainas ir turinio struktūra",
-      "SEO techninis pagrindas (meta, schema, greitis)",
+      "Vieno puslapio struktūra ir aiškus CTA",
+      "Techninis SEO pagrindas (meta, greitis)",
       "Kontaktų forma ir bazinė analitika",
     ],
   },
   {
-    name: "E-komercija",
-    priceFrom: 1900,
-    duration: "3-6 savaitės",
+    name: "El. parduotuvė",
+    priceFrom: 1490,
+    duration: "3–6 savaitės",
     includes: [
-      "Katalogas, produktų puslapiai, atsiskaitymų integracijos",
-      "Pirkimo kelio optimizacija ir konversijų matavimas",
-      "Techninis SEO + našumo optimizacija",
+      "Katalogas, produktų puslapiai, atsiskaitymai",
+      "Pirkimo kelio ir konversijų matavimas",
+      "Techninis SEO ir našumo optimizacija",
     ],
   },
   {
     name: "AI aplikacija",
-    priceFrom: 3200,
-    duration: "4-8 savaitės",
+    priceFrom: 2490,
+    duration: "4–8 savaitės",
     includes: [
-      "AI Orchestration architektūra ir API integracijos",
-      "Autonominiai agentai / darbo srautų automatizacija",
+      "AI ir API integracijos pagal verslo procesą",
+      "Automatizacija ir agentų darbo srautai",
       "Stebėsena, testavimas ir plėtros planas",
     ],
   },
@@ -43,16 +43,16 @@ export function WebBuildPricingCalculator() {
     <section className="site-card-interactive overflow-hidden p-6 sm:p-8">
       <div className="space-y-2">
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-electric)]">
-          Kainos skaičiuoklė
+          Greita apžvalga
         </p>
         <h3 className="text-2xl font-semibold tracking-tight text-white">Preliminari projekto apimtis</h3>
         <p className="text-sm leading-relaxed text-zinc-300 sm:text-base">
-          Pasirinkite projekto tipą slider pagalba ir gaukite orientacinę kainą bei trukmę.
+          Pasirinkite tipą ir pamatykite orientacinę kainą bei trukmę. Tikslus pasiūlymas — po trumpos konsultacijos.
         </p>
       </div>
 
       <div className="mt-6">
-        <label htmlFor="project-type" className="mb-3 block text-xs font-semibold uppercase tracking-[0.14em] text-zinc-300">
+        <label htmlFor="project-type" className="mb-3 block text-xs font-semibold uppercase tracking-[0.14em] text-zinc-400">
           Projekto tipas
         </label>
         <input
@@ -69,7 +69,7 @@ export function WebBuildPricingCalculator() {
           aria-valuenow={index}
           aria-valuetext={selected.name}
         />
-        <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs text-zinc-300">
+        <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs text-zinc-400">
           {plans.map((plan, i) => (
             <button
               key={plan.name}
@@ -85,9 +85,9 @@ export function WebBuildPricingCalculator() {
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_90%,transparent)] p-4">
-          <p className="text-sm text-zinc-300">Preliminari kaina</p>
-          <p className="mt-1 text-2xl font-semibold text-white">nuo {selected.priceFrom} EUR</p>
-          <p className="mt-3 text-sm text-zinc-300">Kūrimo trukmė</p>
+          <p className="text-sm text-zinc-400">Preliminari kaina</p>
+          <p className="mt-1 text-2xl font-semibold text-white">nuo {selected.priceFrom} €</p>
+          <p className="mt-3 text-sm text-zinc-400">Kūrimo trukmė</p>
           <p className="mt-1 text-lg font-medium text-[var(--color-lime)]">{selected.duration}</p>
         </div>
         <div className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_84%,transparent)] p-4">

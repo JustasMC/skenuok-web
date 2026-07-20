@@ -2,11 +2,12 @@ import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import { jsonApiError } from "@/lib/api-errors";
 import { assertContactRateLimit, getRateLimitClientKey } from "@/lib/rate-limit";
+import { siteConfig } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const TO = "pagalba@skenuok.com" as const;
+const TO = siteConfig.contactEmail;
 const SUBJECT = "Testas iš skenuok.com";
 const BODY = "Sveikas, Justai! Jei gavai šį laišką, tavo pašto sistema veikia puikiai.";
 

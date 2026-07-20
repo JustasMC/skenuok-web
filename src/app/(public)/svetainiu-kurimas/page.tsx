@@ -34,20 +34,21 @@ const WebBuildPricingCalculator = dynamic(
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/svetainiu-kurimas");
-  const title = "Svetainių kūrimas su Next.js ir AI";
+  const title = "Svetainių kūrimas su Next.js | SEO ir AI";
   const description =
-    "Svetainių kūrimas nuo idėjos iki paleidimo: Next.js architektūra, SEO optimizacija, Stripe integracijos, Railway infrastruktūra ir AI auditai geresnei vartotojo patirčiai.";
+    "Profesionalus svetainių kūrimas Lietuvoje: Next.js, SEO, Stripe ir AI pagalba. Aiškūs terminai, matuojami rezultatai ir orientacinė kainų skaičiuoklė.";
 
   return {
     title,
     description,
     keywords: [
-      "Svetainių kūrimas",
-      "Next.js kūrimas",
+      "svetainių kūrimas",
+      "Next.js",
       "SEO optimizacija",
-      "AI auditas",
-      "Railway",
-      "Stripe integracija",
+      "AI svetainė",
+      "verslo svetainė",
+      "el. parduotuvė",
+      "Lietuva",
     ],
     alternates: { canonical },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
@@ -76,21 +77,23 @@ export default function SvetainiuKurimasPage() {
       <main id="main-content" className="site-section">
         <div className="site-shell space-y-8 sm:space-y-10">
           <section className="site-card p-6 sm:p-10">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">Svetainių kūrimas</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-electric)]">
+              Svetainių kūrimas
+            </p>
             <h1 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Next.js svetainės su AI Orchestration: greitesnės, pigesnės ir techniškai stipresnės
+              Svetainės ant Next.js: greitos, SEO paruoštos ir aiškiai kainuojamos
             </h1>
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-300">
-              Kuriame svetaines ne „rankinio darbo fabriko“ principu, o su AI Orchestration procesu: nuo struktūros,
-              turinio ir SEO iki diegimo. Tai leidžia trumpinti terminus, mažinti kainą ir užtikrinti aukštą techninį
-              lygį nuo pirmos dienos.
+              Kuriame verslo svetaines ir el. parduotuves nuo struktūros iki paleidimo. Naudojame Next.js, techninį SEO
+              ir AI ten, kur tai taupo laiką — kad gautumėte greitesnį paleidimą, tvarkingą kodą ir matuojamus
+              rezultatus.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href="#kontaktai" className="site-btn-primary">
                 Gauti pasiūlymą
               </Link>
               <Link href="/tools/scanner" className="site-btn-secondary">
-                Pirmiau įvertinti esamą svetainę
+                Įvertinti esamą svetainę
               </Link>
             </div>
           </section>
@@ -99,50 +102,49 @@ export default function SvetainiuKurimasPage() {
             <article className="site-card-interactive p-6 sm:p-8">
               <h2 className="text-2xl font-semibold tracking-tight text-white">Kodėl Next.js?</h2>
               <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
-                Next.js suteikia serverinį renderinimą, tvirtą SEO pagrindą ir aukštą našumą. Rezultatas: greitesnis
-                pirmas užkrovimas, geresnė indeksacija ir ilgaamžė architektūra, kurią paprasta plėsti augant verslui.
+                Serverinis renderinimas, tvirtas SEO pagrindas ir aukštas našumas. Rezultatas — greitesnis pirmas
+                užkrovimas, geresnė indeksacija ir architektūra, kurią lengva plėsti augant verslui.
               </p>
               <ul className="mt-5 space-y-2 text-sm text-zinc-300">
-                <li>• Stabilus techninis pagrindas konversijai ir reklamos srautui.</li>
-                <li>• Tvarkinga komponentinė architektūra be perteklinio chaoso.</li>
-                <li>• Geresni Core Web Vitals rezultatai realiame naudojime.</li>
+                <li>• Stabilus pagrindas konversijai ir reklamai</li>
+                <li>• Aiški komponentinė struktūra be chaoso</li>
+                <li>• Geriau Core Web Vitals realioje aplinkoje</li>
               </ul>
             </article>
 
             <article className="site-card-interactive p-6 sm:p-8">
-              <h2 className="text-2xl font-semibold tracking-tight text-white">AI integracijos nauda</h2>
+              <h2 className="text-2xl font-semibold tracking-tight text-white">AI pagalba kūrime</h2>
               <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
-                AI Orchestration pagreitina kūrimą ir sumažina kaštus: dalis pasikartojančių užduočių automatizuojama,
-                o komanda koncentruojasi į vertę kuriančius sprendimus. Gaunate greitesnį paleidimą ir geresnę kokybę.
+                AI naudojame pasikartojančioms užduotims: turinio juodraščiams, SEO santraukoms, testavimo kontroliniams
+                sąrašams. Žmogus lieka atsakingas už sprendimus, dizainą ir kokybę.
               </p>
               <ul className="mt-5 space-y-2 text-sm text-zinc-300">
-                <li>• Spartesnės iteracijos ir trumpesnis time-to-market.</li>
-                <li>• Automatinis turinio/SEO paruošimas prieš publikavimą.</li>
-                <li>• Mažesnis rankinio darbo kiekis ir mažiau žmogiškų klaidų.</li>
+                <li>• Trumpesnis kelias iki paleidimo</li>
+                <li>• Mažiau rankinio darbo ir klaidų</li>
+                <li>• Aiškesni prioritetai pagal duomenis</li>
               </ul>
             </article>
           </section>
 
           <section className="site-card-interactive p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-white">SEO garantija: procesas, kuris veikia</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-white">SEO: procesas, o ne pažadai</h2>
             <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">
-              SEO srityje negarantuojame „magiško mygtuko“, bet garantuojame disciplinuotą procesą: techninis auditas,
-              struktūros optimizacija, turinio semantika ir nuolatinis matavimas. Būtent šis metodas padėjo
-              <strong className="font-medium text-zinc-200"> skenuok.com </strong>
-              iškelti į aukštas Google pozicijas pagal tikslines užklausas.
+              Negarantuojame „pirmos vietos Google“ — garantuojame disciplinuotą procesą: techninis auditas, struktūra,
+              turinio semantika ir nuolatinis matavimas. Tai pagrindas, kurį Google ir klientai įvertina ilguoju
+              laikotarpiu.
             </p>
             <div className="mt-5 grid gap-4 md:grid-cols-3">
               <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
-                <p className="text-xs uppercase tracking-[0.14em] text-zinc-300">01</p>
-                <p className="mt-2 text-sm text-zinc-300">Techninis SEO bazės sutvarkymas prieš paleidimą.</p>
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">01</p>
+                <p className="mt-2 text-sm text-zinc-300">Techninis SEO prieš paleidimą</p>
               </div>
               <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
-                <p className="text-xs uppercase tracking-[0.14em] text-zinc-300">02</p>
-                <p className="mt-2 text-sm text-zinc-300">AI + analitika pagrįsti turinio ir UX patobulinimai.</p>
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">02</p>
+                <p className="mt-2 text-sm text-zinc-300">Turinio ir UX patobulinimai pagal duomenis</p>
               </div>
               <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/50 p-4">
-                <p className="text-xs uppercase tracking-[0.14em] text-zinc-300">03</p>
-                <p className="mt-2 text-sm text-zinc-300">Metrikų stebėsena ir nuolatinis rezultatų gerinimas.</p>
+                <p className="text-xs uppercase tracking-[0.14em] text-zinc-500">03</p>
+                <p className="mt-2 text-sm text-zinc-300">Metrikų stebėsena ir iteracijos</p>
               </div>
             </div>
           </section>
@@ -151,20 +153,20 @@ export default function SvetainiuKurimasPage() {
             <h2 className="text-2xl font-semibold tracking-tight text-white">Darbo eiga</h2>
             <ol className="mt-5 grid gap-4 md:grid-cols-2">
               <li className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/45 p-4 text-sm text-zinc-300">
-                <strong className="block text-white">1. Discovery</strong>
-                Tikslų, auditorijos ir verslo KPI išgryninimas.
+                <strong className="block text-white">1. Poreikių išgryninimas</strong>
+                Tikslai, auditorija ir verslo KPI.
               </li>
               <li className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/45 p-4 text-sm text-zinc-300">
-                <strong className="block text-white">2. AI Orchestration planas</strong>
-                Architektūra, turinio schema, integracijos ir automatikos.
+                <strong className="block text-white">2. Planas ir architektūra</strong>
+                Struktūra, turinys, integracijos, automatika.
               </li>
               <li className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/45 p-4 text-sm text-zinc-300">
                 <strong className="block text-white">3. Kūrimas ir testavimas</strong>
-                Next.js įgyvendinimas, našumo testai, SEO validacija.
+                Next.js įgyvendinimas, našumas, SEO patikra.
               </li>
               <li className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface-2)]/45 p-4 text-sm text-zinc-300">
                 <strong className="block text-white">4. Paleidimas ir augimas</strong>
-                Diegimas, analitika, iteracijos pagal realius duomenis.
+                Diegimas, analitika, patobulinimai pagal duomenis.
               </li>
             </ol>
           </section>

@@ -9,9 +9,9 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
 
-const title = "Kainodara (SEO URL skaneris, turinio planai)";
+const title = "Kainodara — SEO įrankiai ir kreditų planai";
 const description =
-  "Kainodara: nemokami ir mokami planai — SEO URL skenavimas, svetainių analizė, kursų įrankis, straipsnių kreditai. Palyginkite planus arba rašykite dėl individualių paslaugų.";
+  "Skenuok.com kainodara: nemokamas URL skaneris, turinio kreditai ir planai verslui. Palyginkite planus arba rašykite dėl individualaus projekto.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/pricing");

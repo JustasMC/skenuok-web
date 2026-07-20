@@ -8,9 +8,9 @@ import { useMemo, useState } from "react";
 type ProjectType = "landing" | "verslo" | "ecommerce";
 
 const baseRates: Record<ProjectType, { base: number; perPage: number; duration: string }> = {
-  landing: { base: 690, perPage: 0, duration: "5-9 darbo dienos" },
-  verslo: { base: 1400, perPage: 120, duration: "2-4 savaitės" },
-  ecommerce: { base: 2200, perPage: 180, duration: "3-6 savaitės" },
+  landing: { base: 490, perPage: 0, duration: "5–9 darbo dienos" },
+  verslo: { base: 890, perPage: 70, duration: "2–4 savaitės" },
+  ecommerce: { base: 1490, perPage: 90, duration: "3–6 savaitės" },
 };
 
 const addons: ReadonlyArray<{
@@ -22,24 +22,24 @@ const addons: ReadonlyArray<{
 }> = [
   {
     id: "seo-pro",
-    label: "SEO Pro paketas (100/100 garantija)",
-    price: 390,
+    label: "SEO Pro paketas",
+    price: 190,
     tooltip:
-      "Garantuojame 100/100 Lighthouse balus (Performance, SEO, Accessibility): meta optimizavimas, schema markup, Core Web Vitals < 2.5s LCP, Search Console integracija ir sitemap.xml setup. Tai ne 'bandymas', o inžinerinis standartas.",
+      "Techninis SEO ir našumas: meta, schema markup, Core Web Vitals, Search Console ir sitemap. Tikslas — aukšti Lighthouse balai ir tvarkinga indeksavimo bazė.",
   },
   {
     id: "ai-features",
-    label: "AI funkcijos (custom integracijos)",
-    price: 650,
+    label: "AI funkcijos (individualios integracijos)",
+    price: 350,
     tooltip:
-      "Ne generic chatbot'as: custom AI agentai jūsų verslo logikai (turinio generavimas, automatinis SEO auditas, klientų aptarnavimas, produktų rekomendacijos). Pilnai integruota su jūsų duomenų baze. Samdant AI specialistą kainuotų 2000+ EUR/mėn.",
+      "AI pagal jūsų procesus: turinio pagalba, SEO auditas, klientų aptarnavimas ar rekomendacijos — sujungta su jūsų duomenimis, ne bendras chatbotas.",
   },
   {
     id: "premium-hosting",
-    label: "Premium Hosting & Support (3 mėn.)",
-    price: 180,
+    label: "Hostingas ir palaikymas (3 mėn.)",
+    price: 99,
     tooltip:
-      "Vienkartinis mokėjimas: Railway deployment, CDN optimizavimas, automatiniai backup'ai ir 3 mėnesių techninė pagalba po paleidimo (atnaujinimai, bugfix'ai, našumo stebėsena). Standartinės agentūros tokiai paslaugai ima 50-80 EUR/mėn.",
+      "Vienkartinis mokėjimas: diegimas, CDN, atsarginės kopijos ir 3 mėnesių techninė pagalba po paleidimo.",
     defaultChecked: true,
   },
 ];
@@ -49,7 +49,7 @@ export function WebPriceCalculator() {
   const spring = reduceMotion ? { duration: 0 } : { type: "spring" as const, stiffness: 320, damping: 28 };
 
   const [projectType, setProjectType] = useState<ProjectType>("verslo");
-  const [extraPages, setExtraPages] = useState(3);
+  const [extraPages, setExtraPages] = useState(2);
   const [selectedAddons, setSelectedAddons] = useState<Set<string>>(
     new Set(addons.filter((a) => a.defaultChecked).map((a) => a.id)),
   );
@@ -72,7 +72,9 @@ export function WebPriceCalculator() {
       duration: rate.duration,
       breakdown: [
         { label: "Bazinė kaina", amount: basePrice },
-        ...(pagesPrice > 0 ? [{ label: `+${extraPages} psl. (${rate.perPage} EUR/psl.)`, amount: pagesPrice }] : []),
+        ...(pagesPrice > 0
+          ? [{ label: `+${extraPages} psl. (${rate.perPage} €/psl.)`, amount: pagesPrice }]
+          : []),
         ...(addonsPrice > 0 ? [{ label: "Priedai", amount: addonsPrice }] : []),
       ],
     };
@@ -93,23 +95,22 @@ export function WebPriceCalculator() {
   const projectTypes: Array<{ id: ProjectType; label: string }> = [
     { id: "landing", label: "Landing page" },
     { id: "verslo", label: "Verslo svetainė" },
-    { id: "ecommerce", label: "E-komercija" },
+    { id: "ecommerce", label: "El. parduotuvė" },
   ];
 
   return (
     <section className="site-card-interactive overflow-hidden p-6 sm:p-8" aria-labelledby="price-calc-heading">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-electric)]">
-        Interaktyvus įrankis
+        Kainų skaičiuoklė
       </p>
       <h2 id="price-calc-heading" className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-        Svetainių kūrimo kainų skaičiuoklė
+        Orientacinė svetainės kūrimo kaina
       </h2>
       <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-300 sm:text-base">
-        Pasirinkite projekto tipą, norimus priedus ir puslapių skaičių. Matote realaus laiko kainą su detaliu išskaidymu —
-        skaidrumas yra mūsų prioritetas.
+        Pasirinkite projekto tipą, puslapius ir priedus. Kaina atsinaujina iškart — tai orientacinis pasiūlymas,
+        galutinė suma derinama pagal jūsų reikalavimus.
       </p>
 
-      {/* Project Type Selector */}
       <div className="mt-8">
         <p className="mb-4 text-sm font-medium text-zinc-200">Projekto tipas</p>
         <div className="grid gap-3 sm:grid-cols-3">
@@ -134,7 +135,6 @@ export function WebPriceCalculator() {
         </div>
       </div>
 
-      {/* Extra Pages Slider */}
       {projectType !== "landing" && (
         <motion.div layout transition={spring} className="mt-8">
           <div className="flex items-baseline justify-between gap-3">
@@ -157,14 +157,13 @@ export function WebPriceCalculator() {
             aria-valuenow={extraPages}
             aria-label={`Papildomi puslapiai: ${extraPages}`}
           />
-          <p className="mt-2 text-xs leading-relaxed text-zinc-300">
-            Bazinė versija — iki {projectType === "verslo" ? "5" : "8"} puslapių (apie, paslaugos, kontaktai). Virš to —{" "}
-            {baseRates[projectType].perPage} EUR / psl.
+          <p className="mt-2 text-xs leading-relaxed text-zinc-400">
+            Bazėje — iki {projectType === "verslo" ? "5" : "8"} puslapių (pvz. apie, paslaugos, kontaktai). Papildomai —{" "}
+            {baseRates[projectType].perPage} € už puslapį.
           </p>
         </motion.div>
       )}
 
-      {/* Addons Checkboxes */}
       <motion.div layout transition={spring} className="mt-8">
         <p className="mb-4 text-sm font-medium text-zinc-200">Priedai</p>
         <div className="space-y-3">
@@ -173,7 +172,7 @@ export function WebPriceCalculator() {
             return (
               <label
                 key={addon.id}
-                className="flex cursor-pointer items-start gap-3 rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-surface)_60%,transparent)] p-4 transition hover:border-[var(--color-border)] hover:bg-[color-mix(in_oklab,var(--color-surface)_75%,transparent)]"
+                className="flex cursor-pointer items-start gap-3 rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-surface)_60%,transparent)] p-4 transition hover:bg-[color-mix(in_oklab,var(--color-surface)_75%,transparent)]"
               >
                 <input
                   type="checkbox"
@@ -185,11 +184,11 @@ export function WebPriceCalculator() {
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm font-medium text-zinc-100">{addon.label}</span>
-                    <span className="font-mono text-sm tabular-nums text-[var(--color-lime)]">+{addon.price} EUR</span>
+                    <span className="font-mono text-sm tabular-nums text-[var(--color-lime)]">+{addon.price} €</span>
                     <button
                       type="button"
                       className="group relative inline-flex h-5 w-5 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] text-zinc-300 transition hover:border-[var(--color-electric)] hover:text-[var(--color-electric)]"
-                      aria-label={`Info apie ${addon.label}`}
+                      aria-label={`Informacija: ${addon.label}`}
                     >
                       <Info className="h-3.5 w-3.5" aria-hidden />
                       <span
@@ -208,9 +207,12 @@ export function WebPriceCalculator() {
         </div>
       </motion.div>
 
-      {/* Pricing Breakdown */}
-      <motion.div layout transition={spring} className="mt-8 rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-5 sm:p-6">
-        <p className="text-sm font-semibold text-zinc-200">Kainos išskaidymas (breakdown)</p>
+      <motion.div
+        layout
+        transition={spring}
+        className="mt-8 rounded-xl border border-[var(--color-border)] bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-5 sm:p-6"
+      >
+        <p className="text-sm font-semibold text-zinc-200">Kainos išskaidymas</p>
         <ul className="mt-4 space-y-2.5 text-sm">
           {pricing.breakdown.map((item, i) => (
             <motion.li
@@ -221,12 +223,12 @@ export function WebPriceCalculator() {
               className="flex items-baseline justify-between gap-3 text-zinc-300"
             >
               <span>{item.label}</span>
-              <span className="font-mono tabular-nums">{item.amount} EUR</span>
+              <span className="font-mono tabular-nums">{item.amount} €</span>
             </motion.li>
           ))}
         </ul>
         <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-[var(--color-border)]/60 pt-4">
-          <span className="text-base font-semibold text-zinc-100">Viso</span>
+          <span className="text-base font-semibold text-zinc-100">Viso (orientacinė)</span>
           <motion.span
             key={pricing.total}
             initial={reduceMotion ? false : { scale: 1.05 }}
@@ -234,22 +236,21 @@ export function WebPriceCalculator() {
             transition={spring}
             className="text-2xl font-semibold tabular-nums text-[var(--color-lime)]"
           >
-            {pricing.total} EUR
+            {pricing.total} €
           </motion.span>
         </div>
-        <p className="mt-3 text-xs leading-relaxed text-zinc-300">
+        <p className="mt-3 text-xs leading-relaxed text-zinc-400">
           Orientacinė trukmė: <span className="font-medium text-zinc-200">{pricing.duration}</span>
         </p>
       </motion.div>
 
-      {/* CTA Section */}
       <motion.div layout transition={spring} className="mt-8 space-y-3">
         <div className="flex flex-col gap-3 sm:flex-row">
           <Link
             href="/#kontaktai"
             className="site-btn-primary inline-flex min-h-11 items-center justify-center text-center"
           >
-            Gauti šį pasiūlymą PDF formatu
+            Gauti pasiūlymą el. paštu
           </Link>
           <Link
             href="/#kontaktai"
@@ -258,53 +259,38 @@ export function WebPriceCalculator() {
             Rezervuoti konsultaciją
           </Link>
         </div>
-        <p className="text-xs leading-relaxed text-zinc-300">
-          <strong className="font-medium text-zinc-200">SEO efektas:</strong> Interaktyvūs įrankiai padidina puslapio
-          engagement — Google tai mato kaip kokybės signalą ir geriau ranguoja svetainę.
+        <p className="text-xs leading-relaxed text-zinc-400">
+          Po užklausos atsiųsime aiškų pasiūlymą su apimtimi, terminais ir mokėjimo etapais.
         </p>
       </motion.div>
 
-      {/* Value Proposition: Why Our Pricing is Fair */}
       <motion.div
         layout
         transition={spring}
         className="mt-6 space-y-4 rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-bg)_55%,transparent)] p-5 sm:p-6"
       >
-        <h3 className="text-base font-semibold text-zinc-100 sm:text-lg">
-          Kodėl mūsų kainos yra teisingos? (Rinkos palyginimas)
-        </h3>
-        <div className="grid gap-3 text-sm sm:grid-cols-3">
-          <div className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-4">
-            <p className="font-mono text-xs font-semibold uppercase tracking-wide text-rose-400">Studentas / Pradininkas</p>
-            <p className="mt-2 text-xl font-bold tabular-nums text-white">200-400 EUR</p>
-            <p className="mt-2 text-xs leading-relaxed text-zinc-300">
-              Lighthouse: <span className="font-semibold text-rose-400">40-60 balų</span>. Lėtas WordPress, prastas SEO, dažnai
-              lūžta.
+        <h3 className="text-base font-semibold text-zinc-100 sm:text-lg">Ką gaunate už šią kainą</h3>
+        <div className="grid gap-3 text-sm sm:grid-cols-2">
+          <div className="rounded-lg border border-[var(--color-border)]/80 bg-[var(--color-surface)]/40 p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Rinkos orientyras</p>
+            <p className="mt-2 text-xl font-bold tabular-nums text-white">1 200–2 500 €</p>
+            <p className="mt-2 text-xs leading-relaxed text-zinc-400">
+              Tipinė agentūrinė kaina už panašią apimtį Lietuvoje: geras dizainas, bet dažnai sunkesnė techninė bazė ir
+              ilgesni terminai.
             </p>
           </div>
-          <div className="rounded-lg border border-amber-400/30 bg-amber-400/5 p-4">
-            <p className="font-mono text-xs font-semibold uppercase tracking-wide text-amber-400">Standartinė agentūra</p>
-            <p className="mt-2 text-xl font-bold tabular-nums text-white">1200-2500 EUR</p>
+          <div className="rounded-lg border border-[var(--color-lime)]/35 bg-[color-mix(in_oklab,var(--color-lime)_8%,transparent)] p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-lime)]">Skenuok.com</p>
+            <p className="mt-2 text-xl font-bold tabular-nums text-white">{pricing.total} €</p>
             <p className="mt-2 text-xs leading-relaxed text-zinc-300">
-              Lighthouse: <span className="font-semibold text-amber-400">70-90 balų</span>. Geras dizainas, bet techniškai sunki
-              svetainė.
-            </p>
-          </div>
-          <div className="rounded-lg border border-[var(--color-lime)]/40 bg-[var(--color-lime)]/10 p-4">
-            <p className="font-mono text-xs font-semibold uppercase tracking-wide text-[var(--color-lime)]">
-              Mūsų (AI Orchestrator)
-            </p>
-            <p className="mt-2 text-xl font-bold tabular-nums text-white">{pricing.total} EUR</p>
-            <p className="mt-2 text-xs leading-relaxed text-zinc-300">
-              Lighthouse: <span className="font-semibold text-[var(--color-lime)]">100/100/100</span>. Žaibiškas greitis,
-              modernus stackas, SEO paruoštas.
+              Next.js, SEO ir našumas nuo pirmos dienos. Mokate už aiškų rezultatą: greitą svetainę, tvarkingą kodą ir
+              matuojamus KPI.
             </p>
           </div>
         </div>
-        <p className="border-l-2 border-[var(--color-electric)]/60 pl-4 text-xs leading-relaxed text-zinc-300 sm:text-sm">
-          <strong className="font-medium text-zinc-200">Techninis pranašumas:</strong> Mes naudojame AI-driven development
-          workflow, kuris leidžia pasiekti agentūrų kokybę už realistišką kainą. Klientas moka ne už laiką, o už rezultatą —
-          100/100 Lighthouse balus, kurie garantuoja Google meilę.
+        <p className="border-l-2 border-[var(--color-electric)]/50 pl-4 text-xs leading-relaxed text-zinc-400 sm:text-sm">
+          Dirbame su moderniu stacku ir AI pagalba ten, kur tai taupo laiką — be perteklinio žargono ir be „studentų
+          kainų“ palyginimų. Galutinė kaina visada derinama pagal jūsų projektą.
         </p>
       </motion.div>
     </section>

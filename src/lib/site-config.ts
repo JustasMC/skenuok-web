@@ -11,7 +11,7 @@ export const siteConfig = {
     "Profesionalūs SEO ir AI įrankiai bei fullstack paslaugos: URL skeneris, turinio generatorius, svetainių kūrimas su Next.js. Aiškūs terminai, matuojami rezultatai ir patikima techninė bazė verslui Lietuvoje.",
   tagline: "SEO · Next.js · AI sprendimai",
   locale: "lt_LT",
-  contactEmail: "pagalba@skenuok.com",
+  contactEmail: "JustasMc91@gmail.com",
   twitterCreator: twitterCreator && twitterCreator.startsWith("@") ? twitterCreator : twitterCreator ? `@${twitterCreator}` : undefined,
   keywords: [
     "Skenuok.com",

@@ -1,6 +1,7 @@
 import { Resend } from "resend";
+import { siteConfig } from "@/lib/site-config";
 
-const TO = "pagalba@skenuok.com" as const;
+const TO = siteConfig.contactEmail;
 
 /**
  * Sends a plain-text notification to the inbox when RESEND_API_KEY is set.
@@ -17,7 +18,7 @@ export async function sendLeadSummaryToPagalba(plainText: string): Promise<void>
   const { error } = await resend.emails.send({
     from,
     to: [TO],
-    subject: "Naujas lead — Skenuok",
+    subject: "Naujas lead — Skenuok.com",
     text: plainText.slice(0, 100_000),
   });
 
