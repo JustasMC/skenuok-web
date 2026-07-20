@@ -8,9 +8,16 @@ import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath, getSiteOrigin } from "@/lib/site-url";
 import { LoginForm } from "./LoginForm";
 
+/** Runtime env (AUTH_GOOGLE_*) — never bake at Docker build. */
+export const dynamic = "force-dynamic";
+
 const title = "Prisijungimas";
 const description =
   "Prisijunkite su Google arba el. pašto nuoroda — 3 dovanų kreditai pirmą kartą, SEO generatorius ir darbo vieta.";
+
+function envSet(name: string): boolean {
+  return Boolean(process.env[name]?.trim());
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/login");
@@ -45,16 +52,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function LoginPage() {
-  const googleConfigured = Boolean(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET);
-  const emailConfigured = Boolean(
-    process.env.EMAIL_SERVER_HOST &&
-      process.env.EMAIL_FROM &&
-      process.env.EMAIL_SERVER_USER &&
-      process.env.EMAIL_SERVER_PASSWORD,
-  );
+  const googleConfigured = envSet("AUTH_GOOGLE_ID") && envSet("AUTH_GOOGLE_SECRET");
+  const emailConfigured =
+    envSet("EMAIL_SERVER_HOST") &&
+    envSet("EMAIL_FROM") &&
+    envSet("EMAIL_SERVER_USER") &&
+    envSet("EMAIL_SERVER_PASSWORD");
   const devLoginEmailHint = process.env.DEV_LOGIN_EMAIL?.trim() ?? "";
   const siteBase = getSiteOrigin();
   const oauthCallbackUrl = `${siteBase}/api/auth/callback/google`;
+  const isProd = process.env.NODE_ENV === "production";
 
   return (
     <>
@@ -81,6 +88,8 @@ export default function LoginPage() {
               devLoginConfigured={isDevLoginConfigured}
               devLoginEmailHint={devLoginEmailHint}
               oauthCallbackUrl={oauthCallbackUrl}
+              isProduction={isProd}
+              contactEmail={siteConfig.contactEmail}
             />
           </Suspense>
         </div>

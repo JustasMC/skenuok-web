@@ -10,9 +10,14 @@ import { prisma } from "@/lib/prisma";
 import { grantSignupBonusIfEligible } from "@/lib/signup-bonus";
 
 /** Google OAuth: `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` (Google Cloud → Credentials → OAuth 2.0 Client). */
-const googleConfigured = Boolean(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET);
+const googleConfigured = Boolean(
+  process.env.AUTH_GOOGLE_ID?.trim() && process.env.AUTH_GOOGLE_SECRET?.trim(),
+);
 const emailConfigured = Boolean(
-  process.env.EMAIL_SERVER_HOST && process.env.EMAIL_FROM && process.env.EMAIL_SERVER_USER && process.env.EMAIL_SERVER_PASSWORD,
+  process.env.EMAIL_SERVER_HOST?.trim() &&
+    process.env.EMAIL_FROM?.trim() &&
+    process.env.EMAIL_SERVER_USER?.trim() &&
+    process.env.EMAIL_SERVER_PASSWORD?.trim(),
 );
 
 /** Tik `NODE_ENV=development` + AUTH_DEV_LOGIN=true — be Google/SMTP galima prisijungti lokaliai. */

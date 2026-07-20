@@ -12,6 +12,9 @@ type Props = {
   devLoginEmailHint: string;
   /** Google OAuth redirect URI (rodymas instrukcijose) */
   oauthCallbackUrl: string;
+  /** Production: hide .env debug copy from visitors */
+  isProduction?: boolean;
+  contactEmail?: string;
 };
 
 function GoogleIcon() {
@@ -43,6 +46,8 @@ export function LoginForm({
   devLoginConfigured,
   devLoginEmailHint,
   oauthCallbackUrl,
+  isProduction = false,
+  contactEmail,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -239,11 +244,26 @@ export function LoginForm({
       ) : null}
 
       {!googleConfigured && !devLoginConfigured ? (
-        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
-          Google prisijungimas dar nesukonfigūruotas. Pridėkite į <code className="text-amber-200">.env</code> kintamuosius{" "}
-          <code className="text-amber-200">AUTH_GOOGLE_ID</code> ir <code className="text-amber-200">AUTH_GOOGLE_SECRET</code>{" "}
-          (Google Cloud → OAuth 2.0 Client).
-        </div>
+        isProduction ? (
+          <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-zinc-300">
+            Prisijungimas laikinai nepasiekiamas. Rašykite{" "}
+            {contactEmail ? (
+              <a href={`mailto:${contactEmail}`} className="site-link-inline font-medium">
+                {contactEmail}
+              </a>
+            ) : (
+              "mums el. paštu"
+            )}{" "}
+            — greitai atsakysime.
+          </div>
+        ) : (
+          <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+            Google prisijungimas dar nesukonfigūruotas. Pridėkite į <code className="text-amber-200">.env</code> kintamuosius{" "}
+            <code className="text-amber-200">AUTH_GOOGLE_ID</code> ir <code className="text-amber-200">AUTH_GOOGLE_SECRET</code>{" "}
+            (Google Cloud → OAuth 2.0 Client). Redirect:{" "}
+            <code className="break-all text-amber-200/80">{oauthCallbackUrl}</code>
+          </div>
+        )
       ) : null}
 
       {!googleConfigured && emailConfigured ? (
@@ -278,10 +298,24 @@ export function LoginForm({
       ) : null}
 
       {!hasAnyLogin ? (
-        <p className="text-center text-sm text-rose-400">
-          Nėra sukonfigūruoto prisijungimo būdo. Lokaliai įjunkite <code className="text-rose-300">AUTH_DEV_LOGIN</code> arba
-          nustatykite Google OAuth / SMTP faile <code className="text-rose-300">.env</code>.
-        </p>
+        isProduction ? (
+          <p className="text-center text-sm text-zinc-400">
+            Jei problema kartojasi —{" "}
+            {contactEmail ? (
+              <a href={`mailto:${contactEmail}`} className="site-link-inline">
+                {contactEmail}
+              </a>
+            ) : (
+              "susisiekite"
+            )}
+            .
+          </p>
+        ) : (
+          <p className="text-center text-sm text-rose-400">
+            Nėra sukonfigūruoto prisijungimo būdo. Lokaliai įjunkite <code className="text-rose-300">AUTH_DEV_LOGIN</code> arba
+            nustatykite Google OAuth / SMTP faile <code className="text-rose-300">.env</code>.
+          </p>
+        )
       ) : null}
 
       <p className="text-center text-sm text-zinc-500">
