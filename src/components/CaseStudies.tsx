@@ -2,10 +2,8 @@
 
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { DEFAULT_OG_IMAGE_PATH } from "@/lib/site-url";
 
 type LighthouseScore = { label: string; before: number; after: number };
 
@@ -18,8 +16,6 @@ type CaseStudy = {
   solution: string;
   lighthouse: LighthouseScore[];
   outcomes: string[];
-  image: string;
-  imageAlt: string;
 };
 
 const cases: CaseStudy[] = [
@@ -40,8 +36,6 @@ const cases: CaseStudy[] = [
       "LCP sumažintas nuo 4.2 s iki 1.1 s (Core Web Vitals)",
       "Mobili konversija pagerėjo ~18 % (mokėjimų analitika)",
     ],
-    image: DEFAULT_OG_IMAGE_PATH,
-    imageAlt: "E. parduotuvės Lighthouse rezultatai po optimizavimo",
   },
   {
     id: "saas-dashboard",
@@ -60,8 +54,6 @@ const cases: CaseStudy[] = [
       "NPS pakilo nuo 42 iki 71",
       "Serverio resursų poreikis sumažėjo ~40 %",
     ],
-    image: DEFAULT_OG_IMAGE_PATH,
-    imageAlt: "SaaS skydo Lighthouse rezultatai po optimizavimo",
   },
   {
     id: "portfolio",
@@ -80,8 +72,6 @@ const cases: CaseStudy[] = [
       "Puslapio įkrovimas nuo 8.4 s iki 1.3 s",
       "Organinis srautas augo ~120 %",
     ],
-    image: DEFAULT_OG_IMAGE_PATH,
-    imageAlt: "Portfolio svetainės optimizavimo rezultatai",
   },
 ];
 
@@ -118,21 +108,22 @@ function CaseStudyCard({ caseStudy, index }: { caseStudy: CaseStudy; index: numb
       transition={{ type: "spring", stiffness: 380, damping: 28 }}
       className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-md shadow-black/25 transition-shadow hover:shadow-xl hover:shadow-black/40"
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-bg)]">
-        <Image
-          src={c.image}
-          alt={c.imageAlt}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-          priority={index === 0}
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-transparent to-transparent opacity-60" />
+      <div
+        className="relative flex aspect-[16/10] items-end overflow-hidden bg-[color-mix(in_oklab,var(--color-surface-2)_80%,var(--color-electric)_8%)] p-5"
+        aria-hidden
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,color-mix(in_oklab,var(--color-electric)_22%,transparent),transparent_55%)]" />
+        <div className="relative">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-electric)]">
+            Scenarijus
+          </p>
+          <p className="mt-1 font-mono text-xs text-zinc-400">{c.tag}</p>
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div className="flex items-start justify-between gap-2">
-          <span className="inline-flex rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-electric)]">
+          <span className="inline-flex rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-electric)]">
             {c.tag}
           </span>
           <span className="font-mono text-xs tabular-nums text-zinc-500" aria-label={`Scenarijus ${index + 1}`}>
@@ -204,9 +195,9 @@ export function CaseStudies() {
     <section id="atvejai" className="site-section border-t border-[var(--color-border)]/60">
       <div className="site-shell">
         <SectionHeader
-          eyebrow="Atvejai"
-          title="Tipiniai scenarijai su matuojamais rezultatais"
-          description="Kiekvienas projektas skirtingas — žemiau pavyzdžiai, kaip techninis SEO, našumas ir architektūra veikia realiose situacijose."
+          eyebrow="Atvejų scenarijai"
+          title="Tipiniai projektai su matuojamais rezultatais"
+          description="Iliustratyvūs scenarijai pagal dažniausius užsakymus (ne vieši klientų case study). Tikri KPI ir logotipai skelbiami tik su kliento sutikimu."
           wide
         />
 
@@ -219,8 +210,8 @@ export function CaseStudies() {
         </ul>
 
         <p className="mt-10 max-w-3xl border-l-2 border-[var(--color-border)] pl-4 text-xs leading-relaxed text-zinc-400 sm:mt-12 sm:text-sm">
-          Rezultatai priklauso nuo pradinės būklės, nišos ir konkurencijos. Prieš viešus KPI sutariame matavimo modelį
-          (Lighthouse, Search Console, GA4).
+          Skaičiai — tipiniai tikslai, ne garantija. Rezultatai priklauso nuo pradinės būklės, nišos ir konkurencijos.
+          Prieš viešus KPI sutariame matavimo modelį (Lighthouse, Search Console, GA4).
         </p>
       </div>
     </section>

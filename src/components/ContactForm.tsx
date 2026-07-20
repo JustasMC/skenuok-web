@@ -76,15 +76,15 @@ export function ContactForm() {
             <ul className="space-y-3 text-sm leading-relaxed text-zinc-300">
               <li className="flex gap-3">
                 <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-electric)]" aria-hidden />
-                <span>Serverinė validacija (Zod), rate limit ir „honeypot“ — mažiau šlamšto.</span>
+                <span>Atsakysiu per 1–2 darbo dienas su aiškiu kitu žingsniu.</span>
               </li>
               <li className="flex gap-3">
                 <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-electric)]" aria-hidden />
-                <span>Daug instance produkcijoje: verta Redis (pvz. Upstash) griežtesniam limitui.</span>
+                <span>Galime pradėti nuo nemokamo URL skenerio arba trumpos konsultacijos.</span>
               </li>
               <li className="flex gap-3">
                 <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-electric)]" aria-hidden />
-                <span>Nerašykite slaptų duomenų į laisvo teksto lauką.</span>
+                <span>Nerašykite slaptažodžių ar jautrių duomenų į žinutės lauką.</span>
               </li>
             </ul>
           </div>

@@ -54,7 +54,7 @@ export async function sendStripePurchaseReceiptEmail(opts: {
   });
 
   const hasClaim = Boolean(opts.generatorSessionId);
-  const subject = `FS·AI: ${opts.credits} kreditai aktyvuoti`;
+  const subject = `Skenuok.com: ${opts.credits} kreditai aktyvuoti`;
 
   const textLines = [
     "Sveiki,",
@@ -69,7 +69,7 @@ export async function sendStripePurchaseReceiptEmail(opts: {
       ? `Sesijos ID (atsarginė kopija): ${opts.generatorSessionId}`
       : "",
     "",
-    "— FS·AI",
+    "— Skenuok.com",
   ].filter(Boolean);
 
   const html = `
@@ -81,7 +81,7 @@ export async function sendStripePurchaseReceiptEmail(opts: {
            <p style="font-size:12px;color:#666">Sesijos ID (atsarginė kopija): <code>${escapeHtml(opts.generatorSessionId)}</code></p>`
         : `<p><a href="${base}/dashboard">Atidaryti darbo vietą</a></p>`
     }
-    <p style="font-size:12px;color:#888">— FS·AI</p>
+    <p style="font-size:12px;color:#888">— Skenuok.com</p>
   `;
 
   await transporter.sendMail({

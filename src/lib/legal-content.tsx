@@ -44,8 +44,7 @@ export function PrivacyPolicyContent() {
 
       <LegalSection id="duomenu-valdytojas" title="1. Duomenų valdytojas">
         <p>
-          Duomenų valdytojas: <strong className="text-zinc-200">{siteConfig.name}</strong> (prekės ženklas{" "}
-          {siteConfig.shortName}).
+          Duomenų valdytojas: <strong className="text-zinc-200">{siteConfig.name}</strong>.
         </p>
         <ul className="list-disc space-y-2 pl-5">
           <li>
@@ -265,7 +264,7 @@ export function TermsOfServiceContent() {
           Mokami planai apmokestinami per Stripe. Kainos nurodytos su PVM, jei taikoma. Kreditai nurašomi naudojant
           įrankius pagal galiojančią kainodarą puslapyje{" "}
           <a href="/pricing" className="site-link-inline">
-            /pricing
+            Kainos
           </a>
           .
         </p>
@@ -294,7 +293,7 @@ export function TermsOfServiceContent() {
 
       <LegalSection id="ip" title="5. Intelektinė nuosavybė">
         <p>
-          Svetainės kodas, dizainas, prekės ženklas {siteConfig.name} ir {siteConfig.shortName} priklauso teisėtiems
+          Svetainės kodas, dizainas ir prekės ženklas {siteConfig.name} priklauso teisėtiems
           savininkams. Jūsų įvestas turinys (URL, temos, žinutės) lieka jūsų; suteikiate mums ribotą, neišimtinę
           licenciją jį apdoroti paslaugų teikimui.
         </p>

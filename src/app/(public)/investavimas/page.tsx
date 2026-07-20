@@ -50,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "AI trading workflow",
     ],
     alternates: { canonical },
-    robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+    robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
     openGraph: {
       type: "article",
       locale: siteConfig.locale,

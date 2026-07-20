@@ -16,9 +16,9 @@ const UrlScanner = dynamic(() => import("@/components/tools/UrlScanner").then((m
   ),
 });
 
-const title = "SEO URL skeneris ir Svetainių analizė (Lighthouse + AI auditas)";
+const title = "SEO URL skeneris — Lighthouse ir AI auditas";
 const description =
-  "Nemokamas SEO URL skaneris: Svetainių analizė per Google PageSpeed / Lighthouse, Core Web Vitals, meta, H1, AI rekomendacijos lietuviškai. Toliau — turinio strategija, Paslaugos, Kontaktai. Profesionali web paslauga ant Next.js.";
+  "Patikrinkite svetainės URL: PageSpeed / Lighthouse metrikos, Core Web Vitals, SEO santrauka ir AI rekomendacijos lietuviškai.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = getCanonicalPath("/tools/scanner");

@@ -21,7 +21,7 @@ export function toolOpenGraphImage(input: { title: string; subtitle: string; acc
     (
       <div style={s.root}>
         <div style={s.column}>
-          <span style={s.brand}>FS·AI</span>
+          <span style={s.brand}>Skenuok.com</span>
           <span style={s.title}>{input.title}</span>
           <span style={s.subtitle}>{input.subtitle}</span>
         </div>

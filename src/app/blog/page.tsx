@@ -72,6 +72,26 @@ export default function BlogPage() {
                 Skaityti straipsnį →
               </Link>
             </article>
+
+            <aside className="site-card flex flex-col justify-between p-6 sm:p-8">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">Kitas žingsnis</p>
+                <h2 className="mt-2 text-xl font-semibold tracking-tight text-white">
+                  Norite audito, o ne tik straipsnio?
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-zinc-400">
+                  Pradėkite nuo URL skenerio arba parašykite — sudėliosime prioritetus pagal jūsų nišą.
+                </p>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link href="/tools/scanner" className="site-btn-primary min-h-10 px-4 text-sm">
+                  URL skaneris
+                </Link>
+                <Link href="/#kontaktai" className="site-btn-secondary min-h-10 px-4 text-sm">
+                  Kontaktai
+                </Link>
+              </div>
+            </aside>
           </section>
         </div>
       </main>

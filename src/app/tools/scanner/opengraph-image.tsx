@@ -1,6 +1,6 @@
 import { toolOpenGraphImage } from "@/lib/og-tool-image";
 
-export const alt = "URL skaneris — FS·AI";
+export const alt = "URL skaneris — Skenuok.com";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

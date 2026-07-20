@@ -10,7 +10,7 @@ const columns = [
     links: [
       { href: "/svetainiu-kurimas", label: "Svetainių kūrimas" },
       { href: "/#paslaugos", label: "Moduliai" },
-      { href: "/#atvejai", label: "Atvejai" },
+      { href: "/#atvejai", label: "Atvejų scenarijai" },
       { href: "/pricing", label: "Kainos" },
       { href: "/#kontaktai", label: "Kontaktai" },
     ],
@@ -44,7 +44,7 @@ export function SiteFooter() {
           <div className="max-w-sm">
             <p className="text-lg font-semibold tracking-tight text-white">{siteConfig.name}</p>
             <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-zinc-500">
-              {siteConfig.shortName} · Fullstack &amp; AI
+              {siteConfig.tagline}
             </p>
             <p className="mt-3 text-sm leading-relaxed text-zinc-400">
               SEO auditas, AI įrankiai ir Next.js sprendimai verslui Lietuvoje. Matuojami rezultatai, aiški komunikacija.

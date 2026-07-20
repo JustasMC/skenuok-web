@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { PageIntro } from "@/components/PageIntro";
+import { siteConfig } from "@/lib/site-config";
 
 export type LegalTocItem = { id: string; label: string };
 
@@ -60,8 +61,8 @@ export function LegalPageShell({
             <p className="text-xs font-medium text-zinc-200">Reikia pagalbos?</p>
             <p className="mt-1.5 text-xs leading-relaxed text-zinc-400">
               Klausimais dėl duomenų ar sąlygų rašykite{" "}
-              <a href="mailto:pagalba@skenuok.com" className="site-link-inline">
-                pagalba@skenuok.com
+              <a href={`mailto:${siteConfig.contactEmail}`} className="site-link-inline">
+                {siteConfig.contactEmail}
               </a>
               .
             </p>
