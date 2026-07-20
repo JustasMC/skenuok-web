@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { cn } from "@/lib/cn";
+import { siteConfig } from "@/lib/site-config";
 
 const services = [
   "AI SEO auditas / Svetainių skaneris (bandomasis)",
@@ -39,7 +40,11 @@ export function ContactForm() {
           website: String(data.get("website") ?? ""),
         }),
       });
-      const body = (await res.json().catch(() => ({}))) as { error?: string; retryAfterSec?: number };
+      const body = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        retryAfterSec?: number;
+        emailSent?: boolean;
+      };
       if (res.status === 429) {
         setStatus("err");
         const sec = body.retryAfterSec;
@@ -55,11 +60,15 @@ export function ContactForm() {
         return;
       }
       setStatus("ok");
-      setMessage("Žinutė išsaugota. Netrukus susisieksiu.");
+      setMessage(
+        body.emailSent === false
+          ? `Žinutė išsaugota sistemoje. Jei negausite atsakymo, rašykite tiesiogiai: ${siteConfig.contactEmail}`
+          : `Žinutė gauta. Atsakysiu į ${siteConfig.contactEmail} greitu metu.`,
+      );
       form.reset();
     } catch {
       setStatus("err");
-      setMessage("Nepavyko išsiųsti. Bandykite dar kartą arba rašykite tiesiogiai el. paštu.");
+      setMessage(`Nepavyko išsiųsti. Rašykite tiesiogiai: ${siteConfig.contactEmail}`);
     }
   }
 

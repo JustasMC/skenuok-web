@@ -82,10 +82,11 @@ export async function createLeadAndNotify(data: ContactPayload, source: "contact
 
   const plain = summary.replace(/<[^>]+>/g, "");
 
+  const emailResult = await sendLeadSummaryToPagalba(plain);
+
   void Promise.allSettled([
     notifyDiscord(plain),
     notifyTelegram(summary),
-    sendLeadSummaryToPagalba(plain),
     notifyGenericWebhook({
       type: "lead",
       source,
@@ -96,8 +97,9 @@ export async function createLeadAndNotify(data: ContactPayload, source: "contact
       service: lead.service,
       message: lead.message,
       createdAt: lead.createdAt.toISOString(),
+      emailNotify: emailResult,
     }),
   ]);
 
-  return { id: lead.id };
+  return { id: lead.id, emailNotify: emailResult };
 }

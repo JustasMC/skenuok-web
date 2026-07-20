@@ -52,7 +52,13 @@ export async function POST(req: Request) {
 
   try {
     const lead = await createLeadAndNotify(parsed.data, "contact_form");
-    return NextResponse.json({ ok: true, id: lead.id });
+    return NextResponse.json({
+      ok: true,
+      id: lead.id,
+      emailSent: lead.emailNotify.ok,
+      emailChannel: lead.emailNotify.ok ? lead.emailNotify.channel : undefined,
+      emailReason: lead.emailNotify.ok ? undefined : lead.emailNotify.reason,
+    });
   } catch (e) {
     return jsonApiError("contact", e);
   }
