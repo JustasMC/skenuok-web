@@ -58,6 +58,8 @@ export async function POST(req: Request) {
       emailSent: lead.emailNotify.ok,
       emailChannel: lead.emailNotify.ok ? lead.emailNotify.channel : undefined,
       emailReason: lead.emailNotify.ok ? undefined : lead.emailNotify.reason,
+      emailDetail: lead.emailNotify.ok ? undefined : lead.emailNotify.detail,
+      emailTo: lead.emailNotify.to,
     });
   } catch (e) {
     return jsonApiError("contact", e);

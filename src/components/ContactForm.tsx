@@ -44,6 +44,8 @@ export function ContactForm() {
         error?: string;
         retryAfterSec?: number;
         emailSent?: boolean;
+        emailDetail?: string;
+        emailTo?: string;
       };
       if (res.status === 429) {
         setStatus("err");
@@ -60,11 +62,13 @@ export function ContactForm() {
         return;
       }
       setStatus("ok");
-      setMessage(
-        body.emailSent === false
-          ? `Žinutė išsaugota sistemoje. Jei negausite atsakymo, rašykite tiesiogiai: ${siteConfig.contactEmail}`
-          : `Žinutė gauta. Atsakysiu į ${siteConfig.contactEmail} greitu metu.`,
-      );
+      if (body.emailSent === false) {
+        setMessage(
+          `Žinutė išsaugota, bet el. laiškas į ${body.emailTo ?? siteConfig.contactEmail} nenuėjo. ${body.emailDetail ?? "Patikrinkite Resend nustatymus."}`,
+        );
+      } else {
+        setMessage(`Žinutė gauta. Pranešimas išsiųstas į ${body.emailTo ?? siteConfig.contactEmail}.`);
+      }
       form.reset();
     } catch {
       setStatus("err");
