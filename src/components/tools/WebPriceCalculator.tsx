@@ -8,9 +8,9 @@ import { useMemo, useState } from "react";
 type ProjectType = "landing" | "verslo" | "ecommerce";
 
 const baseRates: Record<ProjectType, { base: number; perPage: number; duration: string }> = {
-  landing: { base: 390, perPage: 0, duration: "5–9 darbo dienos" },
-  verslo: { base: 690, perPage: 55, duration: "2–4 savaitės" },
-  ecommerce: { base: 1190, perPage: 75, duration: "3–6 savaitės" },
+  landing: { base: 330, perPage: 0, duration: "5–9 darbo dienos" },
+  verslo: { base: 590, perPage: 55, duration: "2–4 savaitės" },
+  ecommerce: { base: 990, perPage: 75, duration: "3–6 savaitės" },
 };
 
 const addons: ReadonlyArray<{
@@ -23,21 +23,21 @@ const addons: ReadonlyArray<{
   {
     id: "seo-pro",
     label: "SEO Pro paketas",
-    price: 149,
+    price: 129,
     tooltip:
       "Techninis SEO ir našumas: meta, schema markup, Core Web Vitals, Search Console ir sitemap. Tikslas — aukšti Lighthouse balai ir tvarkinga indeksavimo bazė.",
   },
   {
     id: "ai-features",
     label: "AI funkcijos (individualios integracijos)",
-    price: 279,
+    price: 239,
     tooltip:
       "AI pagal jūsų procesus: turinio pagalba, SEO auditas, klientų aptarnavimas ar rekomendacijos — sujungta su jūsų duomenimis, ne bendras chatbotas.",
   },
   {
     id: "premium-hosting",
     label: "Hostingas ir palaikymas (3 mėn.)",
-    price: 79,
+    price: 69,
     tooltip:
       "Vienkartinis mokėjimas: diegimas, CDN, atsarginės kopijos ir 3 mėnesių techninė pagalba po paleidimo.",
     defaultChecked: true,

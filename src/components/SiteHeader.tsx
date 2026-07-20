@@ -28,6 +28,7 @@ export function SiteHeader() {
   const mobileExtraLinks = [
     { href: "/#paslaugos", label: dict.nav.services },
     { href: "/#atvejai", label: dict.nav.cases },
+    { href: "/#seo-issukis", label: dict.nav.challenge },
     { href: "/#duk", label: dict.nav.faq },
     { href: "/#roi", label: dict.nav.roi },
   ] as const;

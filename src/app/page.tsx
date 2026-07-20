@@ -5,6 +5,8 @@ import { Hero } from "@/components/Hero";
 import { HomeFaq } from "@/components/home/HomeFaq";
 import { HomePrimaryServices } from "@/components/home/HomePrimaryServices";
 import { HomeTestimonials } from "@/components/home/HomeTestimonials";
+import { LighthousePulse } from "@/components/home/LighthousePulse";
+import { SeoSpeedChallenge } from "@/components/home/SeoSpeedChallenge";
 import { Services } from "@/components/Services";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -108,6 +110,8 @@ export default function HomePage() {
       <main id="main-content" className="overflow-x-hidden">
         <Hero />
         <HomePrimaryServices />
+        <SeoSpeedChallenge />
+        <LighthousePulse />
         <HomeTestimonials />
         <CaseStudies />
         <Services />

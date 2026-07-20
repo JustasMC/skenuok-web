@@ -66,6 +66,13 @@ export function Hero() {
               {dict.hero.tryScanner}
             </Link>
             <span className="text-zinc-300"> {dict.hero.tryOr} </span>
+            <a
+              href="#seo-issukis"
+              className="font-medium text-[var(--color-electric)] underline-offset-4 motion-safe:transition-colors motion-safe:duration-200 hover:underline"
+            >
+              {dict.hero.tryChallenge}
+            </a>
+            <span className="text-zinc-300"> {dict.hero.tryOr} </span>
             <Link
               href="/tools/course-scanner"
               className="font-medium text-[var(--color-electric)] underline-offset-4 motion-safe:transition-colors motion-safe:duration-200 hover:text-[var(--color-lime)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/70"

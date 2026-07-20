@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 const plans = [
   {
     name: "Landing page",
-    priceFrom: 390,
+    priceFrom: 330,
     duration: "5–9 darbo dienos",
     includes: [
       "Vieno puslapio struktūra ir aiškus CTA",
@@ -15,7 +15,7 @@ const plans = [
   },
   {
     name: "Verslo svetainė",
-    priceFrom: 690,
+    priceFrom: 590,
     duration: "2–4 savaitės",
     includes: [
       "Iki 5 puslapių (apie, paslaugos, kontaktai)",
@@ -25,7 +25,7 @@ const plans = [
   },
   {
     name: "El. parduotuvė",
-    priceFrom: 1190,
+    priceFrom: 990,
     duration: "3–6 savaitės",
     includes: [
       "Katalogas, produktų puslapiai, atsiskaitymai",
@@ -35,7 +35,7 @@ const plans = [
   },
   {
     name: "AI aplikacija",
-    priceFrom: 1990,
+    priceFrom: 1690,
     duration: "4–8 savaitės",
     includes: [
       "AI ir API integracijos pagal verslo procesą",

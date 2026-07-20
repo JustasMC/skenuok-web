@@ -27,6 +27,7 @@ export function SiteFooter() {
         { href: "/tools/course-scanner", label: dict.footer.courseScanner },
         { href: "/irankiai/seo-generatorius", label: dict.footer.seoGenerator },
         { href: "/#roi", label: dict.footer.roi },
+        { href: "/#seo-issukis", label: dict.footer.challenge },
       ],
     },
     {
