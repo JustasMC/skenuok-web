@@ -1,6 +1,7 @@
 import type { Dictionary } from "@/lib/i18n/dictionaries/lt";
 import { courseReportEn } from "@/lib/i18n/dictionaries/parts/course-report";
 import { generatorUiEn } from "@/lib/i18n/dictionaries/parts/generator-ui";
+import { nicheScanEn } from "@/lib/i18n/dictionaries/parts/niche-scan";
 import {
   agentEn,
   dashboardEn,
@@ -10,13 +11,26 @@ export const en: Dictionary = {
   skipToContent: "Skip to content",
   nav: {
     tools: "Tools",
+    scanners: "Tools · AI scanners",
+    otherTools: "Other tools & generators",
+    moreServices: "More / Services",
+    b2bServices: "B2B services",
+    utilities: "Utilities & packs",
     webBuild: "Web development",
-    pricing: "Pricing",
+    itServices: "IT & business services",
+    tradingBots: "Trading bots & algo",
+    pricing: "Credits & packs",
     blog: "Blog",
     contact: "Contact",
-    urlScanner: "URL scanner",
+    urlScanner: "Web & SEO scanner",
     courseScanner: "Course scanner",
-    seoGenerator: "SEO generator",
+    seoGenerator: "SEO & content generator",
+    scanWeb: "Web & SEO scanner",
+    scanCrypto: "Crypto & finance scanner",
+    scanAuto: "Auto & VIN scanner",
+    scanBeauty: "Beauty & skin scanner",
+    scanHome: "Interior & yard scanner",
+    scanTech: "Electronics & gear scanner",
     services: "Services",
     packages: "Packages",
     cases: "Case studies",
@@ -781,6 +795,7 @@ export const en: Dictionary = {
   },
   dashboard: dashboardEn,
   agent: agentEn,
+  nicheScan: nicheScanEn,
   legal: {
     privacyTitle: "Privacy policy",
     privacyDescription:

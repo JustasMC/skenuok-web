@@ -82,7 +82,7 @@ export default async function SvetainiuKurimasPage() {
               <Link href="#kontaktai" className="site-btn-primary">
                 {t.ctaOffer}
               </Link>
-              <Link href="/tools/scanner" className="site-btn-secondary">
+              <Link href="/scan/web" className="site-btn-secondary">
                 {t.ctaScan}
               </Link>
             </div>

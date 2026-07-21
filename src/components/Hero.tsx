@@ -49,7 +49,7 @@ export function Hero() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-            <Link href="/tools/scanner" className="site-btn-primary w-full min-h-11 sm:w-auto">
+            <Link href="/scan/web" className="site-btn-primary w-full min-h-11 sm:w-auto">
               {dict.hero.ctaScanner}
             </Link>
             <Link href="#kontaktai" className="site-btn-secondary w-full min-h-11 sm:w-auto">
@@ -60,7 +60,7 @@ export function Hero() {
           <div className="rounded-xl border border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-surface)_88%,transparent)] px-4 py-3.5 text-sm leading-relaxed text-zinc-200 backdrop-blur-sm sm:px-5">
             <span className="text-zinc-300">{dict.hero.tryLabel}</span>{" "}
             <Link
-              href="/tools/scanner"
+              href="/scan/web"
               className="font-medium text-[var(--color-electric)] underline-offset-4 motion-safe:transition-colors motion-safe:duration-200 hover:text-[var(--color-lime)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-electric)]/70"
             >
               {dict.hero.tryScanner}

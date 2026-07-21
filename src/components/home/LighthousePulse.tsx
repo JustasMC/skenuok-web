@@ -78,7 +78,7 @@ export function LighthousePulse() {
         <p className="mt-8 max-w-2xl text-xs leading-relaxed text-zinc-500 sm:mt-10 sm:text-sm">{t.disclaimer}</p>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link href="/tools/scanner" className="site-btn-primary min-h-11 px-5">
+          <Link href="/scan/web" className="site-btn-primary min-h-11 px-5">
             {t.ctaScanner}
           </Link>
           <Link href="/#kontaktai" className="site-btn-secondary min-h-11 px-4">

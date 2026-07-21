@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { publicApiErrorMessage } from "@/lib/api-errors";
 import { auth } from "@/auth";
 import { applyGenSessionCookie, resolveGeneratorSessionId } from "@/lib/generator-session-server";
+import {
+  currencyForCountry,
+  detectCountryCode,
+  resolveStripePriceId,
+} from "@/lib/stripe-currency";
 import { getSiteBaseUrl, getStripe } from "@/lib/stripe-server";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +23,7 @@ function parsePack(body: unknown): Pack {
 
 /**
  * Stripe Checkout: line_items turi naudoti katalogo Price ID (price_...), ne prod_.
- * POST JSON: { "priceKey": "5" | "20" } — atitinka 5 € ir 20 € planus (žr. .env.example).
+ * POST JSON: { "priceKey": "5" | "20" } — EUR (LT/EU) arba USD kai sukonfigūruota.
  */
 export async function POST(req: Request) {
   try {
@@ -36,14 +41,11 @@ export async function POST(req: Request) {
     }
 
     const pack = parsePack(body);
-
-    const priceId5 = process.env.STRIPE_PRICE_ID_5_EUR?.trim() ?? "";
-    const priceId20 =
-      process.env.STRIPE_PRICE_ID_20_EUR?.trim() ||
-      process.env.STRIPE_PRICE_ID?.trim() ||
-      "";
-
-    const stripePriceId = pack === "5" ? priceId5 : priceId20;
+    const country = detectCountryCode(req);
+    const preferred = currencyForCountry(country);
+    const resolved = resolveStripePriceId(pack, preferred);
+    const stripePriceId = resolved.priceId;
+    const credits = resolved.credits;
 
     if (!stripePriceId.startsWith("price_")) {
       return NextResponse.json(
@@ -58,17 +60,6 @@ export async function POST(req: Request) {
       );
     }
 
-    const credits =
-      pack === "5"
-        ? Math.max(1, Number.parseInt(process.env.STRIPE_CREDITS_5_EUR ?? process.env.STRIPE_CREDITS_PER_PURCHASE ?? "15", 10))
-        : Math.max(
-            1,
-            Number.parseInt(
-              process.env.STRIPE_CREDITS_20_EUR ?? process.env.STRIPE_CREDITS_PER_PURCHASE ?? "80",
-              10,
-            ),
-          );
-
     const authSession = await auth();
 
     let metadata: Record<string, string>;
@@ -82,23 +73,29 @@ export async function POST(req: Request) {
         credits: String(credits),
         kind: "user_credits",
         pack,
+        currency: resolved.currency,
+        country: country ?? "",
       };
       clientReferenceId = authSession.user.id;
     } else {
-      const resolved = await resolveGeneratorSessionId();
-      anonSessionId = resolved.sessionId;
-      needsSetCookie = resolved.needsSetCookie;
+      const resolvedSession = await resolveGeneratorSessionId();
+      anonSessionId = resolvedSession.sessionId;
+      needsSetCookie = resolvedSession.needsSetCookie;
       metadata = {
-        generatorSessionId: resolved.sessionId,
+        generatorSessionId: resolvedSession.sessionId,
         credits: String(credits),
         kind: "session_credits",
         pack,
+        currency: resolved.currency,
+        country: country ?? "",
       };
-      clientReferenceId = resolved.sessionId;
+      clientReferenceId = resolvedSession.sessionId;
     }
 
     const explicitSuccess = process.env.STRIPE_CHECKOUT_SUCCESS_URL?.trim();
-    const successPath = (process.env.STRIPE_CHECKOUT_SUCCESS_PATH?.trim() || "/success").replace(/\/+$/, "") || "/success";
+    const successPath =
+      (process.env.STRIPE_CHECKOUT_SUCCESS_PATH?.trim() || "/success").replace(/\/+$/, "") ||
+      "/success";
     const successBase = explicitSuccess
       ? explicitSuccess.replace(/\/+$/, "")
       : `${base}${successPath.startsWith("/") ? successPath : `/${successPath}`}`;
@@ -111,6 +108,8 @@ export async function POST(req: Request) {
     console.log("[stripe checkout] creating session", {
       pack,
       stripePriceId,
+      currency: resolved.currency,
+      country,
       successUrl,
       cancelUrl: `${base}/pricing?checkout=cancel`,
       hasUser: Boolean(authSession?.user?.id),
@@ -129,7 +128,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Stripe negrąžino checkout URL" }, { status: 502 });
     }
 
-    const res = NextResponse.json({ ok: true as const, url: checkout.url });
+    const res = NextResponse.json({
+      ok: true as const,
+      url: checkout.url,
+      currency: resolved.currency,
+    });
     if (anonSessionId && needsSetCookie) {
       applyGenSessionCookie(res, anonSessionId);
     }

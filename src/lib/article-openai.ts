@@ -36,7 +36,7 @@ Quality bar (think like a university lecturer + SEO lead):
 5) E-E-A-T: show expertise — cite mechanisms, trade-offs, and when NOT to apply advice. Be accurate; do not invent statistics with fake precision.
 6) Structure: short <p> paragraphs; at least two practical <ul> or <ol> lists (3–6 items each); use <strong> sparingly for key terms.
 7) Internal links: include at least two contextual relative links that help the reader next, choosing from:
-   <a href="/tools/scanner">…</a>, <a href="/tools/course-scanner">…</a>, <a href="/irankiai/seo-generatorius">…</a>, <a href="/pricing">…</a>, <a href="/svetainiu-kurimas">…</a>, <a href="/#kontaktai">…</a>
+   <a href="/scan/web">…</a>, <a href="/tools/course-scanner">…</a>, <a href="/irankiai/seo-generatorius">…</a>, <a href="/pricing">…</a>, <a href="/svetainiu-kurimas">…</a>, <a href="/#kontaktai">…</a>
    Anchors must be descriptive (not “click here”).
 8) Forbidden: <html>, <body>, <head>, <script>, <style>, fluff filler, repeated identical paragraphs.
 9) Match niche/tone from the user message when provided.`;

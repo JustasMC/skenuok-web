@@ -65,6 +65,7 @@ export const dashboardLt = {
     reasons: {
       stripe_checkout: "Kreditų papildymas (Stripe)",
       course_quality_scan: "Kursų kokybės skaneris",
+      niche_scan: "AI nišinis skaneris",
       generator_session_merge: "Anoniminės sesijos kreditai",
       signup_bonus: "Dovanų kreditai už registraciją",
     },
@@ -139,6 +140,7 @@ export const dashboardEn = {
     reasons: {
       stripe_checkout: "Credit top-up (Stripe)",
       course_quality_scan: "Course quality scanner",
+      niche_scan: "AI niche scanner",
       generator_session_merge: "Anonymous session credits",
       signup_bonus: "Signup bonus credits",
     },

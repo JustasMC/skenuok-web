@@ -42,6 +42,12 @@ export function middleware(req: NextRequest) {
     return withLocaleCookie(req, NextResponse.redirect(login));
   }
 
+  if (pathname.startsWith("/admin") && !hasSessionCookie(req)) {
+    const login = new URL("/login", req.nextUrl.origin);
+    login.searchParams.set("callbackUrl", pathname);
+    return withLocaleCookie(req, NextResponse.redirect(login));
+  }
+
   return withLocaleCookie(req, NextResponse.next());
 }
 

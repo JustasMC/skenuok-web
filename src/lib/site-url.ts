@@ -29,7 +29,7 @@ export function getMetadataBaseUrl(): URL {
   }
 }
 
-/** Absoliutus kanoninis URL maršrutui (pvz. `/tools/scanner`). */
+/** Absoliutus kanoninis URL maršrutui (pvz. `/scan/web`). */
 export function getCanonicalPath(path: string): string {
   const origin = getSiteOrigin().replace(/\/+$/, "");
   const suffix = path.startsWith("/") ? path : `/${path}`;

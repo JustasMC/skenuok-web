@@ -138,7 +138,7 @@ export function SeoSpeedChallenge() {
               </p>
               <p className="max-w-xl text-base leading-relaxed text-zinc-300">{verdict}</p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/tools/scanner" className="site-btn-primary min-h-11 px-5">
+                <Link href="/scan/web" className="site-btn-primary min-h-11 px-5">
                   {t.cta}
                 </Link>
                 <button type="button" className="site-btn-secondary min-h-11 px-4" onClick={restart}>

@@ -99,6 +99,11 @@ const nextConfig: NextConfig = {
         destination: "/irankiai/seo-generatorius",
         permanent: true,
       },
+      {
+        source: "/tools/scanner",
+        destination: "/scan/web",
+        permanent: true,
+      },
     ];
   },
   /** Leisti atidaryti dev serverį per LAN IP (kitaip Next.js blokuoja `/_next/*` ir „lūžta“ UI). */

@@ -6,9 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { cn } from "@/lib/cn";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { headers } from "next/headers";
 import { getRequestDictionary } from "@/lib/i18n/server";
 import { siteConfig } from "@/lib/site-config";
 import { getCanonicalPath } from "@/lib/site-url";
+import { currencyForCountry, detectCountryCode } from "@/lib/stripe-currency";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { dict, locale } = await getRequestDictionary();
@@ -52,9 +54,20 @@ function hasConfiguredPrice5(): boolean {
 }
 
 export default async function PricingPage() {
-  const { dict } = await getRequestDictionary();
+  const { dict, locale } = await getRequestDictionary();
   const showPack5 = hasConfiguredPrice5();
   const p = dict.pricing;
+  const h = await headers();
+  const reqLike = new Request("http://local", { headers: h });
+  const checkoutCurrency = currencyForCountry(detectCountryCode(reqLike));
+  const currencyHint =
+    checkoutCurrency === "usd"
+      ? locale === "en"
+        ? "Checkout currency for your region: USD (falls back to EUR if USD prices are not configured)."
+        : "Jūsų regionui Checkout valiuta: USD (jei USD kainos nesukonfigūruotos — EUR)."
+      : locale === "en"
+        ? "Checkout currency for your region: EUR."
+        : "Jūsų regionui Checkout valiuta: EUR.";
 
   const plans = [
     {
@@ -63,7 +76,7 @@ export default async function PricingPage() {
       price: p.freePrice,
       blurb: p.freeBlurb,
       features: [p.freeF1, p.freeF2, p.freeF3, p.freeF4],
-      cta: { href: "/tools/scanner", label: p.freeCta },
+      cta: { href: "/scan/web", label: p.freeCta },
       highlight: false,
     },
     {
@@ -105,6 +118,7 @@ export default async function PricingPage() {
           <p className="mt-3 text-sm text-zinc-400">
             <span className="font-medium text-zinc-300">{p.creditsHow}</span>
           </p>
+          <p className="mt-2 text-xs text-zinc-500">{currencyHint}</p>
         </PageIntro>
 
         <div id="prenumerata" className="grid scroll-mt-24 gap-6 lg:grid-cols-4">
@@ -179,7 +193,7 @@ export default async function PricingPage() {
             <Link href="/#kontaktai" className="site-btn-primary min-h-11 justify-center">
               {dict.pricingFooter.contact}
             </Link>
-            <Link href="/tools/scanner" className="site-btn-secondary min-h-11 justify-center">
+            <Link href="/scan/web" className="site-btn-secondary min-h-11 justify-center">
               {dict.pricingFooter.scanner}
             </Link>
           </div>

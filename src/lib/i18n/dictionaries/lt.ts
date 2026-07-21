@@ -1,5 +1,6 @@
 import { courseReportLt } from "@/lib/i18n/dictionaries/parts/course-report";
 import { generatorUiLt } from "@/lib/i18n/dictionaries/parts/generator-ui";
+import { nicheScanLt } from "@/lib/i18n/dictionaries/parts/niche-scan";
 
 import {
   agentLt,
@@ -10,13 +11,26 @@ export const lt = {
   skipToContent: "Peršokti prie turinio",
   nav: {
     tools: "Įrankiai",
+    scanners: "Įrankiai · AI skeneriai",
+    otherTools: "Kiti įrankiai ir generatoriai",
+    moreServices: "Daugiau / Paslaugos",
+    b2bServices: "B2B paslaugos",
+    utilities: "Įrankiai ir paketai",
     webBuild: "Svetainių kūrimas",
-    pricing: "Kainos",
+    itServices: "IT ir verslo paslaugos",
+    tradingBots: "Trading botai ir algo",
+    pricing: "Kreditai ir paketai",
     blog: "Blogas",
     contact: "Kontaktai",
-    urlScanner: "URL skaneris",
+    urlScanner: "Svetainių ir SEO skeneris",
     courseScanner: "Kursų skaneris",
-    seoGenerator: "SEO generatorius",
+    seoGenerator: "SEO ir turinio generatorius",
+    scanWeb: "Svetainių ir SEO skeneris",
+    scanCrypto: "Krypto ir finansų skeneris",
+    scanAuto: "Auto ir VIN skeneris",
+    scanBeauty: "Grožio ir odos skeneris",
+    scanHome: "Interjero ir kiemo skeneris",
+    scanTech: "Elektronikos ir įrangos skeneris",
     services: "Paslaugos",
     packages: "Paketai",
     cases: "Atvejai",
@@ -785,6 +799,7 @@ export const lt = {
   },
   dashboard: dashboardLt,
   agent: agentLt,
+  nicheScan: nicheScanLt,
   legal: {
     privacyTitle: "Privatumo politika",
     privacyDescription:

@@ -48,7 +48,7 @@ export function DashboardWorkspace({ userName, userEmail }: Props) {
     () =>
       [
         { href: "/irankiai/seo-generatorius", ...t.quickLinks.seoGenerator },
-        { href: "/tools/scanner", ...t.quickLinks.urlScanner },
+        { href: "/scan/web", ...t.quickLinks.urlScanner },
         { href: "/tools/course-scanner", ...t.quickLinks.courseScanner },
         { href: "/pricing", ...t.quickLinks.pricing },
       ] as const,

@@ -11,7 +11,7 @@ export function HomePrimaryServices() {
       title: dict.homeServices.card1Title,
       kicker: dict.homeServices.card1Kicker,
       body: dict.homeServices.card1Body,
-      href: "/tools/scanner",
+      href: "/scan/web",
       cta: dict.homeServices.card1Cta,
     },
     {

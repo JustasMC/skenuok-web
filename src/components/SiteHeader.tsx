@@ -5,35 +5,51 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AuthHeaderActions } from "@/components/AuthHeaderActions";
 import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
+import { MobileMenu } from "@/components/MobileMenu";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { useDict } from "@/components/i18n/LocaleProvider";
+import { buildNavGroups } from "@/lib/nav-links";
 import { siteConfig } from "@/lib/site-config";
+
+function DesktopDropdown({
+  label,
+  links,
+}: {
+  label: string;
+  links: { href: string; label: string }[];
+}) {
+  return (
+    <div className="group relative">
+      <button
+        type="button"
+        className="site-nav-link inline-flex items-center gap-1"
+        aria-haspopup="true"
+        aria-label={label}
+      >
+        {label}
+        <span aria-hidden className="text-xs text-zinc-400 group-hover:text-zinc-200">
+          ▾
+        </span>
+      </button>
+      <div className="pointer-events-none invisible absolute left-0 top-full z-50 mt-1 min-w-60 rounded-lg border border-[var(--color-border)]/80 bg-[var(--color-surface)] p-1 opacity-0 shadow-lg shadow-black/30 transition group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100">
+        {links.map((l) => (
+          <Link
+            key={`${l.href}-${l.label}`}
+            href={l.href}
+            className="block rounded-md px-2.5 py-2 text-sm text-zinc-200 hover:bg-white/5 hover:text-[var(--color-lime)]"
+          >
+            {l.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function SiteHeader() {
   const dict = useDict();
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const primaryLinks = [
-    { href: "/svetainiu-kurimas", label: dict.nav.webBuild },
-    { href: "/pricing", label: dict.nav.pricing },
-    { href: "/blog", label: dict.nav.blog },
-    { href: "/#kontaktai", label: dict.nav.contact },
-  ] as const;
-
-  const toolLinks = [
-    { href: "/tools/scanner", label: dict.nav.urlScanner },
-    { href: "/tools/course-scanner", label: dict.nav.courseScanner },
-    { href: "/irankiai/seo-generatorius", label: dict.nav.seoGenerator },
-  ] as const;
-
-  const mobileExtraLinks = [
-    { href: "/#paslaugos", label: dict.nav.services },
-    { href: "/#paketai", label: dict.nav.packages },
-    { href: "/#atvejai", label: dict.nav.cases },
-    { href: "/#seo-issukis", label: dict.nav.challenge },
-    { href: "/#duk", label: dict.nav.faq },
-    { href: "/#roi", label: dict.nav.roi },
-  ] as const;
+  const groups = buildNavGroups(dict.nav);
 
   useEffect(() => {
     if (mobileOpen) {
@@ -75,32 +91,15 @@ export function SiteHeader() {
           className="hidden items-center gap-x-1 text-sm xl:flex"
           aria-label="Primary"
         >
-          <div className="group relative">
-            <button
-              type="button"
-              className="site-nav-link inline-flex items-center gap-1"
-              aria-haspopup="true"
-              aria-label={dict.nav.tools}
+          <DesktopDropdown label={dict.nav.scanners} links={groups.scanners} />
+          <DesktopDropdown label={dict.nav.otherTools} links={groups.otherTools} />
+          <DesktopDropdown label={dict.nav.moreServices} links={groups.moreServices} />
+          {groups.primary.map((l) => (
+            <Link
+              key={`${l.href}-${l.label}`}
+              href={l.href}
+              className="site-nav-link whitespace-nowrap"
             >
-              {dict.nav.tools}
-              <span aria-hidden className="text-xs text-zinc-400 group-hover:text-zinc-200">
-                ▾
-              </span>
-            </button>
-            <div className="pointer-events-none invisible absolute left-0 top-full z-50 mt-1 min-w-48 rounded-lg border border-[var(--color-border)]/80 bg-[var(--color-surface)] p-1 opacity-0 shadow-lg shadow-black/30 transition group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100">
-              {toolLinks.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className="block rounded-md px-2.5 py-2 text-sm text-zinc-200 hover:bg-white/5 hover:text-[var(--color-lime)]"
-                >
-                  {l.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-          {primaryLinks.map((l) => (
-            <Link key={l.href} href={l.href} className="site-nav-link whitespace-nowrap">
               {l.label}
             </Link>
           ))}
@@ -137,69 +136,20 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {mobileOpen ? (
-        <>
-          <button
-            type="button"
-            className="fixed inset-0 z-40 bg-zinc-950/70 backdrop-blur-sm supports-[backdrop-filter]:bg-zinc-950/45 xl:hidden"
-            aria-label={dict.nav.closeMenu}
-            onClick={() => setMobileOpen(false)}
-          />
-          <div
-            id="mobile-nav"
-            className="relative z-50 max-h-[min(70vh,calc(100dvh-4rem))] overflow-y-auto overscroll-contain border-t border-[var(--color-border)]/80 bg-[color-mix(in_oklab,var(--color-bg)_96%,#0a1620_4%)] shadow-lg shadow-black/40 xl:hidden"
-          >
-            <nav className="site-shell-wide flex flex-col gap-0.5 py-4" aria-label="Mobile">
-              <div className="mb-2 px-3">
-                <LanguageSwitcher />
-              </div>
-              {primaryLinks.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className="rounded-lg px-3 py-3 text-sm text-zinc-200 hover:bg-white/5 hover:text-[var(--color-lime)]"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {l.label}
-                </Link>
-              ))}
-              <p className="mt-2 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                {dict.nav.tools}
-              </p>
-              {toolLinks.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className="rounded-lg px-3 py-3 text-sm text-zinc-200 hover:bg-white/5 hover:text-[var(--color-lime)]"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {l.label}
-                </Link>
-              ))}
-              <p className="mt-2 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                {dict.nav.more}
-              </p>
-              {mobileExtraLinks.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className="rounded-lg px-3 py-3 text-sm text-zinc-200 hover:bg-white/5 hover:text-[var(--color-lime)]"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {l.label}
-                </Link>
-              ))}
-              <Link
-                href="/#kontaktai"
-                className="mt-3 rounded-xl bg-[var(--color-electric)] px-3 py-3 text-center text-sm font-semibold text-[#041014] lg:hidden"
-                onClick={() => setMobileOpen(false)}
-              >
-                {dict.nav.inquiry}
-              </Link>
-            </nav>
-          </div>
-        </>
-      ) : null}
+      <MobileMenu
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        labels={{
+          scanners: dict.nav.scanners,
+          otherTools: dict.nav.otherTools,
+          moreServices: dict.nav.moreServices,
+          inquiry: dict.nav.inquiry,
+          closeMenu: dict.nav.closeMenu,
+        }}
+        scanners={groups.scanners}
+        otherTools={groups.otherTools}
+        moreServices={groups.moreServices}
+      />
     </header>
   );
 }

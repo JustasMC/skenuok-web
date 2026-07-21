@@ -36,7 +36,7 @@ export function HomeTestimonials() {
         </ul>
         <p className="mt-8 text-xs leading-relaxed text-zinc-400 sm:mt-10 sm:text-sm">
           {t.ctaBefore}{" "}
-          <Link className="site-link-inline" href="/tools/scanner">
+          <Link className="site-link-inline" href="/scan/web">
             {t.ctaScanner}
           </Link>{" "}
           {t.ctaOr}{" "}

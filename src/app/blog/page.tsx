@@ -71,7 +71,7 @@ export default async function BlogPage() {
                 <p className="mt-3 text-sm leading-relaxed text-zinc-400">{t.asideBody}</p>
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/tools/scanner" className="site-btn-primary min-h-10 px-4 text-sm">
+                <Link href="/scan/web" className="site-btn-primary min-h-10 px-4 text-sm">
                   {t.scanner}
                 </Link>
                 <Link href="/#kontaktai" className="site-btn-secondary min-h-10 px-4 text-sm">
