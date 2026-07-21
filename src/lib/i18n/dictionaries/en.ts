@@ -32,6 +32,10 @@ export const en: Dictionary = {
     scanHome: "Interior & yard scanner",
     scanTech: "Electronics & gear scanner",
     scanSignals: "Finance & signals scanner",
+    scanEtf: "ETF & dividends",
+    scanMetals: "Commodities & metals",
+    scanFx: "Currencies (FX)",
+    advertise: "Advertise",
     services: "Services",
     packages: "Packages",
     cases: "Case studies",
@@ -90,6 +94,9 @@ export const en: Dictionary = {
     rights: "All rights reserved.",
     privacyShort: "Privacy",
     termsShort: "Terms",
+    affiliateDisclosure:
+      "Some links are affiliate partners. We may earn a commission if you sign up — at no extra cost to you.",
+    advertise: "Advertise",
   },
   cookies: {
     title: "Cookies & privacy",
@@ -823,6 +830,44 @@ export const en: Dictionary = {
     creditsLeft: "Credits left: {n}",
     pricing: "Credit packs",
     disclaimer: "Not financial advice. Data is informational.",
+  },
+  markets: {
+    loadError: "Could not load market data",
+    networkError: "Network error",
+    refresh: "Refresh",
+    refreshing: "Loading…",
+    aiTitle: "AI market summary",
+    aiBody: "1 credit — EMA/RSI context. Not investment advice.",
+    aiCta: "Get AI analysis (1 credit)",
+    aiLoading: "Generating…",
+    aiError: "AI analysis failed",
+    creditsLeft: "Credits left: {n}",
+    pricing: "Credits",
+    disclaimer: "Educational only — not investment advice.",
+    partners: "Partner offers",
+    categories: {
+      etf: {
+        title: "ETF & dividends scanner",
+        description:
+          "S&P 500, VWCE and other ETFs — technical signals + AI summary. Dividend yield / payout in educational context.",
+        kicker: "ETF · Dividends",
+      },
+      metals: {
+        title: "Commodities & metals scanner",
+        description:
+          "Gold, silver, oil — trends and RSI zones. Short AI outlook (1 credit).",
+        kicker: "Metals · Energy",
+      },
+      fx: {
+        title: "FX & inflation scanner",
+        description:
+          "EUR/USD, GBP/USD and more — technicals plus high-level ECB/Fed context.",
+        kicker: "FX · Macro",
+      },
+    },
+  },
+  ads: {
+    cta: "Book a placement",
   },
   legal: {
     privacyTitle: "Privacy policy",

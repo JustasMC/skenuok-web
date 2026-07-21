@@ -39,6 +39,25 @@ model AffiliateClick {
   @@index([category, createdAt])
 }
 
+/// Paid B2B ad placements on scanner pages (auto-hide after endsAt).
+model AdBanner {
+  id          String   @id @default(cuid())
+  /// scan_signals | scan_etf | scan_metals | scan_fx | scan_web | global
+  location    String
+  title       String
+  description String?
+  imageUrl    String?
+  href        String
+  sponsorName String?
+  startsAt    DateTime @default(now())
+  endsAt      DateTime
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([location, active, endsAt])
+}
+
 /// Auth.js v5 + SaaS: kreditai, turinys.
 model User {
   id            String    @id @default(cuid())

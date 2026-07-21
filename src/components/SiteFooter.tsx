@@ -77,10 +77,16 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-3 border-t border-[var(--color-border)]/80 pt-6 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} {siteConfig.name}. {dict.footer.rights}
-          </p>
+          <div className="max-w-xl space-y-2">
+            <p>
+              © {new Date().getFullYear()} {siteConfig.name}. {dict.footer.rights}
+            </p>
+            <p className="leading-relaxed text-zinc-600">{dict.footer.affiliateDisclosure}</p>
+          </div>
           <p className="flex flex-wrap gap-x-4 gap-y-1">
+            <Link href="/reklama" className="hover:text-zinc-300">
+              {dict.footer.advertise}
+            </Link>
             <Link href="/privacy" className="hover:text-zinc-300">
               {dict.footer.privacyShort}
             </Link>

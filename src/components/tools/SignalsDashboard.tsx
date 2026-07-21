@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { AffiliateProductCard } from "@/components/affiliates/AffiliateProductCard";
 import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
+import { affiliatesForMarket } from "@/lib/affiliates/catalog";
 import { fingerprintHeaders } from "@/lib/device-fingerprint";
 
 type Trigger = {
@@ -29,7 +31,9 @@ type Snapshot = {
 const SYMBOLS = ["BTCUSDT", "ETHUSDT", "SOLUSDT"] as const;
 const INTERVALS = ["15m", "1h", "4h"] as const;
 
-export function SignalsDashboard() {
+type Props = { adSlot?: ReactNode };
+
+export function SignalsDashboard({ adSlot }: Props) {
   const { locale } = useLocale();
   const dict = useDict();
   const t = dict.signals;
@@ -112,6 +116,8 @@ export function SignalsDashboard() {
 
   return (
     <div className="space-y-8">
+      {adSlot}
+
       <div className="flex flex-wrap gap-2">
         {SYMBOLS.map((s) => (
           <button
@@ -244,6 +250,23 @@ export function SignalsDashboard() {
         ) : null}
         <p className="mt-4 text-xs text-zinc-500">{t.disclaimer}</p>
       </div>
+
+      {(() => {
+        const partners = affiliatesForMarket("signals", locale);
+        if (partners.length === 0) return null;
+        return (
+          <div>
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-400">
+              {locale === "lt" ? "Partnerių pasiūlymai" : "Partner offers"}
+            </h3>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {partners.map((a) => (
+                <AffiliateProductCard key={a.slug} item={a} locale={locale} />
+              ))}
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }

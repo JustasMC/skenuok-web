@@ -23,6 +23,10 @@ export type NavDict = {
   scanHome: string;
   scanTech: string;
   scanSignals: string;
+  scanEtf: string;
+  scanMetals: string;
+  scanFx: string;
+  advertise: string;
   services: string;
   packages: string;
   cases: string;
@@ -48,6 +52,9 @@ export function buildNavGroups(nav: NavDict) {
     { href: "/scan/home", label: nav.scanHome },
     { href: "/scan/tech", label: nav.scanTech },
     { href: "/scan/signals", label: nav.scanSignals },
+    { href: "/scan/etf", label: nav.scanEtf },
+    { href: "/scan/metals", label: nav.scanMetals },
+    { href: "/scan/fx", label: nav.scanFx },
   ];
 
   const otherTools: NavLink[] = [
@@ -57,6 +64,7 @@ export function buildNavGroups(nav: NavDict) {
 
   const moreServices: NavLink[] = [
     { href: "/services/web-dev", label: nav.itServices },
+    { href: "/reklama", label: nav.advertise },
     { href: "/pricing", label: nav.pricing },
     { href: "/#kontaktai", label: nav.contact },
     { href: "/#duk", label: nav.faq },

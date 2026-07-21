@@ -81,6 +81,11 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     alternates: {
       canonical: siteUrl,
+      languages: {
+        lt: siteUrl,
+        en: siteUrl,
+        "x-default": siteUrl,
+      },
     },
     ...(googleVerification ? { verification: { google: googleVerification } } : {}),
     formatDetection: {

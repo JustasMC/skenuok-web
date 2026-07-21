@@ -104,6 +104,26 @@ const nextConfig: NextConfig = {
         destination: "/scan/web",
         permanent: true,
       },
+      {
+        source: "/dividendai",
+        destination: "/scan/etf",
+        permanent: true,
+      },
+      {
+        source: "/auksas",
+        destination: "/scan/metals",
+        permanent: true,
+      },
+      {
+        source: "/valiutos",
+        destination: "/scan/fx",
+        permanent: true,
+      },
+      {
+        source: "/advertise",
+        destination: "/reklama",
+        permanent: true,
+      },
     ];
   },
   /** Leisti atidaryti dev serverį per LAN IP (kitaip Next.js blokuoja `/_next/*` ir „lūžta“ UI). */

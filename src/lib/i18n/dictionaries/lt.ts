@@ -32,6 +32,10 @@ export const lt = {
     scanHome: "Interjero ir kiemo skeneris",
     scanTech: "Elektronikos ir įrangos skeneris",
     scanSignals: "Finansų ir signalų skeneris",
+    scanEtf: "ETF ir dividendai",
+    scanMetals: "Žaliavos ir metalai",
+    scanFx: "Valiutos (FX)",
+    advertise: "Reklama",
     services: "Paslaugos",
     packages: "Paketai",
     cases: "Atvejai",
@@ -89,6 +93,9 @@ export const lt = {
     rights: "Visos teisės saugomos.",
     privacyShort: "Privatumas",
     termsShort: "Sąlygos",
+    affiliateDisclosure:
+      "Kai kurios nuorodos yra partnerių (affiliate). Už registraciją per jas galime gauti komisinį — jums tai nieko papildomai nekainuoja.",
+    advertise: "Reklama",
   },
   cookies: {
     title: "Slapukai ir privatumas",
@@ -827,6 +834,44 @@ export const lt = {
     creditsLeft: "Kreditų liko: {n}",
     pricing: "Kreditų paketai",
     disclaimer: "Ne finansinis patarimas. Duomenys informaciniai.",
+  },
+  markets: {
+    loadError: "Nepavyko užkrauti rinkos duomenų",
+    networkError: "Tinklo klaida",
+    refresh: "Atnaujinti",
+    refreshing: "Kraunama…",
+    aiTitle: "AI rinkos santrauka",
+    aiBody: "1 kreditas — EMA/RSI kontekstas. Ne investicinis patarimas.",
+    aiCta: "Gauti AI analizę (1 kreditas)",
+    aiLoading: "Generuojama…",
+    aiError: "AI analizė nepavyko",
+    creditsLeft: "Kreditų liko: {n}",
+    pricing: "Kreditai",
+    disclaimer: "Edukacija, ne investicinis patarimas.",
+    partners: "Partnerių pasiūlymai",
+    categories: {
+      etf: {
+        title: "ETF ir dividendų skeneris",
+        description:
+          "S&P 500, VWCE ir kiti ETF — techniniai signalai + AI santrauka. Dividend yield / payout — edukacinis kontekstas.",
+        kicker: "ETF · Dividends",
+      },
+      metals: {
+        title: "Žaliavų ir metalų skeneris",
+        description:
+          "Auksas, sidabras, nafta — kainų tendencijos ir RSI zonos. AI trumpa prognozė (1 kreditas).",
+        kicker: "Metals · Energy",
+      },
+      fx: {
+        title: "Valiutų ir infliacijos (FX) skeneris",
+        description:
+          "EUR/USD, GBP/USD ir kitos poros — technika + ECB/FED kontekstas (aukšto lygio).",
+        kicker: "FX · Macro",
+      },
+    },
+  },
+  ads: {
+    cta: "Užsisakykite dabar",
   },
   legal: {
     privacyTitle: "Privatumo politika",
