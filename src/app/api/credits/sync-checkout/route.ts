@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { jsonApiError, publicApiErrorMessage } from "@/lib/api-errors";
 import { auth } from "@/auth";
-import { resolveGeneratorSessionId } from "@/lib/generator-session-server";
+import { cookies } from "next/headers";
 import { getStripe } from "@/lib/stripe-server";
 import { applyCheckoutSessionCreditsIfPaid } from "@/lib/stripe-checkout-credits";
 
@@ -47,8 +47,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Sesija nepriklauso šiai paskyrai." }, { status: 403 });
     }
   } else if (gidMeta) {
-    const { sessionId: cookieSid } = await resolveGeneratorSessionId();
-    if (cookieSid !== gidMeta) {
+    const jar = await cookies();
+    const cookieSid = jar.get("gen_session")?.value;
+    if (!cookieSid || cookieSid !== gidMeta) {
       return NextResponse.json(
         { error: "Ši naršyklės sesija neatitinka mokėjimo sesijos. Atidarykite tą patį įrenginį / naršyklę." },
         { status: 403 },

@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       };
       clientReferenceId = authSession.user.id;
     } else {
-      const resolvedSession = await resolveGeneratorSessionId();
+      const resolvedSession = await resolveGeneratorSessionId({ req });
       anonSessionId = resolvedSession.sessionId;
       needsSetCookie = resolvedSession.needsSetCookie;
       metadata = {

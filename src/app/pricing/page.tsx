@@ -119,6 +119,19 @@ export default async function PricingPage() {
             <span className="font-medium text-zinc-300">{p.creditsHow}</span>
           </p>
           <p className="mt-2 text-xs text-zinc-500">{currencyHint}</p>
+          <ul className="mt-4 flex flex-wrap gap-2 text-xs text-zinc-400" aria-label={p.creditCostsTitle}>
+            {[p.creditCostArticle, p.creditCostNiche, p.creditCostSignal, p.creditCostCourse, p.creditCostUrl].map(
+              (line) => (
+                <li
+                  key={line}
+                  className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-1"
+                  title={line}
+                >
+                  {line}
+                </li>
+              ),
+            )}
+          </ul>
         </PageIntro>
 
         <div id="prenumerata" className="grid scroll-mt-24 gap-6 lg:grid-cols-4">

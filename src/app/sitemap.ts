@@ -21,6 +21,7 @@ const entries: Array<{
   { path: "/scan/beauty", changeFrequency: "weekly", priority: 0.85 },
   { path: "/scan/home", changeFrequency: "weekly", priority: 0.85 },
   { path: "/scan/tech", changeFrequency: "weekly", priority: 0.85 },
+  { path: "/scan/signals", changeFrequency: "hourly", priority: 0.86 },
   { path: "/services/trading-bots", changeFrequency: "weekly", priority: 0.88 },
   { path: "/services/web-dev", changeFrequency: "weekly", priority: 0.88 },
   { path: "/tools/course-scanner", changeFrequency: "weekly", priority: 0.85 },

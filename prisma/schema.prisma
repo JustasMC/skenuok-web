@@ -129,13 +129,30 @@ model UserCredit {
 }
 
 /// Anoniminė sesija (cookie) — generatoriaus kreditai ir istorija iki suliejimo su paskyra.
+/// Naujos sesijos default = 0; nemokami svečio kreditai skiriami tik per GuestQuota (IP+fingerprint).
 model GeneratorSession {
   id               String    @id @default(cuid())
-  credits          Int       @default(3)
+  credits          Int       @default(0)
   createdAt        DateTime  @default(now())
   mergedIntoUserId String?
   mergedAt         DateTime?
   contents         GeneratedContent[]
+}
+
+/// Daily guest free-credit quota keyed by IP + device fingerprint (server-side anti-abuse).
+model GuestQuota {
+  id                 String   @id @default(cuid())
+  identityKey        String
+  /// UTC calendar day YYYY-MM-DD
+  dayKey             String
+  freeCreditsGranted Int      @default(0)
+  scansUsed          Int      @default(0)
+  lastSessionId      String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([identityKey, dayKey])
+  @@index([identityKey, dayKey])
 }
 
 /// SEO generatoriaus išvestis: priklauso anoniminei sesijai ir/arba prisijungusiam vartotojui.

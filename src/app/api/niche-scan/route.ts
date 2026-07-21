@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { jsonApiError } from "@/lib/api-errors";
+import { assertGuestScanAllowed } from "@/lib/generator-session-server";
 import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale-server";
 import { runNicheScan } from "@/lib/niche-scan/factory";
 import { getNicheScanCredits } from "@/lib/niche-scan-credits";
@@ -131,6 +132,19 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { error: "Nėra sesijos. Perkraukite puslapį arba prisijunkite.", needSession: true as const },
       { status: 401 },
+    );
+  }
+
+  const guestCap = await assertGuestScanAllowed(req);
+  if (!guestCap.ok) {
+    return NextResponse.json(
+      {
+        error: `Svečio dienos limitas (${guestCap.max} AI skenavimai / 24 val.). Prisijunkite arba įsigykite kreditų.`,
+        needCredits: true as const,
+        guestDailyLimit: true as const,
+        retryAfterSec: guestCap.retryAfterSec,
+      },
+      { status: 429, headers: { "Retry-After": String(guestCap.retryAfterSec) } },
     );
   }
 

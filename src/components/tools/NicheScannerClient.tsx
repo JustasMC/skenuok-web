@@ -4,26 +4,10 @@ import Link from "next/link";
 import { useCallback, useState } from "react";
 import { AffiliateProductCard } from "@/components/affiliates/AffiliateProductCard";
 import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
+import { fingerprintHeaders } from "@/lib/device-fingerprint";
 import type { AffiliateRec, NicheId, NicheScanReport } from "@/lib/niche-scan/types";
 
 const MAX_BYTES = 4 * 1024 * 1024;
-
-function deviceFingerprint(): string {
-  if (typeof window === "undefined") return "";
-  const key = "sk_device_fp";
-  try {
-    const existing = localStorage.getItem(key);
-    if (existing) return existing;
-    const id =
-      typeof crypto !== "undefined" && "randomUUID" in crypto
-        ? crypto.randomUUID()
-        : `fp_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    localStorage.setItem(key, id);
-    return id;
-  } catch {
-    return "";
-  }
-}
 
 type Props = { niche: NicheId };
 
@@ -73,14 +57,17 @@ export function NicheScannerClient({ niche }: Props) {
     setReport(null);
 
     try {
-      // Ensure anonymous session cookie exists
-      await fetch("/api/session", { method: "GET" }).catch(() => {});
+      await fetch("/api/session", {
+        method: "GET",
+        credentials: "include",
+        headers: fingerprintHeaders(),
+      }).catch(() => {});
 
       const res = await fetch("/api/niche-scan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-device-fingerprint": deviceFingerprint(),
+          ...fingerprintHeaders(),
         },
         body: JSON.stringify({
           niche,

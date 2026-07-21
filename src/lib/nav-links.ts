@@ -22,6 +22,7 @@ export type NavDict = {
   scanBeauty: string;
   scanHome: string;
   scanTech: string;
+  scanSignals: string;
   services: string;
   packages: string;
   cases: string;
@@ -46,6 +47,7 @@ export function buildNavGroups(nav: NavDict) {
     { href: "/scan/beauty", label: nav.scanBeauty },
     { href: "/scan/home", label: nav.scanHome },
     { href: "/scan/tech", label: nav.scanTech },
+    { href: "/scan/signals", label: nav.scanSignals },
   ];
 
   const otherTools: NavLink[] = [

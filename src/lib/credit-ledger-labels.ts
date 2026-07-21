@@ -15,6 +15,10 @@ export function creditLedgerReason(
       return reasons.course_quality_scan;
     case "niche_scan":
       return reasons.niche_scan;
+    case "guest_daily_free":
+      return reasons.guest_daily_free;
+    case "signal_ai":
+      return reasons.signal_ai;
     case "generator_session_merge":
       return reasons.generator_session_merge;
     case "signup_bonus":
@@ -30,6 +34,8 @@ export function creditLedgerReasonLt(reason: string | null | undefined): string 
     stripe_checkout: "Kreditų papildymas (Stripe)",
     course_quality_scan: "Kursų kokybės skaneris",
     niche_scan: "AI nišinis skaneris",
+    guest_daily_free: "Svečio dienos nemokamas kreditas",
+    signal_ai: "AI signalo analizė",
     generator_session_merge: "Anoniminės sesijos kreditai",
     signup_bonus: "Dovanų kreditai už registraciją",
   });

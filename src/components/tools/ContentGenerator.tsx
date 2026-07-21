@@ -11,6 +11,7 @@ import { BulkSeoEarlyAccessForm } from "@/components/tools/BulkSeoEarlyAccessFor
 import { GeneratorWorkspacePanel } from "@/components/tools/GeneratorWorkspacePanel";
 import { SeoScorePanel } from "@/components/tools/SeoScorePanel";
 import { fireSuccessConfetti } from "@/lib/confetti-celebration";
+import { fingerprintHeaders } from "@/lib/device-fingerprint";
 import type { SeoScoreBreakdown } from "@/lib/seo-score";
 
 type HistoryRow = { id: string; topic: string; seoScore: number | null; createdAt: string };
@@ -69,7 +70,11 @@ export function ContentGenerator() {
   const checkoutConfettiDoneRef = useRef(false);
 
   const refreshSession = useCallback(async (): Promise<number | null> => {
-    const res = await fetch("/api/session", { method: "GET", credentials: "same-origin" });
+    const res = await fetch("/api/session", {
+      method: "GET",
+      credentials: "same-origin",
+      headers: fingerprintHeaders(),
+    });
     const body = (await res.json()) as {
       credits?: number;
       mergeFlash?: { credits: number } | null;

@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { jsonApiError, publicApiErrorMessage } from "@/lib/api-errors";
 import { generateSeoArticleHtml } from "@/lib/article-openai";
+import { assertGuestScanAllowed } from "@/lib/generator-session-server";
 import { resolveAnalysisLocaleFromCookies } from "@/lib/i18n/analysis-locale-server";
 import { prisma } from "@/lib/prisma";
 import { getRateLimitClientKey } from "@/lib/rate-limit";
@@ -114,6 +115,19 @@ export async function POST(req: Request) {
   const sid = jar.get("gen_session")?.value;
   if (!sid) {
     return NextResponse.json({ error: "Nėra sesijos. Perkraukite puslapį.", needSession: true }, { status: 401 });
+  }
+
+  const guestCap = await assertGuestScanAllowed(req);
+  if (!guestCap.ok) {
+    return NextResponse.json(
+      {
+        error: `Svečio dienos limitas (${guestCap.max} AI veiksmai / 24 val.). Prisijunkite arba įsigykite kreditų.`,
+        needCredits: true as const,
+        guestDailyLimit: true as const,
+        retryAfterSec: guestCap.retryAfterSec,
+      },
+      { status: 429, headers: { "Retry-After": String(guestCap.retryAfterSec) } },
+    );
   }
 
   try {

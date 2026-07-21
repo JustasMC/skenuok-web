@@ -60,7 +60,13 @@ export function AuthHeaderActions() {
 
   const loadCredits = useCallback(async (signal?: AbortSignal) => {
     try {
-      const res = await fetch("/api/session", { method: "GET", credentials: "include", signal });
+      const { fingerprintHeaders } = await import("@/lib/device-fingerprint");
+      const res = await fetch("/api/session", {
+        method: "GET",
+        credentials: "include",
+        headers: fingerprintHeaders(),
+        signal,
+      });
       if (!res.ok) {
         setCredits(null);
         setMode(null);
@@ -170,14 +176,22 @@ export function AuthHeaderActions() {
 
     if (isZero) {
       return (
-        <Link
-          href={href}
-          className={`${creditPillBase} credit-zero-pulse border-rose-500/55 bg-rose-500/10 text-rose-100 hover:border-rose-400/80 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400/60`}
-          title={`${mt}. ${dict.auth.creditsGone}`}
-          aria-label={`${mt}. ${dict.auth.creditsGone} ${dict.auth.openPricing}`}
-        >
-          {dict.auth.creditsGoneShort}
-        </Link>
+        <div className="flex items-center gap-1.5">
+          <Link
+            href={href}
+            className={`${creditPillBase} credit-zero-pulse border-rose-500/55 bg-rose-500/10 text-rose-100 hover:border-rose-400/80 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400/60`}
+            title={`${mt}. ${dict.auth.creditsGone}`}
+            aria-label={`${mt}. ${dict.auth.creditsGone} ${dict.auth.openPricing}`}
+          >
+            {dict.auth.creditsGoneShort}
+          </Link>
+          <Link
+            href={href}
+            className="hidden min-h-9 shrink-0 items-center justify-center rounded-lg bg-[var(--color-lime)] px-2.5 py-1.5 text-xs font-semibold text-[#0a1200] hover:brightness-110 sm:inline-flex"
+          >
+            {dict.auth.buyCredits}
+          </Link>
+        </div>
       );
     }
 

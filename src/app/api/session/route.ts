@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     const jar = await cookies();
     const authSession = await auth();
@@ -52,12 +52,15 @@ export async function GET() {
       return res;
     }
 
-    const { sessionId, needsSetCookie } = await resolveGeneratorSessionId();
+    const { sessionId, needsSetCookie, freeCreditsGranted } = await resolveGeneratorSessionId({
+      req,
+    });
     const row = await prisma.generatorSession.findUnique({ where: { id: sessionId } });
     if (!row) {
       return NextResponse.json(
         {
-          error: "Nepavyko sukurti naršyklės sesijos. Perkraukite puslapį arba išvalykite slapukus šiai svetainei.",
+          error:
+            "Nepavyko sukurti naršyklės sesijos. Perkraukite puslapį arba išvalykite slapukus šiai svetainei.",
         },
         { status: 503 },
       );
@@ -69,6 +72,13 @@ export async function GET() {
       user: null,
       mergeFlash,
       mode: "session" as const,
+      freeCreditsGranted,
+      guestNote:
+        row.credits <= 0
+          ? "guest_exhausted"
+          : freeCreditsGranted > 0
+            ? "guest_daily_grant"
+            : undefined,
     });
     if (needsSetCookie) {
       applyGenSessionCookie(res, sessionId);

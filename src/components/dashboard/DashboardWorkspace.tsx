@@ -8,6 +8,7 @@ import { ClaimSessionCredits } from "@/components/dashboard/ClaimSessionCredits"
 import { CreditLedgerTable } from "@/components/dashboard/CreditLedgerTable";
 import { useDict, useLocale } from "@/components/i18n/LocaleProvider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { fingerprintHeaders } from "@/lib/device-fingerprint";
 
 const AgentChatPanel = dynamic(
   () => import("@/components/dashboard/AgentChatPanel").then((m) => m.AgentChatPanel),
@@ -57,7 +58,10 @@ export function DashboardWorkspace({ userName, userEmail }: Props) {
 
   useEffect(() => {
     let cancelled = false;
-    void fetch("/api/session", { credentials: "include" })
+    void fetch("/api/session", {
+      credentials: "include",
+      headers: fingerprintHeaders(),
+    })
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { credits?: number } | null) => {
         if (!cancelled && d && typeof d.credits === "number") setCredits(d.credits);
