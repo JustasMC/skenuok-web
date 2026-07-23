@@ -1,59 +1,14 @@
 import type { ContactPayload } from "@/lib/contact-schema";
 import type { StructuredLeadPayload } from "@/lib/leads-schema";
 import { sendLeadSummaryToPagalba } from "@/lib/email-resend";
+import {
+  escapeHtml,
+  notifyDiscord,
+  notifyGenericWebhook,
+  notifyTelegram,
+} from "@/lib/notify";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-
-/** Escape HTML special characters to prevent XSS attacks */
-function escapeHtml(text: string): string {
-  const map: Record<string, string> = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  };
-  return text.replace(/[&<>"']/g, (char) => map[char] ?? char);
-}
-
-async function notifyDiscord(content: string) {
-  const url = process.env.DISCORD_WEBHOOK_URL;
-  if (!url) return;
-  await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      embeds: [
-        {
-          title: "Naujas lead",
-          description: content.slice(0, 4000),
-          color: 0x00d4ff,
-        },
-      ],
-    }),
-  });
-}
-
-async function notifyGenericWebhook(payload: Record<string, unknown>) {
-  const url = process.env.CONTACT_WEBHOOK_URL;
-  if (!url) return;
-  await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-}
-
-async function notifyTelegram(text: string) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) return;
-  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
-  });
-}
 
 type LeadCreateInput = {
   name: string;
@@ -106,7 +61,7 @@ async function persistAndNotify(data: LeadCreateInput) {
   const emailResult = await sendLeadSummaryToPagalba(plain);
 
   void Promise.allSettled([
-    notifyDiscord(plain),
+    notifyDiscord(plain, "Naujas lead"),
     notifyTelegram(summary),
     notifyGenericWebhook({
       type: "lead",

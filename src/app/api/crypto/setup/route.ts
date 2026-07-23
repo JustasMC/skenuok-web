@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { assertScanRateLimit } from "@/lib/scan-rate-limit";
 import { getRateLimitClientKey } from "@/lib/rate-limit";
+import { assertScanRateLimit } from "@/lib/scan-rate-limit";
 import { buildSetupAnalysis } from "@/lib/signals/setup-engine";
 import { fetchBinanceKlines } from "@/lib/signals/ta";
 
@@ -15,12 +15,12 @@ const querySchema = z.object({
     .min(3)
     .max(20)
     .transform((s) => s.replace("/", "").toUpperCase()),
-  interval: z.enum(["15m", "1h", "4h"]),
+  interval: z.enum(["15m", "1h", "4h"]).default("15m"),
 });
 
-/** Public technical snapshot (rate-limited). AI analysis is a separate credited endpoint. */
+/** Multi-layer setup analysis for crypto hub (rate-limited, free). */
 export async function GET(req: Request) {
-  const limited = assertScanRateLimit(`signals:${getRateLimitClientKey(req)}`);
+  const limited = assertScanRateLimit(`crypto-setup:${getRateLimitClientKey(req)}`);
   if (!limited.ok) {
     return NextResponse.json(
       { error: "Per daug užklausų.", retryAfterSec: limited.retryAfterSec },
@@ -29,11 +29,9 @@ export async function GET(req: Request) {
   }
 
   const url = new URL(req.url);
-  const symbolRaw = (url.searchParams.get("symbol") ?? "BTCUSDT").replace("/", "").toUpperCase();
-  const intervalRaw = url.searchParams.get("interval") ?? "15m";
   const parsed = querySchema.safeParse({
-    symbol: symbolRaw,
-    interval: intervalRaw,
+    symbol: url.searchParams.get("symbol") ?? "BTCUSDT",
+    interval: url.searchParams.get("interval") ?? "15m",
   });
   if (!parsed.success) {
     return NextResponse.json({ error: "Neteisingas simbolis / intervalas" }, { status: 422 });
@@ -41,16 +39,12 @@ export async function GET(req: Request) {
 
   try {
     const candles = await fetchBinanceKlines(parsed.data.symbol, parsed.data.interval);
-    const analysis = buildSetupAnalysis(candles, parsed.data.symbol, parsed.data.interval);
+    const setup = buildSetupAnalysis(candles, parsed.data.symbol, parsed.data.interval);
     return NextResponse.json({
       ok: true as const,
-      ...analysis,
+      ...setup,
+      candles: candles.slice(-60).map((c) => ({ t: c.time, c: c.close, v: c.volume })),
       disclaimer: "Educational only — not investment advice.",
-      candles: candles.slice(-60).map((c) => ({
-        t: c.time,
-        c: c.close,
-        v: c.volume,
-      })),
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Fetch failed";

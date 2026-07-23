@@ -39,6 +39,25 @@ model AffiliateClick {
   @@index([category, createdAt])
 }
 
+/// Crypto / TradingView / cron market alerts (site Telegram channel).
+model MarketAlert {
+  id        String   @id @default(cuid())
+  /// engine | tradingview | cron
+  source    String
+  symbol    String
+  interval  String?
+  title     String
+  message   String
+  payload   Json?
+  /// info | bullish | bearish
+  severity  String   @default("info")
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([symbol, createdAt])
+  @@index([source, createdAt])
+}
+
 /// Paid B2B ad placements on scanner pages (auto-hide after endsAt).
 model AdBanner {
   id          String   @id @default(cuid())

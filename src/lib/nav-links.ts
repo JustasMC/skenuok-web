@@ -26,6 +26,7 @@ export type NavDict = {
   scanEtf: string;
   scanMetals: string;
   scanFx: string;
+  academyPatterns: string;
   advertise: string;
   services: string;
   packages: string;
@@ -55,6 +56,7 @@ export function buildNavGroups(nav: NavDict) {
     { href: "/scan/etf", label: nav.scanEtf },
     { href: "/scan/metals", label: nav.scanMetals },
     { href: "/scan/fx", label: nav.scanFx },
+    { href: "/academy/patterns", label: nav.academyPatterns },
   ];
 
   const otherTools: NavLink[] = [

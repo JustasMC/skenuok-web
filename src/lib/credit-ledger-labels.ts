@@ -19,6 +19,8 @@ export function creditLedgerReason(
       return reasons.guest_daily_free;
     case "signal_ai":
       return reasons.signal_ai;
+    case "chart_vision":
+      return reasons.chart_vision;
     case "generator_session_merge":
       return reasons.generator_session_merge;
     case "signup_bonus":
@@ -36,6 +38,7 @@ export function creditLedgerReasonLt(reason: string | null | undefined): string 
     niche_scan: "AI nišinis skaneris",
     guest_daily_free: "Svečio dienos nemokamas kreditas",
     signal_ai: "AI signalo analizė",
+    chart_vision: "AI chart Vision skeneris",
     generator_session_merge: "Anoniminės sesijos kreditai",
     signup_bonus: "Dovanų kreditai už registraciją",
   });
